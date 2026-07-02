@@ -4,9 +4,9 @@ import Link from 'next/link';
 export default async function Directorio({
   searchParams,
 }: {
-  searchParams: Promise<{ especialidad?: string }>;
+  searchParams: Promise<{ especialidad?: string; modo?: string; tipo?: string }>;
 }) {
-  const { especialidad } = await searchParams;
+  const { especialidad, modo, tipo } = await searchParams;
   const all = getNutricionistas();
 
   const resultados = all.filter((n) => {
@@ -23,8 +23,25 @@ export default async function Directorio({
         <h1 style={{ fontSize: '28px', fontWeight: 800, margin: '20px 0 8px' }}>
           {especialidad ? especialidad : 'Todos los nutricionistas activos'}
         </h1>
-        <p style={{ marginBottom: '30px', color: 'rgba(16,0,76,0.7)' }}>
+
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '14px' }}>
+          {modo && (
+            <span style={{ background: '#ffffff', color: '#5A57A8', borderRadius: '999px', padding: '5px 14px', fontSize: '13px', fontWeight: 700 }}>
+              {modo === 'online' ? 'Online' : 'Visita presencial'}
+            </span>
+          )}
+          {tipo && (
+            <span style={{ background: '#ffffff', color: '#5A57A8', borderRadius: '999px', padding: '5px 14px', fontSize: '13px', fontWeight: 700 }}>
+              {tipo === 'individual' ? 'Individual' : 'Grupal'}
+            </span>
+          )}
+        </div>
+
+        <p style={{ marginBottom: '10px', color: 'rgba(16,0,76,0.7)' }}>
           {resultados.length} nutricionistas encontrados
+        </p>
+        <p style={{ marginBottom: '30px', color: 'rgba(16,0,76,0.5)', fontSize: '13px' }}>
+          Nota: aún no filtramos por modalidad o tipo de sesión — mostrando todos los que coinciden con la especialidad.
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>

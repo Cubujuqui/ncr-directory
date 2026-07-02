@@ -29,6 +29,8 @@ export default function SearchBar({ especialidades }: { especialidades: string[]
   function buscar() {
     const params = new URLSearchParams();
     if (especialidad) params.set('especialidad', especialidad);
+    params.set('modo', modo);
+    params.set('tipo', tipo);
     router.push(`/directorio?${params.toString()}`);
   }
 
