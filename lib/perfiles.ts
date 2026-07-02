@@ -29,6 +29,7 @@ function mergePerfil(manual: PerfilManual, csv: Nutricionista[]): PerfilCompleto
     especialidad: manual.especialidadManual || null,
     whatsapp: manual.whatsapp || null,
     instagram: manual.instagram || null,
+    linkedin: manual.linkedin || null,
     fotoUrl: manual.fotoUrl || null,
     tier: manual.tier,
   };

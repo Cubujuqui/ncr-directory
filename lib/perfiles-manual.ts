@@ -11,14 +11,23 @@ export type PerfilManual = {
 };
 
 export const perfilesManual: PerfilManual[] = [
-  {
+{
     carne: '1987-15', // Eva Mena Xatruch
     tier: 'premium',
+    whatsapp: '50686140824',
+    instagram: 'nutrimorfosiscr',
+    linkedin: 'https://www.linkedin.com/in/eva-mena-xatruch/',
+    fotoUrl: '/1987-15.jpg',
   },
   {
-    carne: null,
+    carne: '2680-19', // Génesis Mayela Soto Sagot
     tier: 'premium',
-    nombreManual: 'Dra.',
-    apellidoManual: 'Ejemplo',
+    whatsapp: '50687161848',
+    instagram: 'merezconutricion',
+  },
+  {
+    carne: '3570-25', // Ines Miranda Duran
+    tier: 'premium',
+    whatsapp: '50685179448',
   },
 ];
