@@ -1,11 +1,12 @@
 import { getEspecialidades } from '@/lib/nutricionistas';
 import SearchBar from '@/components/SearchBar';
 import Spotlight from '@/components/Spotlight';
-import { getPerfilesDestacados } from '@/lib/perfiles';
+import { getPerfilesDestacados, getFilasSecundarias } from '@/lib/perfiles';
 
 export default function Home() {
   const especialidades = getEspecialidades();
   const perfilesDestacados = getPerfilesDestacados();
+  const filasSecundarias = getFilasSecundarias();
 
   return (
     <div style={{ minHeight: '100vh', background: '#BFB6FF', fontFamily: "'Mulish', system-ui, sans-serif", color: '#10004C', overflow: 'hidden', position: 'relative' }}>
@@ -46,7 +47,7 @@ export default function Home() {
           </div>
         </div>
       </main>
-<Spotlight perfiles={perfilesDestacados} />
+<Spotlight perfiles={perfilesDestacados} filasSecundarias={filasSecundarias} />
       {/* FOOTER */}
       <footer style={{ maxWidth: '1400px', margin: '0 auto', padding: '16px 40px 32px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>

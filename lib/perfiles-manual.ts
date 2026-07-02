@@ -6,6 +6,7 @@ export type PerfilManual = {
   especialidadManual?: string; // leave unset to show placeholder
   whatsapp?: string; // leave unset to show placeholder
   instagram?: string;
+  linkedin?: string;
   fotoUrl?: string; // leave unset to show placeholder
 };
 
