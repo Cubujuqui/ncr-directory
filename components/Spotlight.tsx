@@ -106,10 +106,17 @@ export default function Spotlight({
         </p>
 
         <div style={{ display: 'flex', gap: '28px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(200px, 1fr))', gap: '16px', flex: '2 1 480px' }}>
-            {perfiles.map((p, i) => (
-              <PremiumCard key={i} perfil={p} paleta={PALETAS[i % PALETAS.length]} />
-            ))}
+          <div style={{ display: 'flex', gap: '16px', flex: '2 1 480px', alignItems: 'center' }}>
+            {perfiles[0] && (
+              <div style={{ flex: '1 1 0' }}>
+                <PremiumCard perfil={perfiles[0]} paleta={PALETAS[0]} />
+              </div>
+            )}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: '1 1 0' }}>
+              {perfiles.slice(1).map((p, i) => (
+                <PremiumCard key={i} perfil={p} paleta={PALETAS[(i + 1) % PALETAS.length]} />
+              ))}
+            </div>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', flex: '1 1 260px', background: 'rgba(255,255,255,0.35)', borderRadius: '16px', padding: '14px' }}>
