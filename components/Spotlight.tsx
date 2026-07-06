@@ -86,14 +86,8 @@ function FilaSecundariaRow({ fila }: { fila: FilaSecundaria }) {
   );
 }
 
-export default function Spotlight({
-  perfiles,
-  filasSecundarias,
-}: {
-  perfiles: PerfilCompleto[];
-  filasSecundarias: FilaSecundaria[];
-}) {
-  if (perfiles.length === 0 && filasSecundarias.length === 0) return null;
+export default function Spotlight({ perfiles }: { perfiles: PerfilCompleto[] }) {
+  if (perfiles.length === 0) return null;
 
   return (
     <section style={{ background: SECTION_BG, padding: '50px 40px' }}>
@@ -105,25 +99,10 @@ export default function Spotlight({
           Perfiles premium — próximamente más nutricionistas destacados
         </p>
 
-        <div style={{ display: 'flex', gap: '28px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', gap: '16px', flex: '2 1 480px', alignItems: 'center' }}>
-            {perfiles[0] && (
-              <div style={{ flex: '1 1 0' }}>
-                <PremiumCard perfil={perfiles[0]} paleta={PALETAS[0]} />
-              </div>
-            )}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: '1 1 0' }}>
-              {perfiles.slice(1).map((p, i) => (
-                <PremiumCard key={i} perfil={p} paleta={PALETAS[(i + 1) % PALETAS.length]} />
-              ))}
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', flex: '1 1 260px', background: 'rgba(255,255,255,0.35)', borderRadius: '16px', padding: '14px' }}>
-            {filasSecundarias.map((f, i) => (
-              <FilaSecundariaRow key={i} fila={f} />
-            ))}
-          </div>
+        <div style={{ display: 'grid', gridTemplateColumns: `repeat(${perfiles.length}, 1fr)`, gap: '20px' }}>
+          {perfiles.map((p, i) => (
+            <PremiumCard key={i} perfil={p} paleta={PALETAS[i % PALETAS.length]} />
+          ))}
         </div>
       </div>
     </section>
