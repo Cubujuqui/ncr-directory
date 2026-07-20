@@ -5,7 +5,9 @@ export type PerfilManual = {
   apellidoManual?: string; // only used when carne is null
   especialidadManual?: string; // leave unset to show placeholder
   whatsapp?: string; // leave unset to show placeholder
-  instagram?: string;
+instagram?: string;
+  tiktok?: string;
+  youtube?: string;
   linkedin?: string;
   fotoUrl?: string; // leave unset to show placeholder
 };

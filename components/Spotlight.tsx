@@ -1,4 +1,5 @@
 import { PerfilCompleto, FilaSecundaria } from '@/lib/perfiles';
+import SocialIcons from './SocialIcons';
 
 const PALETAS = [
   { background: '#BFB6FF', light: '#F3F0FF', primary: '#7370E0', dark: '#10004C' },
@@ -34,39 +35,21 @@ function PremiumCard({ perfil, paleta }: { perfil: PerfilCompleto; paleta: typeo
           {perfil.especialidad || 'Especialidad por confirmar'}
         </p>
 
-        <div style={{ display: 'flex', gap: '8px' }}>
-          {perfil.whatsapp ? (
-            <a href={`https://wa.me/${perfil.whatsapp}`} target="_blank" rel="noopener noreferrer" title="WhatsApp" style={{ width: '30px', height: '30px', borderRadius: '50%', background: paleta.primary, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#ffffff" strokeWidth={2}><path d="M3 21l1.65-4.95A9 9 0 1 1 8.05 19.35L3 21z"></path></svg>
-            </a>
-          ) : (
-            <div title="WhatsApp — próximamente" style={{ width: '30px', height: '30px', borderRadius: '50%', border: `1.5px dashed ${paleta.dark}55`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke={`${paleta.dark}99`} strokeWidth={2}><path d="M3 21l1.65-4.95A9 9 0 1 1 8.05 19.35L3 21z"></path></svg>
-            </div>
-          )}
-          {perfil.instagram ? (
-            <a href={`https://instagram.com/${perfil.instagram}`} target="_blank" rel="noopener noreferrer" title="Instagram" style={{ width: '30px', height: '30px', borderRadius: '50%', background: paleta.primary, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#ffffff" strokeWidth={1.8}><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.4" cy="6.6" r="1.1" fill="#ffffff" stroke="none"></circle></svg>
-            </a>
-          ) : (
-            <div title="Instagram — próximamente" style={{ width: '30px', height: '30px', borderRadius: '50%', border: `1.5px dashed ${paleta.dark}55`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke={`${paleta.dark}99`} strokeWidth={1.8}><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.4" cy="6.6" r="1.1" fill={`${paleta.dark}99`} stroke="none"></circle></svg>
-            </div>
-          )}
-          {perfil.linkedin ? (
-            <a href={perfil.linkedin} target="_blank" rel="noopener noreferrer" title="LinkedIn" style={{ width: '30px', height: '30px', borderRadius: '50%', background: paleta.primary, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#ffffff" strokeWidth={1.8}><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-            </a>
-          ) : (
-            <div title="LinkedIn — próximamente" style={{ width: '30px', height: '30px', borderRadius: '50%', border: `1.5px dashed ${paleta.dark}55`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke={`${paleta.dark}99`} strokeWidth={1.8}><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-            </div>
-          )}
-        </div>
+<SocialIcons
+          tier="premium"
+          whatsapp={perfil.whatsapp}
+          instagram={perfil.instagram}
+          tiktok={perfil.tiktok}
+          youtube={perfil.youtube}
+          linkedin={perfil.linkedin}
+          activeColor={paleta.primary}
+          grayColor={paleta.dark}
+        />
       </div>
     </div>
   );
 }
+
 function FilaSecundariaRow({ fila }: { fila: FilaSecundaria }) {
   const nombreCompleto = `${fila.nombre} ${fila.primerApellido} ${fila.segundoApellido}`.trim();
   return (

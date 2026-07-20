@@ -1,4 +1,15 @@
 import { getNutricionistas } from '@/lib/nutricionistas';
+import { perfilesManual } from '@/lib/perfiles-manual';
+import SocialIcons from '@/components/SocialIcons';
+
+function shuffle<T>(arr: T[]): T[] {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
 import Link from 'next/link';
 
 export default async function Directorio({
@@ -40,21 +51,49 @@ export default async function Directorio({
         <p style={{ marginBottom: '10px', color: 'rgba(16,0,76,0.7)' }}>
           {resultados.length} nutricionistas encontrados
         </p>
-        <p style={{ marginBottom: '30px', color: 'rgba(16,0,76,0.5)', fontSize: '13px' }}>
+<p style={{ marginBottom: '10px', color: 'rgba(16,0,76,0.5)', fontSize: '13px' }}>
           Nota: aún no filtramos por modalidad o tipo de sesión — mostrando todos los que coinciden con la especialidad.
         </p>
+        <p style={{ marginBottom: '30px', color: 'rgba(16,0,76,0.5)', fontSize: '13px' }}>
+          Mostrando 50 resultados solamente para garantizar igualdad y performance del sitio.
+        </p>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {resultados.slice(0, 50).map((n, i) => (
-            <div key={i} style={{ background: '#F3F0FF', borderRadius: '14px', padding: '18px 22px' }}>
-              <p style={{ fontWeight: 700, margin: 0, fontSize: '17px' }}>
-                {n.Nombre} {n['Primer Apellido']} {n['Segundo Apellido']}
-              </p>
-              {n.Especialidad && (
-                <p style={{ margin: '6px 0 0', fontSize: '14px', color: '#5A57A8' }}>{n.Especialidad}</p>
-              )}
-            </div>
-          ))}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '14px' }}>
+          {shuffle(resultados).slice(0, 50).map((n, i) => {
+            const tieneEspecialidad = !!n.Especialidad?.trim();
+            const manual = perfilesManual.find((m) => m.carne === n['Carné'].trim());
+            const tier = manual?.tier ?? 'free';
+            return (
+              <div key={i} style={{ background: '#F3F0FF', borderRadius: '14px', padding: '16px 20px' }}>
+                <p style={{ fontWeight: 700, margin: 0, fontSize: '16px', color: '#10004C' }}>
+                  {n.Nombre} {n['Primer Apellido']} {n['Segundo Apellido']}
+                </p>
+                <p style={{ margin: '4px 0 10px', fontSize: '12px', color: 'rgba(16,0,76,0.5)' }}>
+                  Carné {n['Carné']}
+                </p>
+<p style={{ margin: '0 0 2px', fontSize: '12px', color: 'rgba(16,0,76,0.4)' }}>
+                  Especialidades: {tieneEspecialidad ? 'Sí' : 'No'}
+                </p>
+                <p style={{ margin: '0 0 2px', fontSize: '12px', color: 'rgba(16,0,76,0.4)' }}>
+                  Citas online: No indica
+                </p>
+                <p style={{ margin: '0 0 12px', fontSize: '12px', color: 'rgba(16,0,76,0.4)' }}>
+                  Visita a domicilio: No indica
+                </p>
+<SocialIcons
+                  tier={tier}
+                  whatsapp={manual?.whatsapp ?? null}
+                  instagram={manual?.instagram ?? null}
+                  tiktok={manual?.tiktok ?? null}
+                  youtube={manual?.youtube ?? null}
+                  linkedin={manual?.linkedin ?? null}
+                  activeColor="#7370E0"
+                  grayColor="#10004C"
+                  size={26}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

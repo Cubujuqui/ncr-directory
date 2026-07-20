@@ -7,7 +7,9 @@ export type PerfilCompleto = {
   segundoApellido: string;
   especialidad: string | null;
   whatsapp: string | null;
-  instagram: string | null;
+ instagram: string | null;
+  tiktok: string | null;
+  youtube: string | null;
   linkedin: string | null;
   fotoUrl: string | null;
   tier: PerfilManual['tier'];
@@ -28,7 +30,9 @@ function mergePerfil(manual: PerfilManual, csv: Nutricionista[]): PerfilCompleto
     segundoApellido: csvRow ? csvRow['Segundo Apellido'] : '',
     especialidad: manual.especialidadManual || null,
     whatsapp: manual.whatsapp || null,
-    instagram: manual.instagram || null,
+  instagram: manual.instagram || null,
+    tiktok: manual.tiktok || null,
+    youtube: manual.youtube || null,
     linkedin: manual.linkedin || null,
     fotoUrl: manual.fotoUrl || null,
     tier: manual.tier,
