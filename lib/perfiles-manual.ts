@@ -8,7 +8,9 @@ export type PerfilManual = {
 instagram?: string;
   tiktok?: string;
   youtube?: string;
-  linkedin?: string;
+linkedin?: string;
+  citasOnline?: boolean;
+  visitaDomicilio?: boolean;
   fotoUrl?: string; // leave unset to show placeholder
 };
 
@@ -27,9 +29,15 @@ export const perfilesManual: PerfilManual[] = [
     whatsapp: '50687161848',
     instagram: 'merezconutricion',
   },
-  {
+{
     carne: '3570-25', // Ines Miranda Duran
     tier: 'premium',
     whatsapp: '50685179448',
+  },
+  {
+    carne: '2013-15', // Daniela Sanchez Conejo
+    tier: 'contact',
+    whatsapp: '50687896701',
+    citasOnline: true,
   },
 ];

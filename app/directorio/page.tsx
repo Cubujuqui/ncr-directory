@@ -1,4 +1,5 @@
 import { getNutricionistas } from '@/lib/nutricionistas';
+import { ordenarResultadosDirectorio } from '@/lib/perfiles';
 import { perfilesManual } from '@/lib/perfiles-manual';
 import SocialIcons from '@/components/SocialIcons';
 
@@ -59,7 +60,7 @@ export default async function Directorio({
         </p>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '14px' }}>
-          {shuffle(resultados).slice(0, 50).map((n, i) => {
+{ordenarResultadosDirectorio(resultados).map((n, i) => {
             const tieneEspecialidad = !!n.Especialidad?.trim();
             const manual = perfilesManual.find((m) => m.carne === n['Carné'].trim());
             const tier = manual?.tier ?? 'free';
@@ -82,6 +83,7 @@ export default async function Directorio({
                 </p>
 <SocialIcons
                   tier={tier}
+                  identificador={n['Carné'].trim()}
                   whatsapp={manual?.whatsapp ?? null}
                   instagram={manual?.instagram ?? null}
                   tiktok={manual?.tiktok ?? null}

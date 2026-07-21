@@ -3,6 +3,7 @@ type Tier = 'premium' | 'contact' | 'free';
 
 type Props = {
   tier: Tier;
+  identificador?: string;
   whatsapp: string | null;
   instagram: string | null;
   tiktok: string | null;
@@ -31,8 +32,10 @@ const ICONOS = {
   ),
 };
 
-function getHref(platform: keyof typeof ICONOS, value: string) {
-  if (platform === 'whatsapp') return 'https://wa.me/' + value;
+function getHref(platform: keyof typeof ICONOS, value: string, identificador?: string) {
+  if (platform === 'whatsapp') {
+    return identificador ? '/go/whatsapp/' + encodeURIComponent(identificador) : 'https://wa.me/' + value;
+  }
   if (platform === 'instagram') return 'https://instagram.com/' + value;
   if (platform === 'tiktok') return 'https://tiktok.com/@' + value;
   return value;
@@ -61,7 +64,7 @@ export default function SocialIcons(props: Props) {
     const activo = permitido && !!valor;
 
     if (activo) {
-      const enlace = getHref(platform, valor as string);
+  const enlace = getHref(platform, valor as string, props.identificador);
       return React.createElement(
         'a',
         {

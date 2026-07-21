@@ -37,6 +37,7 @@ function PremiumCard({ perfil, paleta }: { perfil: PerfilCompleto; paleta: typeo
 
 <SocialIcons
           tier="premium"
+          identificador={perfil.carne ?? undefined}
           whatsapp={perfil.whatsapp}
           instagram={perfil.instagram}
           tiktok={perfil.tiktok}

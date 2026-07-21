@@ -3,6 +3,7 @@ import { perfilesManual, PerfilManual } from './perfiles-manual';
 
 export type PerfilCompleto = {
   nombre: string;
+  carne: string | null;
   primerApellido: string;
   segundoApellido: string;
   especialidad: string | null;
@@ -26,6 +27,7 @@ function mergePerfil(manual: PerfilManual, csv: Nutricionista[]): PerfilCompleto
   const csvRow = manual.carne ? csv.find((n) => n['Carné'].trim() === manual.carne) : undefined;
   return {
     nombre: csvRow ? csvRow.Nombre : manual.nombreManual || '',
+    carne: manual.carne,
     primerApellido: csvRow ? csvRow['Primer Apellido'] : manual.apellidoManual || '',
     segundoApellido: csvRow ? csvRow['Segundo Apellido'] : '',
     especialidad: manual.especialidadManual || null,
@@ -61,6 +63,29 @@ function shuffle<T>(arr: T[]): T[] {
     [copy[i], copy[j]] = [copy[j], copy[i]];
   }
   return copy;
+}
+
+export function ordenarResultadosDirectorio(
+  nutricionistas: Nutricionista[],
+  maxTotal = 50,
+  maxContactoDestacado = 6
+): Nutricionista[] {
+  const esContacto = (n: Nutricionista) => {
+    const m = perfilesManual.find((p) => p.carne === n['Carné'].trim());
+    return m?.tier === 'contact';
+  };
+
+  const contactos = nutricionistas.filter(esContacto);
+  const resto = nutricionistas.filter((n) => !esContacto(n));
+
+  const contactosBarajados = shuffle(contactos);
+  const destacados = contactosBarajados.slice(0, maxContactoDestacado);
+  const contactosRestantes = contactosBarajados.slice(maxContactoDestacado);
+
+  const poolRestante = shuffle([...contactosRestantes, ...resto]);
+  const espacioRestante = Math.max(maxTotal - destacados.length, 0);
+
+  return [...destacados, ...poolRestante.slice(0, espacioRestante)];
 }
 
 export function getFilasSecundarias(totalFilas = 4): FilaSecundaria[] {
