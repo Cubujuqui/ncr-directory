@@ -31,11 +31,22 @@ function PremiumCard({ perfil, paleta }: { perfil: PerfilCompleto; paleta: typeo
           PERFIL PREMIUM
         </span>
         <p style={{ margin: 0, fontWeight: 800, fontSize: '16px', color: paleta.dark }}>{nombreCompleto}</p>
-        <p style={{ margin: '4px 0 14px', fontSize: '13px', color: `${paleta.dark}99`, fontStyle: 'italic' }}>
-          {perfil.especialidad || 'Especialidad por confirmar'}
+        {perfil.carne && (
+          <p style={{ margin: '2px 0 0', fontSize: '12px', color: `${paleta.dark}99` }}>
+            Carné {perfil.carne}
+          </p>
+        )}
+<p style={{ margin: '4px 0 2px', fontSize: '12px', color: perfil.especialidad ? paleta.dark : `${paleta.dark}66`, fontWeight: perfil.especialidad ? 700 : 400 }}>
+          Especialidad: {perfil.especialidad || 'No indica'}
+        </p>
+        <p style={{ margin: '0 0 2px', fontSize: '12px', color: perfil.citasOnline ? paleta.dark : `${paleta.dark}66`, fontWeight: perfil.citasOnline ? 700 : 400 }}>
+          Citas online: {perfil.citasOnline ? 'Sí' : 'No indica'}
+        </p>
+        <p style={{ margin: '0 0 14px', fontSize: '12px', color: perfil.visitaDomicilio ? paleta.dark : `${paleta.dark}66`, fontWeight: perfil.visitaDomicilio ? 700 : 400 }}>
+          Visita a domicilio: {perfil.visitaDomicilio ? 'Sí' : 'No indica'}
         </p>
 
-<SocialIcons
+        <SocialIcons
           tier="premium"
           identificador={perfil.carne ?? undefined}
           whatsapp={perfil.whatsapp}

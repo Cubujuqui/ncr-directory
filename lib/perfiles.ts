@@ -11,7 +11,9 @@ export type PerfilCompleto = {
  instagram: string | null;
   tiktok: string | null;
   youtube: string | null;
-  linkedin: string | null;
+linkedin: string | null;
+  citasOnline: boolean | null;
+  visitaDomicilio: boolean | null;
   fotoUrl: string | null;
   tier: PerfilManual['tier'];
 };
@@ -30,12 +32,14 @@ function mergePerfil(manual: PerfilManual, csv: Nutricionista[]): PerfilCompleto
     carne: manual.carne,
     primerApellido: csvRow ? csvRow['Primer Apellido'] : manual.apellidoManual || '',
     segundoApellido: csvRow ? csvRow['Segundo Apellido'] : '',
-    especialidad: manual.especialidadManual || null,
+especialidad: manual.especialidadManual || csvRow?.Especialidad?.trim() || null,
     whatsapp: manual.whatsapp || null,
   instagram: manual.instagram || null,
     tiktok: manual.tiktok || null,
     youtube: manual.youtube || null,
     linkedin: manual.linkedin || null,
+    citasOnline: manual.citasOnline ?? null,
+    visitaDomicilio: manual.visitaDomicilio ?? null,
     fotoUrl: manual.fotoUrl || null,
     tier: manual.tier,
   };
