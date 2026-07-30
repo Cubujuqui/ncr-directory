@@ -1,12 +1,11 @@
 import { getEspecialidades } from '@/lib/nutricionistas';
 import SearchBar from '@/components/SearchBar';
 import Spotlight from '@/components/Spotlight';
-import { getPerfilesDestacados, getFilasSecundarias } from '@/lib/perfiles';
+import { getPerfilesDestacados } from '@/lib/perfiles';
 
 export default function Home() {
   const especialidades = getEspecialidades();
   const perfilesDestacados = getPerfilesDestacados();
-  const filasSecundarias = getFilasSecundarias();
 
   return (
     <div style={{ minHeight: '100vh', background: '#BFB6FF', fontFamily: "'Mulish', system-ui, sans-serif", color: '#10004C', overflow: 'hidden', position: 'relative' }}>
@@ -24,8 +23,8 @@ export default function Home() {
           <a href="#" style={{ color: '#10004C', textDecoration: 'none', fontSize: '15px', fontWeight: 600 }}></a>
           <a href="#" style={{ color: '#10004C', textDecoration: 'none', fontSize: '15px', fontWeight: 600 }}></a>
           <a href="#" style={{ color: '#10004C', textDecoration: 'none', fontSize: '15px', fontWeight: 600 }}></a>
-          <a href="#" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', border: '1.5px solid rgba(16,0,76,0.55)', borderRadius: '999px', padding: '11px 22px', color: '#10004C', textDecoration: 'none', fontSize: '15px', fontWeight: 700, textAlign: 'center' }}>
-            Acceso VIP para Nutri&apos;s
+          <a href="/go/whatsapp/solicitar" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', border: '1.5px solid rgba(16,0,76,0.55)', borderRadius: '999px', padding: '11px 22px', color: '#10004C', textDecoration: 'none', fontSize: '15px', fontWeight: 700, textAlign: 'center' }}>
+            ¿Sos nutricionista? Escribinos
           </a>
         </nav>
       </header>
@@ -47,7 +46,7 @@ export default function Home() {
           </div>
         </div>
       </main>
-<Spotlight perfiles={perfilesDestacados} filasSecundarias={filasSecundarias} />
+<Spotlight perfiles={perfilesDestacados} />
       {/* FOOTER */}
       <footer style={{ maxWidth: '1400px', margin: '0 auto', padding: '16px 40px 32px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>

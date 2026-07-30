@@ -1,0 +1,1 @@
+export const whatsappAdmin = '50684609660';

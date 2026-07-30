@@ -72,24 +72,28 @@ function shuffle<T>(arr: T[]): T[] {
 export function ordenarResultadosDirectorio(
   nutricionistas: Nutricionista[],
   maxTotal = 50,
-  maxContactoDestacado = 6
+  maxPremiumDestacado = 3,
+  maxContactoDestacado = 3
 ): Nutricionista[] {
-  const esContacto = (n: Nutricionista) => {
+  const tierDe = (n: Nutricionista) => {
     const m = perfilesManual.find((p) => p.carne === n['Carné'].trim());
-    return m?.tier === 'contact';
+    return m?.tier ?? 'free';
   };
 
-  const contactos = nutricionistas.filter(esContacto);
-  const resto = nutricionistas.filter((n) => !esContacto(n));
+  const premium = shuffle(nutricionistas.filter((n) => tierDe(n) === 'premium'));
+  const contacto = shuffle(nutricionistas.filter((n) => tierDe(n) === 'contact'));
+  const gratis = nutricionistas.filter((n) => tierDe(n) === 'free');
 
-  const contactosBarajados = shuffle(contactos);
-  const destacados = contactosBarajados.slice(0, maxContactoDestacado);
-  const contactosRestantes = contactosBarajados.slice(maxContactoDestacado);
+  const premiumDestacados = premium.slice(0, maxPremiumDestacado);
+  const contactoDestacados = contacto.slice(0, maxContactoDestacado);
 
-  const poolRestante = shuffle([...contactosRestantes, ...resto]);
-  const espacioRestante = Math.max(maxTotal - destacados.length, 0);
+  const premiumResto = premium.slice(maxPremiumDestacado);
+  const contactoResto = contacto.slice(maxContactoDestacado);
 
-  return [...destacados, ...poolRestante.slice(0, espacioRestante)];
+  const pool = shuffle([...premiumResto, ...contactoResto, ...gratis]);
+  const espacioRestante = Math.max(maxTotal - premiumDestacados.length - contactoDestacados.length, 0);
+
+  return [...premiumDestacados, ...contactoDestacados, ...pool.slice(0, espacioRestante)];
 }
 
 export function getFilasSecundarias(totalFilas = 4): FilaSecundaria[] {
