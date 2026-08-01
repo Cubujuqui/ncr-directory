@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Nutricionistas en Costa Rica | Agenda tu Cita Online",
   description:
-    "Encuentra nutricionistas en Costa Rica especializados en pérdida de peso, nutrición deportiva, infantil y más. Agenda tu cita online o presencial.",
+    "Encontrá las mejores nutricionistas en Costa Rica. Especialistas en pérdida de peso, nutrición deportiva, infantil y más. Agendá tu cita online o presencial.",
 };
 
 export default function RootLayout({
