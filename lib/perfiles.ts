@@ -14,6 +14,7 @@ export type PerfilCompleto = {
 linkedin: string | null;
   citasOnline: boolean | null;
   visitaDomicilio: boolean | null;
+  puntoContactoPrimario: 'whatsapp' | 'instagram' | 'tiktok' | 'youtube' | 'linkedin' | 'email';
   email: string | null;
   fotoUrl: string | null;
   tier: PerfilManual['tier'];
@@ -41,6 +42,7 @@ especialidad: manual.especialidadManual || csvRow?.Especialidad?.trim() || null,
     linkedin: manual.linkedin || null,
     citasOnline: manual.citasOnline ?? null,
     visitaDomicilio: manual.visitaDomicilio ?? null,
+    puntoContactoPrimario: manual.puntoContactoPrimario ?? 'whatsapp',
     email: manual.email || null,
     fotoUrl: manual.fotoUrl || null,
     tier: manual.tier,
