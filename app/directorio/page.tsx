@@ -85,6 +85,7 @@ export default async function Directorio({
                   tier={tier}
                   identificador={n['Carné'].trim()}
                   whatsapp={manual?.whatsapp ?? null}
+                  email={manual?.email ?? null}
                   instagram={manual?.instagram ?? null}
                   tiktok={manual?.tiktok ?? null}
                   youtube={manual?.youtube ?? null}

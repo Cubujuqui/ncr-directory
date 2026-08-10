@@ -50,6 +50,7 @@ function PremiumCard({ perfil, paleta }: { perfil: PerfilCompleto; paleta: typeo
           tier="premium"
           identificador={perfil.carne ?? undefined}
           whatsapp={perfil.whatsapp}
+          email={perfil.email}
           instagram={perfil.instagram}
           tiktok={perfil.tiktok}
           youtube={perfil.youtube}

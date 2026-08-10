@@ -11,6 +11,7 @@ instagram?: string;
 linkedin?: string;
   citasOnline?: boolean;
   visitaDomicilio?: boolean;
+  email?: string;
   fotoUrl?: string; // leave unset to show placeholder
 };
 

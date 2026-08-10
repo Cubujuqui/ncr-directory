@@ -5,6 +5,7 @@ type Props = {
   tier: Tier;
   identificador?: string;
   whatsapp: string | null;
+  email: string | null;
   instagram: string | null;
   tiktok: string | null;
   youtube: string | null;
@@ -17,6 +18,9 @@ type Props = {
 const ICONOS = {
   whatsapp: (color: string) => (
     <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={2}><path d="M3 21l1.65-4.95A9 9 0 1 1 8.05 19.35L3 21z"></path></svg>
+  ),
+  email: (color: string) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={1.8}><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>
   ),
   instagram: (color: string) => (
     <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={1.8}><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.4" cy="6.6" r="1.1" fill={color} stroke="none"></circle></svg>
@@ -36,11 +40,13 @@ function getHref(platform: keyof typeof ICONOS, value: string, identificador?: s
   if (platform === 'whatsapp') {
     return identificador ? '/go/whatsapp/' + encodeURIComponent(identificador) : 'https://wa.me/' + value;
   }
+  if (platform === 'email') {
+    return identificador ? '/go/email/' + encodeURIComponent(identificador) : 'mailto:' + value;
+  }
   if (platform === 'instagram') return 'https://instagram.com/' + value;
   if (platform === 'tiktok') return 'https://tiktok.com/@' + value;
   return value;
 }
-
 export default function SocialIcons(props: Props) {
   const tier = props.tier;
   const activeColor = props.activeColor;
@@ -50,17 +56,17 @@ export default function SocialIcons(props: Props) {
 
   const valores: Record<keyof typeof ICONOS, string | null> = {
     whatsapp: props.whatsapp,
+    email: props.email,
     instagram: props.instagram,
     tiktok: props.tiktok,
     youtube: props.youtube,
     linkedin: props.linkedin,
   };
 
-  const orden: (keyof typeof ICONOS)[] = ['whatsapp', 'instagram', 'tiktok', 'youtube', 'linkedin'];
+const orden: (keyof typeof ICONOS)[] = ['whatsapp', 'email', 'instagram', 'tiktok', 'youtube', 'linkedin'];
 
   const items = orden.map(function (platform) {
-    const permitido = tier === 'premium' || (tier === 'contact' && platform === 'whatsapp');
-    const valor = valores[platform];
+const permitido = tier === 'premium' || (tier === 'contact' && (platform === 'whatsapp' || platform === 'email'));    const valor = valores[platform];
     const activo = permitido && !!valor;
 
     if (activo) {

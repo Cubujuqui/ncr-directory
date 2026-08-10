@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { getEspecialidades } from '@/lib/nutricionistas';
 import SearchBar from '@/components/SearchBar';
 import Spotlight from '@/components/Spotlight';
@@ -58,8 +59,7 @@ export default function Home() {
             </svg>
           </a>
         </div>
-        <a href="#" style={{ color: 'rgba(16,0,76,0.6)', textDecoration: 'none', fontSize: '13px', fontWeight: 400 }}>Lo que debes saber</a>
-      </footer>
+<Link href="/aviso-legal" style={{ color: 'rgba(16,0,76,0.6)', textDecoration: 'none', fontSize: '13px', fontWeight: 400 }}>Aviso Legal</Link>      </footer>
     </div>
   );
 }
