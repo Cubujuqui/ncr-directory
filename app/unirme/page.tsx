@@ -38,7 +38,7 @@ export default function Unirme() {
     const form = e.currentTarget;
     const data = new FormData(form);
 
-    const carne = carneValor.trim();
+const carne = carneValor.trim();
     const consentimiento = data.get('consentimiento') === 'on';
 
     if (!carne) {
@@ -46,17 +46,37 @@ export default function Unirme() {
       setErrorMsg('El número de carné es obligatorio.');
       return;
     }
+    if (!busquedaHecha || !nombreCPN) {
+      setEstado('error');
+      setErrorMsg('Necesitamos verificar tu carné antes de continuar. Hacé clic en "Buscar" y confirmá que aparece tu nombre.');
+      return;
+    }
     if (!consentimiento) {
       setEstado('error');
       setErrorMsg('Debés autorizar la publicación de tus datos para continuar.');
       return;
     }
-    if (!fotoCarne) {
+if (!fotoCarne) {
       setEstado('error');
       setErrorMsg('Necesitamos una foto de tu carné para verificar tu identidad.');
       return;
     }
 
+    const canalPrincipal = data.get('punto_contacto_primario') as string;
+    const valorCanalPrincipal = (data.get(canalPrincipal) as string || '').trim();
+    if (!valorCanalPrincipal) {
+      const nombresCanal: Record<string, string> = {
+        whatsapp: 'WhatsApp',
+        email: 'Email',
+        instagram: 'Instagram',
+        tiktok: 'TikTok',
+        youtube: 'YouTube',
+        linkedin: 'LinkedIn',
+      };
+      setEstado('error');
+      setErrorMsg(`Elegiste ${nombresCanal[canalPrincipal]} como tu canal principal — necesitamos ese dato para poder redirigir a quien te contacte.`);
+      return;
+    }
     setEstado('enviando');
 
     const referidoPor = (data.get('referido_por') as string || '').trim() || null;
@@ -152,7 +172,7 @@ whatsapp: (() => {
                 onChange={(e) => { setCarneValor(e.target.value); setBusquedaHecha(false); }}
                 onBlur={buscarNombre}
                 style={{ ...inputStyle, flex: 1 }}
-                placeholder="Ej. 1987-15"
+                placeholder="Ej. 0000-00"
               />
               <button
                 type="button"
@@ -183,17 +203,17 @@ whatsapp: (() => {
               </div>
             )}
 
-            {busquedaHecha && !nombreCPN && (
-              <div style={{ marginTop: '10px' }}>
-                <p style={helpStyle}>No encontramos ese carné en el registro público más reciente. Podés escribir tu nombre manualmente.</p>
-                <input name="nombre_preferido" style={{ ...inputStyle, marginTop: '8px' }} placeholder="Tu nombre completo" />
+{busquedaHecha && !nombreCPN && (
+              <div style={{ marginTop: '10px', background: '#FDECEC', borderRadius: '10px', padding: '12px' }}>
+                <p style={{ fontSize: '13px', color: '#c0392b', fontWeight: 700, margin: 0 }}>
+                  No encontramos ese carné en el registro público del CPN. Verificá que esté correctamente escrito — no podés continuar sin un carné válido.
+                </p>
               </div>
             )}
           </div>
 
           <div style={sectionStyle}>
-            <label style={labelStyle}>Foto de tu carné vigente *</label>
-            <input
+            <label style={labelStyle}>Foto de tu carné vigente *</label>            <input
               type="file"
               accept="image/*"
               required
