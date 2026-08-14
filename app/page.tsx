@@ -3,6 +3,7 @@ import { getEspecialidades } from '@/lib/nutricionistas';
 import SearchBar from '@/components/SearchBar';
 import Spotlight from '@/components/Spotlight';
 import { getPerfilesDestacados } from '@/lib/perfiles';
+import Image from 'next/image';
 
 export default function Home() {
   const especialidades = getEspecialidades();
@@ -14,10 +15,7 @@ export default function Home() {
       {/* NAV */}
       <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 40px', maxWidth: '1400px', margin: '0 auto', gap: '24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1.5px dashed rgba(16,0,76,0.5)', borderRadius: '8px', backgroundImage: 'repeating-linear-gradient(135deg, rgba(16,0,76,0.10) 0 6px, rgba(16,0,76,0.02) 6px 12px)' }}>
-            <span style={{ fontFamily: "ui-monospace, 'SF Mono', Menlo, monospace", fontSize: '8px', lineHeight: 1.05, color: 'rgba(16,0,76,0.85)', textAlign: 'center', letterSpacing: '0.2px' }}>logo.svg</span>
-          </div>
-        </div>
+<Image src="/ncr-disc.svg" alt="Nutricionistas en Costa Rica" width={44} height={44} />        </div>
 
         <nav style={{ display: 'flex', alignItems: 'center', gap: '30px', marginLeft: 'auto' }}>
           <a href="#" style={{ color: '#10004C', textDecoration: 'none', fontSize: '15px', fontWeight: 600 }}></a>
