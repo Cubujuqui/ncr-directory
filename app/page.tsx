@@ -5,9 +5,9 @@ import Spotlight from '@/components/Spotlight';
 import { getPerfilesDestacados } from '@/lib/perfiles';
 import Image from 'next/image';
 
-export default function Home() {
+export default async function Home() {
   const especialidades = getEspecialidades();
-  const perfilesDestacados = getPerfilesDestacados();
+  const perfilesDestacados = await getPerfilesDestacados();
 
   return (
     <div style={{ minHeight: '100vh', background: '#BFB6FF', fontFamily: "'Mulish', system-ui, sans-serif", color: '#10004C', overflow: 'hidden', position: 'relative' }}>

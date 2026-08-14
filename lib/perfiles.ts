@@ -1,123 +1,107 @@
-import { getNutricionistas, Nutricionista } from './nutricionistas';
-import { perfilesManual, PerfilManual } from './perfiles-manual';
+import { supabaseAdmin } from './supabase-admin';
+import { getElegibilidadMap } from './elegibilidad';
 
 export type PerfilCompleto = {
-  nombre: string;
   carne: string | null;
+  nombre: string;
   primerApellido: string;
   segundoApellido: string;
   especialidad: string | null;
   whatsapp: string | null;
- instagram: string | null;
+  email: string | null;
+  instagram: string | null;
   tiktok: string | null;
   youtube: string | null;
-linkedin: string | null;
+  linkedin: string | null;
+  fotoUrl: string | null;
+  tier: 'free' | 'contact' | 'premium';
   citasOnline: boolean | null;
   visitaDomicilio: boolean | null;
   puntoContactoPrimario: 'whatsapp' | 'instagram' | 'tiktok' | 'youtube' | 'linkedin' | 'email';
-  email: string | null;
-  fotoUrl: string | null;
-  tier: PerfilManual['tier'];
 };
 
-export type FilaSecundaria = {
-  nombre: string;
-  primerApellido: string;
-  segundoApellido: string;
-  tier: 'contact' | 'free';
-};
+function toTitleCase(texto: string | null): string {
+  if (!texto) return '';
+  return texto
+    .toLowerCase()
+    .split(' ')
+    .map((palabra) => palabra.charAt(0).toUpperCase() + palabra.slice(1))
+    .join(' ');
+}
 
-function mergePerfil(manual: PerfilManual, csv: Nutricionista[]): PerfilCompleto {
-  const csvRow = manual.carne ? csv.find((n) => n['Carné'].trim() === manual.carne) : undefined;
+function mapearPerfil(fila: any): PerfilCompleto {
   return {
-    nombre: csvRow ? csvRow.Nombre : manual.nombreManual || '',
-    carne: manual.carne,
-    primerApellido: csvRow ? csvRow['Primer Apellido'] : manual.apellidoManual || '',
-    segundoApellido: csvRow ? csvRow['Segundo Apellido'] : '',
-especialidad: manual.especialidadManual || csvRow?.Especialidad?.trim() || null,
-    whatsapp: manual.whatsapp || null,
-  instagram: manual.instagram || null,
-    tiktok: manual.tiktok || null,
-    youtube: manual.youtube || null,
-    linkedin: manual.linkedin || null,
-    citasOnline: manual.citasOnline ?? null,
-    visitaDomicilio: manual.visitaDomicilio ?? null,
-    puntoContactoPrimario: manual.puntoContactoPrimario ?? 'whatsapp',
-    email: manual.email || null,
-    fotoUrl: manual.fotoUrl || null,
-    tier: manual.tier,
+    carne: fila.carne,
+    nombre: fila.nombre_preferido ? toTitleCase(fila.nombre_preferido) : toTitleCase(fila.nombre_manual),
+    primerApellido: toTitleCase(fila.apellido_manual),
+    segundoApellido: toTitleCase(fila.segundo_apellido_manual),
+    especialidad: fila.especialidad_manual,
+    whatsapp: fila.whatsapp,
+    email: fila.email,
+    instagram: fila.instagram,
+    tiktok: fila.tiktok,
+    youtube: fila.youtube,
+    linkedin: fila.linkedin,
+    fotoUrl: fila.foto_url,
+    tier: (fila.tier as 'free' | 'contact' | 'premium') || 'free',
+    citasOnline: fila.citas_online,
+    visitaDomicilio: fila.visita_domicilio,
+    puntoContactoPrimario: (fila.punto_contacto_primario as PerfilCompleto['puntoContactoPrimario']) || 'whatsapp',
   };
 }
 
-export function getPerfilesDestacados(): PerfilCompleto[] {
-  const csv = getNutricionistas();
-  return perfilesManual.filter((p) => p.tier === 'premium').map((m) => mergePerfil(m, csv));
-}
+async function getTodosLosPerfiles(): Promise<any[]> {
+  const todos: any[] = [];
+  let desde = 0;
+  const tamanoPagina = 1000;
 
-function getSegundoNivel(): FilaSecundaria[] {
-  const csv = getNutricionistas();
-  return perfilesManual
-    .filter((p) => p.tier === 'contact')
-    .map((m) => {
-      const perfil = mergePerfil(m, csv);
-      return { nombre: perfil.nombre, primerApellido: perfil.primerApellido, segundoApellido: perfil.segundoApellido, tier: 'contact' as const };
-    });
-}
+  while (true) {
+    const { data, error } = await supabaseAdmin
+      .from('perfiles')
+      .select('*')
+      .order('id', { ascending: true })
+      .range(desde, desde + tamanoPagina - 1);
 
-function shuffle<T>(arr: T[]): T[] {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
+    if (error || !data) break;
+    todos.push(...data);
+    if (data.length < tamanoPagina) break;
+    desde += tamanoPagina;
   }
-  return copy;
+
+  return todos;
 }
 
-export function ordenarResultadosDirectorio(
-  nutricionistas: Nutricionista[],
-  maxTotal = 50,
-  maxPremiumDestacado = 3,
-  maxContactoDestacado = 3
-): Nutricionista[] {
-  const tierDe = (n: Nutricionista) => {
-    const m = perfilesManual.find((p) => p.carne === n['Carné'].trim());
-    return m?.tier ?? 'free';
-  };
+async function getPerfilesElegibles(): Promise<PerfilCompleto[]> {
+  const [data, elegibilidad] = await Promise.all([
+    getTodosLosPerfiles(),
+    getElegibilidadMap(),
+  ]);
 
-  const premium = shuffle(nutricionistas.filter((n) => tierDe(n) === 'premium'));
-  const contacto = shuffle(nutricionistas.filter((n) => tierDe(n) === 'contact'));
-  const gratis = nutricionistas.filter((n) => tierDe(n) === 'free');
-
-  const premiumDestacados = premium.slice(0, maxPremiumDestacado);
-  const contactoDestacados = contacto.slice(0, maxContactoDestacado);
-
-  const premiumResto = premium.slice(maxPremiumDestacado);
-  const contactoResto = contacto.slice(maxContactoDestacado);
-
-  const pool = shuffle([...premiumResto, ...contactoResto, ...gratis]);
-  const espacioRestante = Math.max(maxTotal - premiumDestacados.length - contactoDestacados.length, 0);
-
-  return [...premiumDestacados, ...contactoDestacados, ...pool.slice(0, espacioRestante)];
+  return data
+    .filter((fila) => fila.carne && elegibilidad.get(fila.carne) !== false)
+    .map(mapearPerfil);
 }
 
-export function getFilasSecundarias(totalFilas = 4): FilaSecundaria[] {
-  const segundoNivel = getSegundoNivel();
-  const carnesExcluidos = new Set(perfilesManual.filter((p) => p.carne).map((p) => p.carne));
-  const csv = getNutricionistas();
+export async function getPerfilesDestacados(): Promise<PerfilCompleto[]> {
+  const perfiles = await getPerfilesElegibles();
+  return perfiles.filter((p) => p.tier === 'premium').slice(0, 3);
+}
 
-  const activosDisponibles = csv.filter(
-    (n) => n.Estado === 'Activo' && !carnesExcluidos.has(n['Carné'].trim())
-  );
+export async function ordenarResultadosDirectorio(especialidad?: string, maxTotal = 50): Promise<{ resultados: PerfilCompleto[]; total: number }> {
+  let perfiles = await getPerfilesElegibles();
 
-  const espaciosLibres = Math.max(totalFilas - segundoNivel.length, 0);
-  const muestraGratuita: FilaSecundaria[] = shuffle(activosDisponibles)
-    .slice(0, espaciosLibres)
-    .map((n) => ({
-      nombre: n.Nombre,
-      primerApellido: n['Primer Apellido'],
-      segundoApellido: n['Segundo Apellido'],
-      tier: 'free' as const,
-    }));
+  if (especialidad) {
+    perfiles = perfiles.filter((p) => p.especialidad === especialidad);
+  }
 
-  return shuffle([...segundoNivel, ...muestraGratuita]);
+  const total = perfiles.length;
+  const premium = perfiles.filter((p) => p.tier === 'premium').slice(0, 3);
+  const contacto = perfiles.filter((p) => p.tier === 'contact').slice(0, 3);
+  const gratis = perfiles
+    .filter((p) => p.tier === 'free')
+    .sort(() => Math.random() - 0.5);
+
+  const restantes = Math.max(0, maxTotal - premium.length - contacto.length);
+  const resultados = [...premium, ...contacto, ...gratis.slice(0, restantes)];
+  return { resultados, total };
 }

@@ -1,16 +1,5 @@
-import { getNutricionistas } from '@/lib/nutricionistas';
 import { ordenarResultadosDirectorio } from '@/lib/perfiles';
-import { perfilesManual } from '@/lib/perfiles-manual';
 import SocialIcons from '@/components/SocialIcons';
-
-function shuffle<T>(arr: T[]): T[] {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
 import Link from 'next/link';
 
 export default async function Directorio({
@@ -19,13 +8,7 @@ export default async function Directorio({
   searchParams: Promise<{ especialidad?: string; modo?: string; tipo?: string }>;
 }) {
   const { especialidad, modo, tipo } = await searchParams;
-  const all = getNutricionistas();
-
-  const resultados = all.filter((n) => {
-    if (n.Estado !== 'Activo') return false;
-    if (especialidad && n.Especialidad?.trim() !== especialidad) return false;
-    return true;
-  });
+  const { resultados, total } = await ordenarResultadosDirectorio(especialidad, 50);
 
   return (
     <div style={{ minHeight: '100vh', background: '#BFB6FF', fontFamily: "'Mulish', system-ui, sans-serif", color: '#10004C', padding: '40px' }}>
@@ -50,9 +33,9 @@ export default async function Directorio({
         </div>
 
         <p style={{ marginBottom: '10px', color: 'rgba(16,0,76,0.7)' }}>
-          {resultados.length} nutricionistas encontrados
+          {total} nutricionistas encontrados
         </p>
-<p style={{ marginBottom: '10px', color: 'rgba(16,0,76,0.5)', fontSize: '13px' }}>
+        <p style={{ marginBottom: '10px', color: 'rgba(16,0,76,0.5)', fontSize: '13px' }}>
           Nota: aún no filtramos por modalidad o tipo de sesión — mostrando todos los que coinciden con la especialidad.
         </p>
         <p style={{ marginBottom: '30px', color: 'rgba(16,0,76,0.5)', fontSize: '13px' }}>
@@ -60,36 +43,36 @@ export default async function Directorio({
         </p>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '14px' }}>
-{ordenarResultadosDirectorio(resultados).map((n, i) => {
-            const tieneEspecialidad = !!n.Especialidad?.trim();
-            const manual = perfilesManual.find((m) => m.carne === n['Carné'].trim());
-            const tier = manual?.tier ?? 'free';
+          {resultados.map((perfil, i) => {
+            const tieneEspecialidad = !!perfil.especialidad;
+            const citasTexto = perfil.citasOnline === true ? 'Sí' : perfil.citasOnline === false ? 'No' : 'No indica';
+            const domicilioTexto = perfil.visitaDomicilio === true ? 'Sí' : perfil.visitaDomicilio === false ? 'No' : 'No indica';
             return (
-              <div key={i} style={{ background: '#F3F0FF', borderRadius: '14px', padding: '16px 20px' }}>
+              <div key={perfil.carne ?? i} style={{ background: '#F3F0FF', borderRadius: '14px', padding: '16px 20px' }}>
                 <p style={{ fontWeight: 700, margin: 0, fontSize: '16px', color: '#10004C' }}>
-                  {n.Nombre} {n['Primer Apellido']} {n['Segundo Apellido']}
+                  {perfil.nombre} {perfil.primerApellido} {perfil.segundoApellido}
                 </p>
                 <p style={{ margin: '4px 0 10px', fontSize: '12px', color: 'rgba(16,0,76,0.5)' }}>
-                  Carné {n['Carné']}
+                  Carné {perfil.carne}
                 </p>
-<p style={{ margin: '0 0 2px', fontSize: '12px', color: 'rgba(16,0,76,0.4)' }}>
+                <p style={{ margin: '0 0 2px', fontSize: '12px', color: 'rgba(16,0,76,0.4)' }}>
                   Especialidades: {tieneEspecialidad ? 'Sí' : 'No'}
                 </p>
                 <p style={{ margin: '0 0 2px', fontSize: '12px', color: 'rgba(16,0,76,0.4)' }}>
-                  Citas online: No indica
+                  Citas online: {citasTexto}
                 </p>
                 <p style={{ margin: '0 0 12px', fontSize: '12px', color: 'rgba(16,0,76,0.4)' }}>
-                  Visita a domicilio: No indica
+                  Visita a domicilio: {domicilioTexto}
                 </p>
-<SocialIcons
-                  tier={tier}
-                  identificador={n['Carné'].trim()}
-                  whatsapp={manual?.whatsapp ?? null}
-                  email={manual?.email ?? null}
-                  instagram={manual?.instagram ?? null}
-                  tiktok={manual?.tiktok ?? null}
-                  youtube={manual?.youtube ?? null}
-                  linkedin={manual?.linkedin ?? null}
+                <SocialIcons
+                  tier={perfil.tier}
+                  identificador={perfil.carne ?? ''}
+                  whatsapp={perfil.whatsapp}
+                  email={perfil.email}
+                  instagram={perfil.instagram}
+                  tiktok={perfil.tiktok}
+                  youtube={perfil.youtube}
+                  linkedin={perfil.linkedin}
                   activeColor="#7370E0"
                   grayColor="#10004C"
                   size={26}

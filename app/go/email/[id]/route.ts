@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { perfilesManual } from '@/lib/perfiles-manual';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const perfil = perfilesManual.find((p) => p.carne === id);
+
+  const { data: perfil } = await supabaseAdmin
+    .from('perfiles')
+    .select('email')
+    .eq('carne', id)
+    .maybeSingle();
 
   if (!perfil?.email) {
     return NextResponse.redirect(new URL('/', request.url));

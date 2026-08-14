@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { perfilesManual } from '@/lib/perfiles-manual';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 import { whatsappAdmin } from '@/lib/contacto-admin';
 
 export async function GET(
@@ -14,7 +14,11 @@ export async function GET(
     );
   }
 
-  const perfil = perfilesManual.find((p) => p.carne === id);
+  const { data: perfil } = await supabaseAdmin
+    .from('perfiles')
+    .select('whatsapp')
+    .eq('carne', id)
+    .maybeSingle();
 
   if (!perfil?.whatsapp) {
     return NextResponse.redirect(new URL('/', request.url));
