@@ -9,6 +9,7 @@ export type PerfilCompleto = {
   especialidad: string | null;
   whatsapp: string | null;
   email: string | null;
+  facebook: string | null;
   instagram: string | null;
   tiktok: string | null;
   youtube: string | null;
@@ -37,7 +38,8 @@ function mapearPerfil(fila: any): PerfilCompleto {
     segundoApellido: toTitleCase(fila.segundo_apellido_manual),
     especialidad: fila.especialidad_manual,
     whatsapp: fila.whatsapp,
-    email: fila.email,
+email: fila.email,
+    facebook: fila.facebook,
     instagram: fila.instagram,
     tiktok: fila.tiktok,
     youtube: fila.youtube,

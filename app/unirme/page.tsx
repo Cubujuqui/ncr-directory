@@ -65,9 +65,10 @@ if (!fotoCarne) {
     const canalPrincipal = data.get('punto_contacto_primario') as string;
     const valorCanalPrincipal = (data.get(canalPrincipal) as string || '').trim();
     if (!valorCanalPrincipal) {
-      const nombresCanal: Record<string, string> = {
+const nombresCanal: Record<string, string> = {
         whatsapp: 'WhatsApp',
         email: 'Email',
+        facebook: 'Facebook',
         instagram: 'Instagram',
         tiktok: 'TikTok',
         youtube: 'YouTube',
@@ -104,7 +105,8 @@ whatsapp: (() => {
         const digitos = (data.get('whatsapp') as string || '').replace(/\D/g, '');
         return digitos ? `506${digitos}` : null;
       })(),      
-      email: (data.get('email') as string || '').trim() || null,
+email: (data.get('email') as string || '').trim() || null,
+      facebook: (data.get('facebook') as string || '').trim() || null,
       instagram: (data.get('instagram') as string || '').trim() || null,
       tiktok: (data.get('tiktok') as string || '').trim() || null,
       youtube: (data.get('youtube') as string || '').trim() || null,
@@ -262,6 +264,11 @@ whatsapp: (() => {
             <input name="email" type="email" style={inputStyle} placeholder="Opcional" />
           </div>
 
+<div style={sectionStyle}>
+            <label style={labelStyle}>Facebook</label>
+            <input name="facebook" style={inputStyle} placeholder="usuario o nombre de página" />
+          </div>
+
           <div style={sectionStyle}>
             <label style={labelStyle}>Instagram</label>
             <input name="instagram" style={inputStyle} placeholder="usuario, sin @" />
@@ -285,8 +292,9 @@ whatsapp: (() => {
           <div style={sectionStyle}>
             <label style={labelStyle}>¿Cuál es tu canal de contacto principal?</label>
             <select name="punto_contacto_primario" defaultValue="whatsapp" style={inputStyle}>
-              <option value="whatsapp">WhatsApp</option>
+<option value="whatsapp">WhatsApp</option>
               <option value="email">Email</option>
+              <option value="facebook">Facebook</option>
               <option value="instagram">Instagram</option>
               <option value="tiktok">TikTok</option>
               <option value="youtube">YouTube</option>

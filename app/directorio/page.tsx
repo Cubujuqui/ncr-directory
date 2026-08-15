@@ -64,11 +64,12 @@ export default async function Directorio({
                 <p style={{ margin: '0 0 12px', fontSize: '12px', color: 'rgba(16,0,76,0.4)' }}>
                   Visita a domicilio: {domicilioTexto}
                 </p>
-                <SocialIcons
+<SocialIcons
                   tier={perfil.tier}
                   identificador={perfil.carne ?? ''}
                   whatsapp={perfil.whatsapp}
                   email={perfil.email}
+                  facebook={perfil.facebook}
                   instagram={perfil.instagram}
                   tiktok={perfil.tiktok}
                   youtube={perfil.youtube}

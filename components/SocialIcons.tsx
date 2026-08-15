@@ -6,6 +6,7 @@ type Props = {
   identificador?: string;
   whatsapp: string | null;
   email: string | null;
+  facebook: string | null;
   instagram: string | null;
   tiktok: string | null;
   youtube: string | null;
@@ -21,6 +22,9 @@ const ICONOS = {
   ),
   email: (color: string) => (
     <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={1.8}><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>
+  ),
+  facebook: (color: string) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={1.8}><path d="M15 3h-2a4 4 0 0 0-4 4v3H6v4h3v7h4v-7h3l1-4h-4V7a1 1 0 0 1 1-1h3V3z"></path></svg>
   ),
   instagram: (color: string) => (
     <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={1.8}><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.4" cy="6.6" r="1.1" fill={color} stroke="none"></circle></svg>
@@ -43,6 +47,7 @@ function getHref(platform: keyof typeof ICONOS, value: string, identificador?: s
   if (platform === 'email') {
     return identificador ? '/go/email/' + encodeURIComponent(identificador) : 'mailto:' + value;
   }
+  if (platform === 'facebook') return 'https://facebook.com/' + value;
   if (platform === 'instagram') return 'https://instagram.com/' + value;
   if (platform === 'tiktok') return 'https://tiktok.com/@' + value;
   return value;
@@ -57,13 +62,14 @@ export default function SocialIcons(props: Props) {
   const valores: Record<keyof typeof ICONOS, string | null> = {
     whatsapp: props.whatsapp,
     email: props.email,
+    facebook: props.facebook,
     instagram: props.instagram,
     tiktok: props.tiktok,
     youtube: props.youtube,
     linkedin: props.linkedin,
   };
 
-const orden: (keyof typeof ICONOS)[] = ['whatsapp', 'email', 'instagram', 'tiktok', 'youtube', 'linkedin'];
+const orden: (keyof typeof ICONOS)[] = ['whatsapp', 'email', 'facebook', 'instagram', 'tiktok', 'youtube', 'linkedin'];
 
   const items = orden.map(function (platform) {
 const permitido = tier === 'premium' || (tier === 'contact' && (platform === 'whatsapp' || platform === 'email'));    const valor = valores[platform];

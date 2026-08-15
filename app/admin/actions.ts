@@ -13,6 +13,26 @@ async function checkAuth() {
   }
 }
 
+const CAMPOS_OPCIONALES = [
+  'nombre_manual',
+  'apellido_manual',
+  'segundo_apellido_manual',
+  'especialidad_manual',
+  'whatsapp',
+  'email',
+  'facebook',
+  'instagram',
+  'tiktok',
+  'youtube',
+  'linkedin',
+  'foto_url',
+  'referido_por',
+  'referido_timestamp',
+  'nombre_preferido',
+  'especialidades_adicionales',
+  'punto_contacto_primario',
+] as const;
+
 export async function aprobarSolicitud(id: number) {
   await checkAuth();
 
@@ -24,27 +44,20 @@ export async function aprobarSolicitud(id: number) {
 
   if (fetchError || !solicitud) throw new Error('Solicitud no encontrada');
 
-  const perfilData = {
-    carne: solicitud.carne,
-    nombre_manual: solicitud.nombre_manual,
-    apellido_manual: solicitud.apellido_manual,
+  const datosOpcionales: Record<string, any> = {};
+  for (const campo of CAMPOS_OPCIONALES) {
+    const valor = solicitud[campo];
+    if (valor !== null && valor !== undefined && valor !== '') {
+      datosOpcionales[campo] = valor;
+    }
+  }
+
+  const datosEnriquecimiento = {
+    ...datosOpcionales,
     tier: solicitud.tier,
-    especialidad_manual: solicitud.especialidad_manual,
-    whatsapp: solicitud.whatsapp,
-    email: solicitud.email,
-    instagram: solicitud.instagram,
-    tiktok: solicitud.tiktok,
-    youtube: solicitud.youtube,
-    linkedin: solicitud.linkedin,
-    foto_url: solicitud.foto_url,
     citas_online: solicitud.citas_online,
     visita_domicilio: solicitud.visita_domicilio,
-    referido_por: solicitud.referido_por,
-    referido_timestamp: solicitud.referido_timestamp,
     aprobado_timestamp: new Date().toISOString(),
-    nombre_preferido: solicitud.nombre_preferido,
-    especialidades_adicionales: solicitud.especialidades_adicionales,
-    punto_contacto_primario: solicitud.punto_contacto_primario,
   };
 
   const { data: existente } = await supabaseAdmin
@@ -54,9 +67,9 @@ export async function aprobarSolicitud(id: number) {
     .maybeSingle();
 
   if (existente) {
-    await supabaseAdmin.from('perfiles').update(perfilData).eq('id', existente.id);
+    await supabaseAdmin.from('perfiles').update(datosEnriquecimiento).eq('id', existente.id);
   } else {
-    await supabaseAdmin.from('perfiles').insert(perfilData);
+    await supabaseAdmin.from('perfiles').insert({ carne: solicitud.carne, ...datosEnriquecimiento });
   }
 
   await supabaseAdmin

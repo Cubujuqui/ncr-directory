@@ -58,8 +58,9 @@ export default async function AdminPage() {
 <div style={{ fontSize: '14px', lineHeight: 1.8 }}>
                     <p><strong>Nivel solicitado:</strong> {s.tier}</p>
                     <p><strong>Nombre preferido:</strong> {s.nombre_preferido || 'No indica'}</p>
-                    <p><strong>WhatsApp:</strong> {s.whatsapp || 'No indica'}</p>
+<p><strong>WhatsApp:</strong> {s.whatsapp || 'No indica'}</p>
                     <p><strong>Email:</strong> {s.email || 'No indica'}</p>
+                    <p><strong>Facebook:</strong> {s.facebook || 'No indica'}</p>
                     <p><strong>Instagram:</strong> {s.instagram || 'No indica'}</p>
                     <p><strong>TikTok:</strong> {s.tiktok || 'No indica'}</p>
                     <p><strong>YouTube:</strong> {s.youtube || 'No indica'}</p>
