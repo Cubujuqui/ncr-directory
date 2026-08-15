@@ -56,6 +56,8 @@ export default async function Home() {
             </svg>
           </a>
         </div>
-<Link href="/aviso-legal" style={{ color: 'rgba(16,0,76,0.6)', textDecoration: 'none', fontSize: '13px', fontWeight: 400 }}>Información Importante</Link>    </div>
+<Link href="/aviso-legal" style={{ color: 'rgba(16,0,76,0.6)', textDecoration: 'none', fontSize: '13px', fontWeight: 400 }}>Información Importante</Link>
+      </footer>
+    </div>
   );
 }
