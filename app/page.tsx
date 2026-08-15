@@ -49,15 +49,13 @@ export default async function Home() {
       {/* FOOTER */}
       <footer style={{ maxWidth: '1400px', margin: '0 auto', padding: '16px 40px 32px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
-          <a href="#" aria-label="Instagram" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '40px', height: '40px', borderRadius: '999px', color: '#10004C', textDecoration: 'none' }}>
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#10004C" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+<a href="https://www.instagram.com/nutricionistasencostarica/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '40px', height: '40px', borderRadius: '999px', color: '#10004C', textDecoration: 'none' }}>            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#10004C" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="3" width="18" height="18" rx="5"></rect>
               <circle cx="12" cy="12" r="4"></circle>
               <circle cx="17.4" cy="6.6" r="1.1" fill="#10004C" stroke="none"></circle>
             </svg>
           </a>
         </div>
-<Link href="/aviso-legal" style={{ color: 'rgba(16,0,76,0.6)', textDecoration: 'none', fontSize: '13px', fontWeight: 400 }}>Aviso Legal</Link>      </footer>
-    </div>
+<Link href="/aviso-legal" style={{ color: 'rgba(16,0,76,0.6)', textDecoration: 'none', fontSize: '13px', fontWeight: 400 }}>Información Importante</Link>    </div>
   );
 }
