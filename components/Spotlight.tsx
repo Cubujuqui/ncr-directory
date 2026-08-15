@@ -1,4 +1,4 @@
-import { PerfilCompleto, FilaSecundaria } from '@/lib/perfiles';
+import { PerfilCompleto } from '@/lib/perfiles';
 import SocialIcons from './SocialIcons';
 
 const PALETAS = [
@@ -59,25 +59,6 @@ function PremiumCard({ perfil, paleta }: { perfil: PerfilCompleto; paleta: typeo
           grayColor={paleta.dark}
         />
       </div>
-    </div>
-  );
-}
-
-function FilaSecundariaRow({ fila }: { fila: FilaSecundaria }) {
-  const nombreCompleto = `${fila.nombre} ${fila.primerApellido} ${fila.segundoApellido}`.trim();
-  return (
-    <div style={{ background: '#ffffff', borderRadius: '10px', padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
-      <span style={{ fontSize: '14px', fontWeight: 600, color: '#510F00', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-        {nombreCompleto}
-      </span>
-      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
-        {fila.tier === 'contact' && (
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#25D366" strokeWidth={2}><path d="M3 21l1.65-4.95A9 9 0 1 1 8.05 19.35L3 21z"></path></svg>
-        )}
-        <span style={{ fontSize: '10px', fontWeight: 800, color: fila.tier === 'contact' ? '#FF6A4D' : 'rgba(81,15,0,0.4)' }}>
-          {fila.tier === 'contact' ? 'CONTACTO' : 'GRATIS'}
-        </span>
-      </span>
     </div>
   );
 }
