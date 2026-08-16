@@ -49,8 +49,8 @@ export default async function Home() {
       </main>
 <Spotlight perfiles={perfilesDestacados} />
       {/* FOOTER */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
-          <SocialIcons
+      <footer style={{ maxWidth: '1400px', margin: '0 auto', padding: '16px 40px 32px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>          <SocialIcons
             tier="premium"
             whatsapp={whatsappAdmin}
             email="nutricionistasencostarica@gmail.com"
