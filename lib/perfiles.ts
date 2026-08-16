@@ -18,7 +18,7 @@ export type PerfilCompleto = {
   tier: 'free' | 'contact' | 'premium';
   citasOnline: boolean | null;
   visitaDomicilio: boolean | null;
-  puntoContactoPrimario: 'whatsapp' | 'instagram' | 'tiktok' | 'youtube' | 'linkedin' | 'email';
+  puntoContactoPrimario: 'whatsapp' | 'instagram' | 'tiktok' | 'youtube' | 'linkedin' | 'email' | 'facebook';
 };
 
 function toTitleCase(texto: string | null): string {

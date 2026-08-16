@@ -1,5 +1,6 @@
 import { PerfilCompleto } from '@/lib/perfiles';
-import SocialIcons from './SocialIcons';
+import SocialIcons, { getHref } from './SocialIcons';
+import TarjetaClicable from './TarjetaClicable';
 
 const PALETAS = [
   { background: '#BFB6FF', light: '#F3F0FF', primary: '#7370E0', dark: '#10004C' },
@@ -13,9 +14,12 @@ const SECTION_BG = '#FFA589';
 function PremiumCard({ perfil, paleta }: { perfil: PerfilCompleto; paleta: typeof PALETAS[number] }) {
   const nombreCompleto = `${perfil.nombre} ${perfil.primerApellido} ${perfil.segundoApellido}`.trim();
 
+  const canal = perfil.puntoContactoPrimario;
+  const valorCanal = perfil[canal];
+  const enlacePrincipal = valorCanal ? getHref(canal, valorCanal, perfil.carne ?? undefined) : null;
+
   return (
-    <div style={{ background: paleta.light, borderRadius: '18px', overflow: 'hidden', boxShadow: '0 8px 20px rgba(0,0,0,0.08)', height: '100%', boxSizing: 'border-box', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ width: '100%', aspectRatio: '1 / 1', background: `${paleta.dark}0d` }}>
+    <TarjetaClicable href={enlacePrincipal} style={{ background: paleta.light, borderRadius: '18px', overflow: 'hidden', boxShadow: '0 8px 20px rgba(0,0,0,0.08)', height: '100%', boxSizing: 'border-box', display: 'flex', flexDirection: 'column' }}>      <div style={{ width: '100%', aspectRatio: '1 / 1', background: `${paleta.dark}0d` }}>
         {perfil.fotoUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={perfil.fotoUrl} alt={nombreCompleto} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
@@ -56,11 +60,11 @@ function PremiumCard({ perfil, paleta }: { perfil: PerfilCompleto; paleta: typeo
           tiktok={perfil.tiktok}
           youtube={perfil.youtube}
           linkedin={perfil.linkedin}
-          activeColor={paleta.primary}
+activeColor={paleta.primary}
           grayColor={paleta.dark}
         />
       </div>
-    </div>
+    </TarjetaClicable>
   );
 }
 

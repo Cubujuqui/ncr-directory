@@ -1,6 +1,16 @@
 import { ordenarResultadosDirectorio } from '@/lib/perfiles';
-import SocialIcons from '@/components/SocialIcons';
+import SocialIcons, { getHref } from '@/components/SocialIcons';
+import TarjetaClicable from '@/components/TarjetaClicable';
 import Link from 'next/link';
+
+function calcularEnlacePrincipal(perfil: { tier: string; puntoContactoPrimario: string; carne: string | null; whatsapp: string | null; email: string | null; facebook: string | null; instagram: string | null; tiktok: string | null; youtube: string | null; linkedin: string | null }) {
+  const canal = perfil.puntoContactoPrimario as 'whatsapp' | 'email' | 'facebook' | 'instagram' | 'tiktok' | 'youtube' | 'linkedin';
+  const esActivo = perfil.tier === 'premium' || (perfil.tier === 'contact' && (canal === 'whatsapp' || canal === 'email'));
+  if (!esActivo) return null;
+  const valor = perfil[canal];
+  if (!valor) return null;
+  return getHref(canal, valor, perfil.carne ?? undefined);
+}
 
 export default async function Directorio({
   searchParams,
@@ -47,9 +57,9 @@ export default async function Directorio({
             const tieneEspecialidad = !!perfil.especialidad;
             const citasTexto = perfil.citasOnline === true ? 'Sí' : perfil.citasOnline === false ? 'No' : 'No indica';
             const domicilioTexto = perfil.visitaDomicilio === true ? 'Sí' : perfil.visitaDomicilio === false ? 'No' : 'No indica';
+const enlacePrincipal = calcularEnlacePrincipal(perfil);
             return (
-              <div key={perfil.carne ?? i} style={{ background: '#F3F0FF', borderRadius: '14px', padding: '16px 20px' }}>
-                <p style={{ fontWeight: 700, margin: 0, fontSize: '16px', color: '#10004C' }}>
+              <TarjetaClicable key={perfil.carne ?? i} href={enlacePrincipal} style={{ background: '#F3F0FF', borderRadius: '14px', padding: '16px 20px' }}>                <p style={{ fontWeight: 700, margin: 0, fontSize: '16px', color: '#10004C' }}>
                   {perfil.nombre} {perfil.primerApellido} {perfil.segundoApellido}
                 </p>
                 <p style={{ margin: '4px 0 10px', fontSize: '12px', color: 'rgba(16,0,76,0.5)' }}>
@@ -76,12 +86,11 @@ export default async function Directorio({
                   linkedin={perfil.linkedin}
                   activeColor="#7370E0"
                   grayColor="#10004C"
-                  size={26}
+size={26}
                 />
-              </div>
+              </TarjetaClicable>
             );
-          })}
-        </div>
+          })}        </div>
       </div>
     </div>
   );

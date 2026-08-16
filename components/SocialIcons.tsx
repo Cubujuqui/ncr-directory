@@ -40,8 +40,8 @@ const ICONOS = {
   ),
 };
 
-function getHref(platform: keyof typeof ICONOS, value: string, identificador?: string) {
-  if (platform === 'whatsapp') {
+export function getHref(platform: keyof typeof ICONOS, value: string, identificador?: string) {
+    if (platform === 'whatsapp') {
     return identificador ? '/go/whatsapp/' + encodeURIComponent(identificador) : 'https://wa.me/' + value;
   }
   if (platform === 'email') {
