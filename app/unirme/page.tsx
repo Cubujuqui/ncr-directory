@@ -15,7 +15,8 @@ export default function Unirme() {
   const [usarNombreCPN, setUsarNombreCPN] = useState(true);
 
   const [fotoCarne, setFotoCarne] = useState<File | null>(null);
-
+  const [fotoPerfil, setFotoPerfil] = useState<File | null>(null);
+  const [tier, setTier] = useState('premium');
   async function buscarNombre() {
     if (!carneValor.trim()) return;
     setBuscando(true);
@@ -86,7 +87,7 @@ const nombresCanal: Record<string, string> = {
     const extension = fotoCarne.name.split('.').pop();
     const rutaFoto = `${carne}-${Date.now()}.${extension}`;
 
-    const { error: errorSubida } = await supabase.storage
+const { error: errorSubida } = await supabase.storage
       .from('carnes-verificacion')
       .upload(rutaFoto, fotoCarne);
 
@@ -97,8 +98,27 @@ const nombresCanal: Record<string, string> = {
       return;
     }
 
-    const { error } = await supabase.from('solicitudes').insert({
-      carne,
+    let fotoPerfilUrl: string | null = null;
+    if (tier === 'premium' && fotoPerfil) {
+      const extensionPerfil = fotoPerfil.name.split('.').pop();
+      const rutaFotoPerfil = `${carne}-${Date.now()}.${extensionPerfil}`;
+
+      const { error: errorSubidaPerfil } = await supabase.storage
+        .from('fotos-perfil')
+        .upload(rutaFotoPerfil, fotoPerfil);
+
+      if (errorSubidaPerfil) {
+        setEstado('error');
+        setErrorMsg('No pudimos subir tu foto de perfil. Intentá de nuevo.');
+        console.error(errorSubidaPerfil);
+        return;
+      }
+
+      const { data: urlData } = supabase.storage.from('fotos-perfil').getPublicUrl(rutaFotoPerfil);
+      fotoPerfilUrl = urlData.publicUrl;
+    }
+
+    const { error } = await supabase.from('solicitudes').insert({      carne,
       nombre_preferido: nombrePreferido,
       tier: data.get('tier') as string,
 whatsapp: (() => {
@@ -118,8 +138,8 @@ email: (data.get('email') as string || '').trim() || null,
       referido_timestamp: referidoPor ? new Date().toISOString() : null,
       consentimiento: true,
       carne_foto_url: rutaFoto,
+      foto_url: fotoPerfilUrl,
     });
-
     if (error) {
       setEstado('error');
       setErrorMsg('Hubo un problema al enviar el formulario. Intentá de nuevo en un momento.');
@@ -229,29 +249,40 @@ email: (data.get('email') as string || '').trim() || null,
             <label style={labelStyle}>Nivel que te interesa</label>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <label style={{ display: 'flex', gap: '10px', background: '#E4E0FB', borderRadius: '10px', padding: '12px', alignItems: 'flex-start' }}>
-                <input type="radio" name="tier" value="premium" defaultChecked style={{ marginTop: '3px' }} />
-                <span>
+<input type="radio" name="tier" value="premium" checked={tier === 'premium'} onChange={() => setTier('premium')} style={{ marginTop: '3px' }} />                <span>
                   <strong>Premium</strong> — máxima visibilidad, aparecés destacado en la portada.
                   <br />
                   <span style={helpStyle}>Precio preliminar: $17/mes. Por ahora, sin costo mientras probamos el sistema.</span>
                 </span>
               </label>
               <label style={{ display: 'flex', gap: '10px', background: '#F3F0FF', borderRadius: '10px', padding: '12px', alignItems: 'flex-start' }}>
-                <input type="radio" name="tier" value="contact" style={{ marginTop: '3px' }} />
-                <span>
+<input type="radio" name="tier" value="contact" checked={tier === 'contact'} onChange={() => setTier('contact')} style={{ marginTop: '3px' }} />                <span>
                   <strong>Contacto</strong> — incluye enlace directo a tu WhatsApp.
                   <br />
                   <span style={helpStyle}>Precio preliminar: $9/mes. Por ahora, sin costo mientras probamos el sistema.</span>
                 </span>
               </label>
               <label style={{ display: 'flex', gap: '10px', background: '#F3F0FF', borderRadius: '10px', padding: '12px', alignItems: 'flex-start' }}>
-                <input type="radio" name="tier" value="free" style={{ marginTop: '3px' }} />
+<input type="radio" name="tier" value="free" checked={tier === 'free'} onChange={() => setTier('free')} style={{ marginTop: '3px' }} />
                 <span>
                   <strong>Gratis</strong> — aparecés en el directorio con tu información básica.
                 </span>
               </label>
             </div>
           </div>
+
+          {tier === 'premium' && (
+            <div style={sectionStyle}>
+              <label style={labelStyle}>Foto de perfil</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setFotoPerfil(e.target.files?.[0] || null)}
+                style={inputStyle}
+              />
+              <p style={helpStyle}>Esta es la foto que se mostrará en tu tarjeta destacada. Opcional, pero recomendada.</p>
+            </div>
+          )}
 
  <div style={sectionStyle}>
             <label style={labelStyle}>WhatsApp</label>

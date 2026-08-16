@@ -44,11 +44,24 @@ export default async function AdminPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {solicitudesConFoto.map((s) => (
             <div key={s.id} style={{ background: '#fff', borderRadius: '16px', padding: '22px', boxShadow: '0 4px 14px rgba(16,0,76,0.06)' }}>
-              <div style={{ display: 'flex', gap: '20px' }}>
-                {s.fotoUrlFirmada && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={s.fotoUrlFirmada} alt="Carné" style={{ width: '140px', height: '140px', objectFit: 'cover', borderRadius: '10px', flexShrink: 0 }} />
-                )}
+<div style={{ display: 'flex', gap: '20px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', flexShrink: 0 }}>
+{s.fotoUrlFirmada && (
+                    <div>
+                      <p style={{ fontSize: '11px', fontWeight: 700, color: 'rgba(16,0,76,0.5)', margin: '0 0 4px' }}>Carné (verificación)</p>
+                      <a href={s.fotoUrlFirmada} target="_blank" rel="noopener noreferrer">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={s.fotoUrlFirmada} alt="Carné" style={{ width: '140px', height: '140px', objectFit: 'cover', borderRadius: '10px', cursor: 'zoom-in' }} />
+                      </a>
+                    </div>
+                  )}                  {s.foto_url && (
+                    <div>
+                      <p style={{ fontSize: '11px', fontWeight: 700, color: 'rgba(16,0,76,0.5)', margin: '0 0 4px' }}>Foto de perfil (pública)</p>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={s.foto_url} alt="Foto de perfil" style={{ width: '140px', height: '140px', objectFit: 'cover', borderRadius: '10px' }} />
+                    </div>
+                  )}
+                </div>
                 <div style={{ flex: 1 }}>
                   <p style={{ fontWeight: 800, fontSize: '17px', margin: '0 0 4px' }}>Carné {s.carne}</p>
                   <p style={{ fontSize: '13px', color: 'rgba(16,0,76,0.5)', margin: '0 0 10px' }}>
