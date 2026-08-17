@@ -41,17 +41,21 @@ const ICONOS = {
 };
 
 export function getHref(platform: keyof typeof ICONOS, value: string, identificador?: string) {
-    if (platform === 'whatsapp') {
+  if (platform === 'whatsapp') {
     return identificador ? '/go/whatsapp/' + encodeURIComponent(identificador) : 'https://wa.me/' + value;
   }
   if (platform === 'email') {
     return identificador ? '/go/email/' + encodeURIComponent(identificador) : 'mailto:' + value;
+  }
+  if (identificador) {
+    return '/go/social/' + platform + '/' + encodeURIComponent(identificador);
   }
   if (platform === 'facebook') return 'https://facebook.com/' + value;
   if (platform === 'instagram') return 'https://instagram.com/' + value;
   if (platform === 'tiktok') return 'https://tiktok.com/@' + value;
   return value;
 }
+
 export default function SocialIcons(props: Props) {
   const tier = props.tier;
   const activeColor = props.activeColor;

@@ -24,5 +24,7 @@ export async function GET(
     return NextResponse.redirect(new URL('/', request.url));
   }
 
+  await supabaseAdmin.from('clics').insert({ carne: id, canal: 'whatsapp' });
+
   return NextResponse.redirect(`https://wa.me/${perfil.whatsapp}`);
 }

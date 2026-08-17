@@ -17,5 +17,7 @@ export async function GET(
     return NextResponse.redirect(new URL('/', request.url));
   }
 
+  await supabaseAdmin.from('clics').insert({ carne: id, canal: 'email' });
+
   return NextResponse.redirect(`mailto:${perfil.email}`);
 }
