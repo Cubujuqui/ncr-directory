@@ -23,7 +23,7 @@ export async function GET(
 
   const { data: perfil } = await supabaseAdmin
     .from('perfiles')
-    .select(canal)
+    .select(`${canal}, tier`)
     .eq('carne', id)
     .maybeSingle();
 
@@ -33,7 +33,7 @@ export async function GET(
     return NextResponse.redirect(new URL('/', request.url));
   }
 
-  await supabaseAdmin.from('clics').insert({ carne: id, canal });
+  await supabaseAdmin.from('clics').insert({ carne: id, canal, tier: (perfil as any).tier });
 
   return NextResponse.redirect(construirUrl(canal as Canal, valor));
 }

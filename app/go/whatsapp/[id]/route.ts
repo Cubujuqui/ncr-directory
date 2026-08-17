@@ -16,7 +16,7 @@ export async function GET(
 
   const { data: perfil } = await supabaseAdmin
     .from('perfiles')
-    .select('whatsapp')
+    .select('whatsapp, tier')
     .eq('carne', id)
     .maybeSingle();
 
@@ -24,7 +24,7 @@ export async function GET(
     return NextResponse.redirect(new URL('/', request.url));
   }
 
-  await supabaseAdmin.from('clics').insert({ carne: id, canal: 'whatsapp' });
+  await supabaseAdmin.from('clics').insert({ carne: id, canal: 'whatsapp', tier: perfil.tier });
 
   return NextResponse.redirect(`https://wa.me/${perfil.whatsapp}`);
 }

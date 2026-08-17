@@ -9,7 +9,7 @@ export async function GET(
 
   const { data: perfil } = await supabaseAdmin
     .from('perfiles')
-    .select('email')
+    .select('email, tier')
     .eq('carne', id)
     .maybeSingle();
 
@@ -17,7 +17,7 @@ export async function GET(
     return NextResponse.redirect(new URL('/', request.url));
   }
 
-  await supabaseAdmin.from('clics').insert({ carne: id, canal: 'email' });
+  await supabaseAdmin.from('clics').insert({ carne: id, canal: 'email', tier: perfil.tier });
 
   return NextResponse.redirect(`mailto:${perfil.email}`);
 }
