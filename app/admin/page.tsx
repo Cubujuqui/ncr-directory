@@ -54,7 +54,8 @@ export default async function AdminPage() {
                         <img src={s.fotoUrlFirmada} alt="Carné" style={{ width: '140px', height: '140px', objectFit: 'cover', borderRadius: '10px', cursor: 'zoom-in' }} />
                       </a>
                     </div>
-                  )}                  {s.foto_url && (
+                  )}                  
+                  {s.foto_url && (
                     <div>
                       <p style={{ fontSize: '11px', fontWeight: 700, color: 'rgba(16,0,76,0.5)', margin: '0 0 4px' }}>Foto de perfil (pública)</p>
                       {/* eslint-disable-next-line @next/next/no-img-element */}

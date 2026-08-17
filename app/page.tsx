@@ -34,7 +34,6 @@ export default async function Home() {
       <main style={{ position: 'relative', maxWidth: '1400px', margin: '0 auto', padding: '70px 40px 90px', display: 'flex', alignItems: 'center', gap: '48px' }}>
         <div style={{ flex: '1 1 600px', maxWidth: '760px', position: 'relative', zIndex: 2 }}>
           <h1 style={{ fontSize: '42px', lineHeight: 1.12, fontWeight: 800, margin: '0 0 18px', letterSpacing: '-0.5px' }}>¿Buscás nutricionistas en Costa Rica?</h1>
-          <p style={{ fontSize: '22px', fontWeight: 700, margin: '0 0 34px' }}>¿Agendamos una cita?</p>
 
           <SearchBar especialidades={especialidades} />
         </div>
@@ -65,7 +64,7 @@ export default async function Home() {
           />
         </div>
 <Link href="/aviso-legal" style={{ color: 'rgba(16,0,76,0.6)', textDecoration: 'none', fontSize: '13px', fontWeight: 400 }}>Información Importante</Link>
-      </footer>
+        <p style={{ color: 'rgba(16,0,76,0.4)', fontSize: '12px', fontWeight: 400, margin: 0 }}>Construido en conjunto con Claude (Anthropic)</p>      </footer>
     </div>
   );
 }

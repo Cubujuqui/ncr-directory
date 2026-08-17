@@ -89,11 +89,28 @@ export async function getPerfilesDestacados(): Promise<PerfilCompleto[]> {
   return perfiles.filter((p) => p.tier === 'premium').slice(0, 3);
 }
 
-export async function ordenarResultadosDirectorio(especialidad?: string, maxTotal = 50): Promise<{ resultados: PerfilCompleto[]; total: number }> {
+export async function ordenarResultadosDirectorio(
+  especialidad?: string,
+  maxTotal = 50,
+  filtros?: { online?: boolean; presencial?: boolean; premiumSolamente?: boolean }
+): Promise<{ resultados: PerfilCompleto[]; total: number }> {
   let perfiles = await getPerfilesElegibles();
 
   if (especialidad) {
     perfiles = perfiles.filter((p) => p.especialidad === especialidad);
+  }
+
+  if (filtros?.online || filtros?.presencial) {
+    perfiles = perfiles.filter((p) =>
+      (filtros.online && p.citasOnline === true) || (filtros.presencial && p.visitaDomicilio === true)
+    );
+  }
+
+  if (filtros?.premiumSolamente) {
+    perfiles = perfiles.filter((p) => p.tier === 'premium');
+    const total = perfiles.length;
+    const resultados = perfiles.sort(() => Math.random() - 0.5).slice(0, maxTotal);
+    return { resultados, total };
   }
 
   const total = perfiles.length;

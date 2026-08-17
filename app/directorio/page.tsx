@@ -1,6 +1,7 @@
 import { ordenarResultadosDirectorio } from '@/lib/perfiles';
 import SocialIcons, { getHref } from '@/components/SocialIcons';
 import TarjetaClicable from '@/components/TarjetaClicable';
+import FiltrosDirectorio from '@/components/FiltrosDirectorio';
 import Link from 'next/link';
 
 function calcularEnlacePrincipal(perfil: { tier: string; puntoContactoPrimario: string; carne: string | null; whatsapp: string | null; email: string | null; facebook: string | null; instagram: string | null; tiktok: string | null; youtube: string | null; linkedin: string | null }) {
@@ -15,11 +16,14 @@ function calcularEnlacePrincipal(perfil: { tier: string; puntoContactoPrimario: 
 export default async function Directorio({
   searchParams,
 }: {
-  searchParams: Promise<{ especialidad?: string; modo?: string; tipo?: string }>;
+  searchParams: Promise<{ especialidad?: string; online?: string; presencial?: string; premium?: string }>;
 }) {
-  const { especialidad, modo, tipo } = await searchParams;
-  const { resultados, total } = await ordenarResultadosDirectorio(especialidad, 50);
-
+  const { especialidad, online, presencial, premium } = await searchParams;
+  const { resultados, total } = await ordenarResultadosDirectorio(especialidad, 50, {
+    online: online === '1',
+    presencial: presencial === '1',
+    premiumSolamente: premium === '1',
+  });
   return (
     <div style={{ minHeight: '100vh', background: '#BFB6FF', fontFamily: "'Mulish', system-ui, sans-serif", color: '#10004C', padding: '40px' }}>
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
@@ -29,26 +33,13 @@ export default async function Directorio({
           {especialidad ? especialidad : 'Todos los nutricionistas activos'}
         </h1>
 
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '14px' }}>
-          {modo && (
-            <span style={{ background: '#ffffff', color: '#5A57A8', borderRadius: '999px', padding: '5px 14px', fontSize: '13px', fontWeight: 700 }}>
-              {modo === 'online' ? 'Online' : 'Visita presencial'}
-            </span>
-          )}
-          {tipo && (
-            <span style={{ background: '#ffffff', color: '#5A57A8', borderRadius: '999px', padding: '5px 14px', fontSize: '13px', fontWeight: 700 }}>
-              {tipo === 'individual' ? 'Individual' : 'Grupal'}
-            </span>
-          )}
-        </div>
-
+<FiltrosDirectorio />
         <p style={{ marginBottom: '10px', color: 'rgba(16,0,76,0.7)' }}>
           {total} nutricionistas encontrados
         </p>
-        <p style={{ marginBottom: '10px', color: 'rgba(16,0,76,0.5)', fontSize: '13px' }}>
-          Nota: aún no filtramos por modalidad o tipo de sesión — mostrando todos los que coinciden con la especialidad.
-        </p>
-        <p style={{ marginBottom: '30px', color: 'rgba(16,0,76,0.5)', fontSize: '13px' }}>
+<p style={{ marginBottom: '10px', color: 'rgba(16,0,76,0.5)', fontSize: '13px' }}>
+          Nota: los filtros de Individual/Grupal y seguros estarán disponibles próximamente.
+        </p>        <p style={{ marginBottom: '30px', color: 'rgba(16,0,76,0.5)', fontSize: '13px' }}>
           Mostrando 50 resultados solamente para garantizar igualdad y performance del sitio.
         </p>
 
