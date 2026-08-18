@@ -2,15 +2,13 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import styles from './SearchBar.module.css';
 
 export default function SearchBar({ especialidades }: { especialidades: string[] }) {
   const router = useRouter();
   const [online, setOnline] = useState(false);
   const [presencial, setPresencial] = useState(false);
-  const [individual, setIndividual] = useState(false);
-  const [grupal, setGrupal] = useState(false);
   const [premiumSolamente, setPremiumSolamente] = useState(false);
-  const [aceptaSeguros, setAceptaSeguros] = useState(false);
   const [especialidad, setEspecialidad] = useState('');
   const [dropdownAbierto, setDropdownAbierto] = useState(false);
   const [panelAbierto, setPanelAbierto] = useState(false);
@@ -47,11 +45,11 @@ export default function SearchBar({ especialidades }: { especialidades: string[]
   const filtrosActivos = [online, presencial, premiumSolamente].filter(Boolean).length;
 
   return (
-    <div style={{ background: '#F3F0FF', borderRadius: '20px', padding: '18px', maxWidth: '760px', boxShadow: '0 18px 40px rgba(0,0,0,0.14)' }}>
-      <div ref={panelRef} style={{ position: 'relative', marginBottom: '16px' }}>
+    <div className={styles.contenedor}>
+      <div ref={panelRef} className={styles.filtrosWrapper}>
         <button
           onClick={() => setPanelAbierto((v) => !v)}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '9px', border: 'none', cursor: 'pointer', background: filtrosActivos > 0 ? '#E4E0FB' : '#ffffff', color: '#10004C', borderRadius: '999px', padding: '9px 18px', fontFamily: 'inherit', fontSize: '15px', fontWeight: 700 }}
+          className={`${styles.botonFiltros} ${filtrosActivos > 0 ? styles.botonFiltrosActivo : ''}`}
         >
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#7370E0" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <line x1="4" y1="6" x2="20" y2="6"></line>
@@ -64,29 +62,29 @@ export default function SearchBar({ especialidades }: { especialidades: string[]
           Filtros{filtrosActivos > 0 ? ` (${filtrosActivos})` : ''}
         </button>
 
-{panelAbierto && (
-          <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, background: '#ffffff', borderRadius: '14px', boxShadow: '0 10px 30px rgba(16,0,76,0.18)', padding: '18px', zIndex: 10, display: 'flex', flexDirection: 'column', gap: '12px', minWidth: '260px' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '15px', fontWeight: 600, color: '#10004C', cursor: 'pointer' }}>
+        {panelAbierto && (
+          <div className={styles.panel}>
+            <label className={styles.opcion}>
               <input type="checkbox" checked={online} onChange={() => setOnline((v) => !v)} />
               Online
             </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '15px', fontWeight: 600, color: '#10004C', cursor: 'pointer' }}>
+            <label className={styles.opcion}>
               <input type="checkbox" checked={presencial} onChange={() => setPresencial((v) => !v)} />
               Visita presencial
             </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '15px', fontWeight: 600, color: '#B0AEB8', cursor: 'not-allowed' }} title="Próximamente">
+            <label className={`${styles.opcion} ${styles.opcionDeshabilitada}`} title="Próximamente">
               <input type="checkbox" disabled />
               Individual
             </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '15px', fontWeight: 600, color: '#B0AEB8', cursor: 'not-allowed' }} title="Próximamente">
+            <label className={`${styles.opcion} ${styles.opcionDeshabilitada}`} title="Próximamente">
               <input type="checkbox" disabled />
               Grupal
             </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '15px', fontWeight: 600, color: '#10004C', cursor: 'pointer' }}>
+            <label className={styles.opcion}>
               <input type="checkbox" checked={premiumSolamente} onChange={() => setPremiumSolamente((v) => !v)} />
               Miembros Premium
             </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '15px', fontWeight: 600, color: '#B0AEB8', cursor: 'not-allowed' }} title="Próximamente">
+            <label className={`${styles.opcion} ${styles.opcionDeshabilitada}`} title="Próximamente">
               <input type="checkbox" disabled />
               ¿Acepta seguros?
             </label>
@@ -94,25 +92,20 @@ export default function SearchBar({ especialidades }: { especialidades: string[]
         )}
       </div>
 
-      <div style={{ display: 'flex', gap: '12px', alignItems: 'stretch' }}>
-        <div ref={wrapperRef} style={{ flex: 1.4, position: 'relative' }}>
-          <div
-            onClick={() => setDropdownAbierto((v) => !v)}
-            style={{ background: '#ffffff', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '0 16px', minHeight: '44px', cursor: 'pointer' }}
-          >
-            <span style={{ color: especialidad ? '#10004C' : '#8a908d', fontSize: '16px', fontWeight: 500, flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+      <div className={styles.filaBusqueda}>
+        <div ref={wrapperRef} className={styles.especialidadWrapper}>
+          <div onClick={() => setDropdownAbierto((v) => !v)} className={styles.especialidadBoton}>
+            <span className={`${styles.especialidadTexto} ${especialidad ? styles.especialidadTextoActivo : ''}`}>
               {especialidad || 'Todas las especialidades'}
             </span>
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#8a908d" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
           </div>
 
           {dropdownAbierto && (
-            <div style={{ position: 'absolute', top: 'calc(100% + 6px)', left: 0, right: 0, background: '#ffffff', borderRadius: '12px', boxShadow: '0 10px 30px rgba(16,0,76,0.18)', maxHeight: '280px', overflowY: 'auto', zIndex: 10 }}>
+            <div className={styles.dropdownLista}>
               <div
                 onClick={() => elegirEspecialidad('')}
-                style={{ padding: '11px 16px', cursor: 'pointer', fontSize: '15px', color: '#8a908d', fontWeight: 500 }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = '#F3F0FF')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                className={`${styles.opcionEspecialidad} ${styles.opcionEspecialidadVacia}`}
               >
                 Todas las especialidades
               </div>
@@ -120,9 +113,7 @@ export default function SearchBar({ especialidades }: { especialidades: string[]
                 <div
                   key={esp}
                   onClick={() => elegirEspecialidad(esp)}
-                  style={{ padding: '11px 16px', cursor: 'pointer', fontSize: '15px', color: '#10004C', fontWeight: 500 }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = '#F3F0FF')}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                  className={styles.opcionEspecialidad}
                 >
                   {esp}
                 </div>
@@ -131,7 +122,7 @@ export default function SearchBar({ especialidades }: { especialidades: string[]
           )}
         </div>
 
-        <button onClick={buscar} style={{ display: 'inline-flex', alignItems: 'center', gap: '9px', border: 'none', cursor: 'pointer', background: '#7370E0', color: '#ffffff', borderRadius: '12px', padding: '0 30px', minHeight: '44px', fontFamily: 'inherit', fontSize: '17px', fontWeight: 800 }}>
+        <button onClick={buscar} className={styles.botonBuscar}>
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#ffffff" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4-4"></path></svg>
           Buscar
         </button>
