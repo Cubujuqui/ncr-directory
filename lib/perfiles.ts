@@ -21,8 +21,7 @@ export type PerfilCompleto = {
   puntoContactoPrimario: 'whatsapp' | 'instagram' | 'tiktok' | 'youtube' | 'linkedin' | 'email' | 'facebook';
 };
 
-function toTitleCase(texto: string | null): string {
-  if (!texto) return '';
+export function toTitleCase(texto: string | null): string {  if (!texto) return '';
   return texto
     .toLowerCase()
     .split(' ')

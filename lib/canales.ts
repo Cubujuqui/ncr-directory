@@ -1,0 +1,1 @@
+export const CANALES = ['whatsapp', 'email', 'facebook', 'instagram', 'tiktok', 'youtube', 'linkedin'] as const;

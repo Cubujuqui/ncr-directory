@@ -3,6 +3,7 @@ import { isValidAdminToken } from '@/lib/admin-auth';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import LoginForm from './LoginForm';
 import { aprobarSolicitud, rechazarSolicitud } from './actions';
+import Link from 'next/link';
 
 export default async function AdminPage() {
   const cookieStore = await cookies();
@@ -34,8 +35,11 @@ export default async function AdminPage() {
   return (
     <div style={{ minHeight: '100vh', background: '#F3F0FF', fontFamily: "'Mulish', system-ui, sans-serif", color: '#10004C', padding: '40px 20px' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <h1 style={{ fontSize: '28px', fontWeight: 800, marginBottom: '6px' }}>Solicitudes pendientes</h1>
-        <p style={{ color: 'rgba(16,0,76,0.6)', marginBottom: '30px' }}>{solicitudesConFoto.length} esperando revisión</p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+          <h1 style={{ fontSize: '28px', fontWeight: 800, margin: 0 }}>Solicitudes pendientes</h1>
+          <Link href="/admin/reportes" style={{ color: '#7370E0', textDecoration: 'none', fontWeight: 700, fontSize: '14px' }}>Ver reporte de clics →</Link>
+        </div>
+                <p style={{ color: 'rgba(16,0,76,0.6)', marginBottom: '30px' }}>{solicitudesConFoto.length} esperando revisión</p>
 
         {solicitudesConFoto.length === 0 && (
           <p style={{ color: 'rgba(16,0,76,0.5)' }}>No hay solicitudes pendientes.</p>
