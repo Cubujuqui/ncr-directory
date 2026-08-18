@@ -1,0 +1,109 @@
+.pagina {
+  min-height: 100vh;
+  background: #BFB6FF;
+  font-family: 'Mulish', system-ui, sans-serif;
+  color: #10004C;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.botonNutricionista {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1.5px solid rgba(16,0,76,0.55);
+  border-radius: 999px;
+  padding: 10px 18px;
+  color: #10004C;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.hero {
+  position: relative;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 40px 20px 60px;
+}
+
+.titulo {
+  font-size: 30px;
+  line-height: 1.15;
+  font-weight: 800;
+  margin: 0 0 18px;
+  letter-spacing: -0.5px;
+}
+
+.footer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px 20px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.iconosFooter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.avisoLegal {
+  color: rgba(16,0,76,0.6);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.credito {
+  color: rgba(16,0,76,0.4);
+  font-size: 12px;
+  font-weight: 400;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .header {
+    padding: 20px 40px;
+  }
+
+  .botonNutricionista {
+    padding: 11px 22px;
+    font-size: 15px;
+  }
+
+  .hero {
+    padding: 70px 40px 90px;
+  }
+
+  .titulo {
+    font-size: 42px;
+  }
+
+  .footer {
+    padding: 16px 40px 32px;
+  }
+}
