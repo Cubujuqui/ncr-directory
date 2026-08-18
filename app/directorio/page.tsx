@@ -3,6 +3,7 @@ import SocialIcons, { getHref } from '@/components/SocialIcons';
 import TarjetaClicable from '@/components/TarjetaClicable';
 import FiltrosDirectorio from '@/components/FiltrosDirectorio';
 import Link from 'next/link';
+import styles from './page.module.css';
 
 function calcularEnlacePrincipal(perfil: { tier: string; puntoContactoPrimario: string; carne: string | null; whatsapp: string | null; email: string | null; facebook: string | null; instagram: string | null; tiktok: string | null; youtube: string | null; linkedin: string | null }) {
   const canal = perfil.puntoContactoPrimario as 'whatsapp' | 'email' | 'facebook' | 'instagram' | 'tiktok' | 'youtube' | 'linkedin';
@@ -24,48 +25,36 @@ export default async function Directorio({
     presencial: presencial === '1',
     premiumSolamente: premium === '1',
   });
-  return (
-    <div style={{ minHeight: '100vh', background: '#BFB6FF', fontFamily: "'Mulish', system-ui, sans-serif", color: '#10004C', padding: '40px' }}>
-      <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-        <Link href="/" style={{ color: '#10004C', textDecoration: 'none', fontWeight: 700, fontSize: '15px' }}>← Volver</Link>
 
-        <h1 style={{ fontSize: '28px', fontWeight: 800, margin: '20px 0 8px' }}>
+  return (
+    <div className={styles.pagina}>
+      <div className={styles.contenedor}>
+        <Link href="/" className={styles.volver}>← Volver</Link>
+
+        <h1 className={styles.titulo}>
           {especialidad ? especialidad : 'Todos los nutricionistas activos'}
         </h1>
 
-<FiltrosDirectorio />
-        <p style={{ marginBottom: '10px', color: 'rgba(16,0,76,0.7)' }}>
-          {total} nutricionistas encontrados
-        </p>
-<p style={{ marginBottom: '10px', color: 'rgba(16,0,76,0.5)', fontSize: '13px' }}>
-          Nota: los filtros de Individual/Grupal y seguros estarán disponibles próximamente.
-        </p>        <p style={{ marginBottom: '30px', color: 'rgba(16,0,76,0.5)', fontSize: '13px' }}>
-          Mostrando 50 resultados solamente para garantizar igualdad y performance del sitio.
-        </p>
+        <FiltrosDirectorio />
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '14px' }}>
+        <p className={styles.conteo}>{total} nutricionistas encontrados</p>
+        <p className={styles.nota}>Nota: los filtros de Individual/Grupal y seguros estarán disponibles próximamente.</p>
+        <p className={styles.notaUltima}>Mostrando 50 resultados solamente para garantizar igualdad y performance del sitio.</p>
+
+        <div className={styles.grilla}>
           {resultados.map((perfil, i) => {
             const tieneEspecialidad = !!perfil.especialidad;
             const citasTexto = perfil.citasOnline === true ? 'Sí' : perfil.citasOnline === false ? 'No' : 'No indica';
             const domicilioTexto = perfil.visitaDomicilio === true ? 'Sí' : perfil.visitaDomicilio === false ? 'No' : 'No indica';
-const enlacePrincipal = calcularEnlacePrincipal(perfil);
+            const enlacePrincipal = calcularEnlacePrincipal(perfil);
             return (
-              <TarjetaClicable key={perfil.carne ?? i} href={enlacePrincipal} style={{ background: '#F3F0FF', borderRadius: '14px', padding: '16px 20px' }}>                <p style={{ fontWeight: 700, margin: 0, fontSize: '16px', color: '#10004C' }}>
-                  {perfil.nombre} {perfil.primerApellido} {perfil.segundoApellido}
-                </p>
-                <p style={{ margin: '4px 0 10px', fontSize: '12px', color: 'rgba(16,0,76,0.5)' }}>
-                  Carné {perfil.carne}
-                </p>
-                <p style={{ margin: '0 0 2px', fontSize: '12px', color: 'rgba(16,0,76,0.4)' }}>
-                  Especialidades: {tieneEspecialidad ? 'Sí' : 'No'}
-                </p>
-                <p style={{ margin: '0 0 2px', fontSize: '12px', color: 'rgba(16,0,76,0.4)' }}>
-                  Citas online: {citasTexto}
-                </p>
-                <p style={{ margin: '0 0 12px', fontSize: '12px', color: 'rgba(16,0,76,0.4)' }}>
-                  Visita a domicilio: {domicilioTexto}
-                </p>
-<SocialIcons
+              <TarjetaClicable key={perfil.carne ?? i} href={enlacePrincipal} className={styles.tarjeta}>
+                <p className={styles.nombre}>{perfil.nombre} {perfil.primerApellido} {perfil.segundoApellido}</p>
+                <p className={styles.carne}>Carné {perfil.carne}</p>
+                <p className={styles.detalle}>Especialidades: {tieneEspecialidad ? 'Sí' : 'No'}</p>
+                <p className={styles.detalle}>Citas online: {citasTexto}</p>
+                <p className={styles.detalleUltimo}>Visita a domicilio: {domicilioTexto}</p>
+                <SocialIcons
                   tier={perfil.tier}
                   identificador={perfil.carne ?? ''}
                   whatsapp={perfil.whatsapp}
@@ -77,11 +66,12 @@ const enlacePrincipal = calcularEnlacePrincipal(perfil);
                   linkedin={perfil.linkedin}
                   activeColor="#7370E0"
                   grayColor="#10004C"
-size={26}
+                  size={26}
                 />
               </TarjetaClicable>
             );
-          })}        </div>
+          })}
+        </div>
       </div>
     </div>
   );

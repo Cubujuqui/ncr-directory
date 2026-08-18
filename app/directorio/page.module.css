@@ -1,0 +1,107 @@
+.pagina {
+  min-height: 100vh;
+  background: #BFB6FF;
+  font-family: 'Mulish', system-ui, sans-serif;
+  color: #10004C;
+  padding: 20px;
+}
+
+.contenedor {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.volver {
+  color: #10004C;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.titulo {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 16px 0 8px;
+}
+
+.conteo {
+  margin-bottom: 10px;
+  color: rgba(16,0,76,0.7);
+  font-size: 14px;
+}
+
+.nota {
+  margin-bottom: 10px;
+  color: rgba(16,0,76,0.5);
+  font-size: 12px;
+}
+
+.notaUltima {
+  margin-bottom: 24px;
+  color: rgba(16,0,76,0.5);
+  font-size: 12px;
+}
+
+.grilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.tarjeta {
+  background: #F3F0FF;
+  border-radius: 14px;
+  padding: 16px 20px;
+}
+
+.nombre {
+  font-weight: 700;
+  margin: 0;
+  font-size: 15px;
+  color: #10004C;
+}
+
+.carne {
+  margin: 4px 0 10px;
+  font-size: 12px;
+  color: rgba(16,0,76,0.5);
+}
+
+.detalle {
+  margin: 0 0 2px;
+  font-size: 12px;
+  color: rgba(16,0,76,0.4);
+}
+
+.detalleUltimo {
+  margin: 0 0 12px;
+  font-size: 12px;
+  color: rgba(16,0,76,0.4);
+}
+
+@media (min-width: 768px) {
+  .pagina {
+    padding: 40px;
+  }
+
+  .titulo {
+    font-size: 28px;
+    margin: 20px 0 8px;
+  }
+
+  .conteo {
+    font-size: 16px;
+  }
+
+  .nota, .notaUltima {
+    font-size: 13px;
+  }
+
+  .notaUltima {
+    margin-bottom: 30px;
+  }
+
+  .nombre {
+    font-size: 16px;
+  }
+}
