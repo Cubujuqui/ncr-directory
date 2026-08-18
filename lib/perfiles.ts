@@ -83,9 +83,9 @@ async function getPerfilesElegibles(): Promise<PerfilCompleto[]> {
     .map(mapearPerfil);
 }
 
-export async function getPerfilesDestacados(): Promise<PerfilCompleto[]> {
+  export async function getPerfilesDestacados(): Promise<PerfilCompleto[]> {
   const perfiles = await getPerfilesElegibles();
-  return perfiles.filter((p) => p.tier === 'premium').slice(0, 3);
+  return perfiles.filter((p) => p.tier === 'premium').sort(() => Math.random() - 0.5).slice(0, 3);
 }
 
 export async function ordenarResultadosDirectorio(
