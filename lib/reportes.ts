@@ -12,6 +12,31 @@ export type FilaReporte = {
   porCanal: Record<string, number>;
 };
 
+export type FilaHistorialMes = {
+  mes: string;
+  etiqueta: string;
+  porCanal: Record<string, number>;
+  total: number;
+};
+
+export function generarListaMeses(): string[] {
+  const inicio = new Date('2026-08-01T00:00:00Z');
+  const ahora = new Date();
+  const meses: string[] = [];
+  const cursor = new Date(inicio);
+  while (cursor <= ahora) {
+    meses.push(cursor.toISOString().slice(0, 7));
+    cursor.setUTCMonth(cursor.getUTCMonth() + 1);
+  }
+  return meses;
+}
+
+function formatearMesCorto(mes: string): string {
+  const [anio, mesNum] = mes.split('-');
+  const nombres = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+  return `${nombres[parseInt(mesNum, 10) - 1]} ${anio}`;
+}
+
 async function getTodosLosClics(): Promise<any[]> {
   const todos: any[] = [];
   let desde = 0;
@@ -78,4 +103,42 @@ export async function getReporteClicks(mes: string): Promise<FilaReporte[]> {
 
     return { carne, nombre: nombre.trim(), tier: tierMasComun, total, porCanal };
   });
+}
+
+export async function getHistorialPersona(carne: string): Promise<{ nombre: string; historial: FilaHistorialMes[]; canalesActivos: string[] }> {
+  const todos = await getTodosLosClics();
+  const delPersona = todos.filter((c) => c.carne === carne);
+
+  const { data: perfil } = await supabaseAdmin
+    .from('perfiles')
+    .select('nombre_manual, apellido_manual, segundo_apellido_manual, nombre_preferido')
+    .eq('carne', carne)
+    .maybeSingle();
+
+  const nombre = perfil
+    ? `${perfil.nombre_preferido ? toTitleCase(perfil.nombre_preferido) : toTitleCase(perfil.nombre_manual)} ${toTitleCase(perfil.apellido_manual)} ${toTitleCase(perfil.segundo_apellido_manual)}`.trim()
+    : carne;
+
+  const meses = generarListaMeses();
+  const historial: FilaHistorialMes[] = meses.map((mes) => {
+    const inicioMes = new Date(`${mes}-01T00:00:00Z`);
+    const finMes = new Date(inicioMes);
+    finMes.setUTCMonth(finMes.getUTCMonth() + 1);
+
+    const delMes = delPersona.filter((c) => {
+      const fecha = new Date(c.created_at);
+      return fecha >= inicioMes && fecha < finMes;
+    });
+
+    const porCanal: Record<string, number> = {};
+    for (const canal of CANALES) {
+      porCanal[canal] = delMes.filter((c) => c.canal === canal).length;
+    }
+
+    return { mes, etiqueta: formatearMesCorto(mes), porCanal, total: delMes.length };
+  });
+
+  const canalesActivos = CANALES.filter((canal) => historial.some((h) => h.porCanal[canal] > 0));
+
+  return { nombre, historial, canalesActivos };
 }

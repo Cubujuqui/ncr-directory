@@ -1,22 +1,10 @@
 import { cookies } from 'next/headers';
 import { isValidAdminToken } from '@/lib/admin-auth';
 import LoginForm from '../LoginForm';
-import { getReporteClicks } from '@/lib/reportes';
+import { getReporteClicks, generarListaMeses } from '@/lib/reportes';
 import TablaReportes from './TablaReportes';
 import SelectorMes from './SelectorMes';
 import Link from 'next/link';
-
-function generarOpcionesMes(): string[] {
-  const inicio = new Date('2026-08-01T00:00:00Z');
-  const ahora = new Date();
-  const opciones: string[] = [];
-  const cursor = new Date(inicio);
-  while (cursor <= ahora) {
-    opciones.push(cursor.toISOString().slice(0, 7));
-    cursor.setUTCMonth(cursor.getUTCMonth() + 1);
-  }
-  return opciones.reverse();
-}
 
 export default async function ReportesPage({
   searchParams,
@@ -30,8 +18,8 @@ export default async function ReportesPage({
     return <LoginForm />;
   }
 
-  const opciones = generarOpcionesMes();
-  const { mes: mesParam } = await searchParams;
+  const opciones = generarListaMeses().reverse();
+    const { mes: mesParam } = await searchParams;
   const mes = mesParam && opciones.includes(mesParam) ? mesParam : opciones[0];
 
   const datos = await getReporteClicks(mes);
