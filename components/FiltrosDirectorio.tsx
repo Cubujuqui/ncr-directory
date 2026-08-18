@@ -2,6 +2,7 @@
 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import FiltroToggle from './FiltroToggle';
+import styles from './FiltrosDirectorio.module.css';
 
 export default function FiltrosDirectorio() {
   const router = useRouter();
@@ -23,7 +24,7 @@ export default function FiltrosDirectorio() {
   }
 
   return (
-    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '14px' }}>
+    <div className={styles.contenedor}>
       <FiltroToggle activo={online} onClick={() => alternar('online', online)}>Online</FiltroToggle>
       <FiltroToggle activo={presencial} onClick={() => alternar('presencial', presencial)}>Visita presencial</FiltroToggle>
       <FiltroToggle activo={false} disabled>Individual</FiltroToggle>
