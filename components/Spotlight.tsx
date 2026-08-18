@@ -1,6 +1,7 @@
 import { PerfilCompleto } from '@/lib/perfiles';
 import SocialIcons, { getHref } from './SocialIcons';
 import TarjetaClicable from './TarjetaClicable';
+import styles from './Spotlight.module.css';
 
 const PALETAS = [
   { background: '#BFB6FF', light: '#F3F0FF', primary: '#7370E0', dark: '#10004C' },
@@ -19,38 +20,39 @@ function PremiumCard({ perfil, paleta }: { perfil: PerfilCompleto; paleta: typeo
   const enlacePrincipal = valorCanal ? getHref(canal, valorCanal, perfil.carne ?? undefined) : null;
 
   return (
-    <TarjetaClicable href={enlacePrincipal} style={{ background: paleta.light, borderRadius: '18px', overflow: 'hidden', boxShadow: '0 8px 20px rgba(0,0,0,0.08)', height: '100%', boxSizing: 'border-box', display: 'flex', flexDirection: 'column' }}>      <div style={{ width: '100%', aspectRatio: '1 / 1', background: `${paleta.dark}0d` }}>
+    <TarjetaClicable href={enlacePrincipal} className={styles.tarjeta} style={{ background: paleta.light }}>
+      <div className={styles.fotoContenedor} style={{ background: `${paleta.dark}0d` }}>
         {perfil.fotoUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={perfil.fotoUrl} alt={nombreCompleto} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          <img src={perfil.fotoUrl} alt={nombreCompleto} className={styles.fotoImg} />
         ) : (
-          <div style={{ width: '100%', height: '100%', border: `1.5px dashed ${paleta.dark}66`, boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundImage: `repeating-linear-gradient(135deg, ${paleta.dark}14 0 6px, ${paleta.dark}05 6px 12px)` }}>
-            <span style={{ fontFamily: "ui-monospace, 'SF Mono', Menlo, monospace", fontSize: '11px', color: `${paleta.dark}99`, textAlign: 'center' }}>foto</span>
+          <div className={styles.fotoPlaceholder} style={{ border: `1.5px dashed ${paleta.dark}66`, backgroundImage: `repeating-linear-gradient(135deg, ${paleta.dark}14 0 6px, ${paleta.dark}05 6px 12px)` }}>
+            <span className={styles.fotoPlaceholderTexto} style={{ color: `${paleta.dark}99` }}>foto</span>
           </div>
         )}
       </div>
 
-      <div style={{ padding: '18px 22px 22px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', flex: 1 }}>
-        <span style={{ display: 'inline-block', background: paleta.primary, color: '#ffffff', fontSize: '11px', fontWeight: 800, padding: '3px 10px', borderRadius: '999px', marginBottom: '10px', letterSpacing: '0.3px' }}>
+      <div className={styles.info}>
+        <span className={styles.badge} style={{ background: paleta.primary }}>
           PERFIL PREMIUM
         </span>
-        <p style={{ margin: 0, fontWeight: 800, fontSize: '16px', color: paleta.dark }}>{nombreCompleto}</p>
+        <p className={styles.nombre} style={{ color: paleta.dark }}>{nombreCompleto}</p>
         {perfil.carne && (
-          <p style={{ margin: '2px 0 0', fontSize: '12px', color: `${paleta.dark}99` }}>
+          <p className={styles.carne} style={{ color: `${paleta.dark}99` }}>
             Carné {perfil.carne}
           </p>
         )}
-<p style={{ margin: '4px 0 2px', fontSize: '12px', color: perfil.especialidad ? paleta.dark : `${paleta.dark}66`, fontWeight: perfil.especialidad ? 700 : 400 }}>
+        <p className={styles.detalle} style={{ color: perfil.especialidad ? paleta.dark : `${paleta.dark}66`, fontWeight: perfil.especialidad ? 700 : 400 }}>
           Especialidad: {perfil.especialidad || 'No indica'}
         </p>
-        <p style={{ margin: '0 0 2px', fontSize: '12px', color: perfil.citasOnline ? paleta.dark : `${paleta.dark}66`, fontWeight: perfil.citasOnline ? 700 : 400 }}>
+        <p className={styles.detalle} style={{ color: perfil.citasOnline ? paleta.dark : `${paleta.dark}66`, fontWeight: perfil.citasOnline ? 700 : 400 }}>
           Citas online: {perfil.citasOnline ? 'Sí' : 'No indica'}
         </p>
-        <p style={{ margin: '0 0 14px', fontSize: '12px', color: perfil.visitaDomicilio ? paleta.dark : `${paleta.dark}66`, fontWeight: perfil.visitaDomicilio ? 700 : 400 }}>
+        <p className={styles.detalleUltimo} style={{ color: perfil.visitaDomicilio ? paleta.dark : `${paleta.dark}66`, fontWeight: perfil.visitaDomicilio ? 700 : 400 }}>
           Visita a domicilio: {perfil.visitaDomicilio ? 'Sí' : 'No indica'}
         </p>
 
-<SocialIcons
+        <SocialIcons
           tier="premium"
           identificador={perfil.carne ?? undefined}
           whatsapp={perfil.whatsapp}
@@ -60,7 +62,7 @@ function PremiumCard({ perfil, paleta }: { perfil: PerfilCompleto; paleta: typeo
           tiktok={perfil.tiktok}
           youtube={perfil.youtube}
           linkedin={perfil.linkedin}
-activeColor={paleta.primary}
+          activeColor={paleta.primary}
           grayColor={paleta.dark}
         />
       </div>
@@ -72,16 +74,16 @@ export default function Spotlight({ perfiles }: { perfiles: PerfilCompleto[] }) 
   if (perfiles.length === 0) return null;
 
   return (
-    <section style={{ background: SECTION_BG, padding: '50px 40px' }}>
-      <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-        <h2 style={{ margin: '0 0 6px', fontSize: '26px', fontWeight: 800, color: '#510F00', fontFamily: "'Mulish', system-ui, sans-serif" }}>
+    <section className={styles.seccion} style={{ background: SECTION_BG }}>
+      <div className={styles.contenedor}>
+        <h2 className={styles.titulo}>
           Nutricionistas destacados
         </h2>
-        <p style={{ margin: '0 0 26px', color: 'rgba(81,15,0,0.7)', fontFamily: "'Mulish', system-ui, sans-serif" }}>
+        <p className={styles.subtitulo}>
           Perfiles premium — próximamente más nutricionistas destacados
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: `repeat(${perfiles.length}, 1fr)`, gap: '20px' }}>
+        <div className={styles.grilla} style={{ '--num-columnas': perfiles.length } as React.CSSProperties}>
           {perfiles.map((p, i) => (
             <PremiumCard key={i} perfil={p} paleta={PALETAS[i % PALETAS.length]} />
           ))}
