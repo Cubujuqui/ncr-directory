@@ -223,6 +223,12 @@
   text-decoration: none;
 }
 
+.enlaceConsentimiento {
+  color: #7370E0;
+  text-decoration: underline;
+  font-weight: 700;
+}
+
 @media (min-width: 600px) {
   .pagina {
     padding: 50px 20px;

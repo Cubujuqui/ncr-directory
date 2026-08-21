@@ -17,7 +17,7 @@ export default function Unirme() {
 
   const [fotoCarne, setFotoCarne] = useState<File | null>(null);
   const [fotoPerfil, setFotoPerfil] = useState<File | null>(null);
-  const [tier, setTier] = useState('premium');
+  const [tier, setTier] = useState('');
 
   async function buscarNombre() {
     if (!carneValor.trim()) return;
@@ -62,6 +62,11 @@ export default function Unirme() {
     if (!fotoCarne) {
       setEstado('error');
       setErrorMsg('Necesitamos una foto de tu carné para verificar tu identidad.');
+      return;
+    }
+    if (!tier) {
+      setEstado('error');
+      setErrorMsg('Elegí un nivel (Premium, Contacto o Gratis) para continuar.');
       return;
     }
 
@@ -380,7 +385,9 @@ export default function Unirme() {
           <div className={`${styles.seccion} ${styles.cajaConsentimiento}`}>
             <label className={styles.consentimientoLabel}>
               <input type="checkbox" name="consentimiento" required className={styles.checkboxConsentimiento} />
-              Autorizo la publicación de estos datos en nutricionistasencostarica.com. Entiendo que el sitio utiliza tecnología para proteger mi privacidad: mis datos de contacto no se muestran públicamente, sino que se usan únicamente para redirigir a quien haga clic hacia el canal de comunicación que yo indiqué. *
+              <span>
+                Entiendo que: 1) la foto de mi carné NO será mostrada en el sitio. 2) Los datos provistos (WhatsApp, redes sociales, email, foto de perfil) serán utilizados para redirigir clientes potenciales hacia los canales que agregué. 3) El sitio utiliza tecnología para proteger la privacidad de mis datos de acuerdo a la legislación local y mejores prácticas disponibles. 4) Estoy de acuerdo en que los datos provistos se usen según lo descrito en este espacio y en <Link href="/aviso-legal" className={styles.enlaceConsentimiento}>Información Importante</Link>. ¿Dudas? <a href="/go/whatsapp/solicitar" className={styles.enlaceConsentimiento}>Escribir aquí</a>. *
+              </span>
             </label>
           </div>
 
