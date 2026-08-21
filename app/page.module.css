@@ -96,11 +96,13 @@
   }
 
   .hero {
+    max-width: 1000px;
     padding: 70px 40px 90px;
   }
 
   .titulo {
     font-size: 42px;
+    white-space: nowrap;
   }
 
   .footer {
