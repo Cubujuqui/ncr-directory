@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import styles from './page.module.css';
 
 export default function Unirme() {
   const [estado, setEstado] = useState<'idle' | 'enviando' | 'exito' | 'error'>('idle');
@@ -17,6 +18,7 @@ export default function Unirme() {
   const [fotoCarne, setFotoCarne] = useState<File | null>(null);
   const [fotoPerfil, setFotoPerfil] = useState<File | null>(null);
   const [tier, setTier] = useState('premium');
+
   async function buscarNombre() {
     if (!carneValor.trim()) return;
     setBuscando(true);
@@ -39,7 +41,7 @@ export default function Unirme() {
     const form = e.currentTarget;
     const data = new FormData(form);
 
-const carne = carneValor.trim();
+    const carne = carneValor.trim();
     const consentimiento = data.get('consentimiento') === 'on';
 
     if (!carne) {
@@ -57,7 +59,7 @@ const carne = carneValor.trim();
       setErrorMsg('Debés autorizar la publicación de tus datos para continuar.');
       return;
     }
-if (!fotoCarne) {
+    if (!fotoCarne) {
       setEstado('error');
       setErrorMsg('Necesitamos una foto de tu carné para verificar tu identidad.');
       return;
@@ -66,7 +68,7 @@ if (!fotoCarne) {
     const canalPrincipal = data.get('punto_contacto_primario') as string;
     const valorCanalPrincipal = (data.get(canalPrincipal) as string || '').trim();
     if (!valorCanalPrincipal) {
-const nombresCanal: Record<string, string> = {
+      const nombresCanal: Record<string, string> = {
         whatsapp: 'WhatsApp',
         email: 'Email',
         facebook: 'Facebook',
@@ -87,7 +89,7 @@ const nombresCanal: Record<string, string> = {
     const extension = fotoCarne.name.split('.').pop();
     const rutaFoto = `${carne}-${Date.now()}.${extension}`;
 
-const { error: errorSubida } = await supabase.storage
+    const { error: errorSubida } = await supabase.storage
       .from('carnes-verificacion')
       .upload(rutaFoto, fotoCarne);
 
@@ -118,14 +120,15 @@ const { error: errorSubida } = await supabase.storage
       fotoPerfilUrl = urlData.publicUrl;
     }
 
-    const { error } = await supabase.from('solicitudes').insert({      carne,
+    const { error } = await supabase.from('solicitudes').insert({
+      carne,
       nombre_preferido: nombrePreferido,
       tier: data.get('tier') as string,
-whatsapp: (() => {
+      whatsapp: (() => {
         const digitos = (data.get('whatsapp') as string || '').replace(/\D/g, '');
         return digitos ? `506${digitos}` : null;
-      })(),      
-email: (data.get('email') as string || '').trim() || null,
+      })(),
+      email: (data.get('email') as string || '').trim() || null,
       facebook: (data.get('facebook') as string || '').trim() || null,
       instagram: (data.get('instagram') as string || '').trim() || null,
       tiktok: (data.get('tiktok') as string || '').trim() || null,
@@ -152,13 +155,13 @@ email: (data.get('email') as string || '').trim() || null,
 
   if (estado === 'exito') {
     return (
-      <div style={{ minHeight: '100vh', background: '#F3F0FF', fontFamily: "'Mulish', system-ui, sans-serif", color: '#10004C', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-        <div style={{ maxWidth: '480px', textAlign: 'center' }}>
-          <h1 style={{ fontSize: '26px', fontWeight: 800, margin: '0 0 14px' }}>¡Listo! Recibimos tu información</h1>
-          <p style={{ fontSize: '16px', lineHeight: 1.7, color: 'rgba(16,0,76,0.75)' }}>
+      <div className={styles.paginaExito}>
+        <div className={styles.contenedorExito}>
+          <h1 className={styles.tituloExito}>¡Listo! Recibimos tu información</h1>
+          <p className={styles.textoExito}>
             Vamos a revisar tu solicitud y activaremos tu perfil pronto. Si tenés dudas, escribinos por WhatsApp.
           </p>
-          <Link href="/" style={{ display: 'inline-block', marginTop: '20px', color: '#7370E0', fontWeight: 700, textDecoration: 'none' }}>
+          <Link href="/" className={styles.volverExito}>
             ← Volver al inicio
           </Link>
         </div>
@@ -166,104 +169,102 @@ email: (data.get('email') as string || '').trim() || null,
     );
   }
 
-  const labelStyle = { display: 'block', fontSize: '14px', fontWeight: 700, marginBottom: '6px', color: '#10004C' };
-  const inputStyle = { width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid rgba(16,0,76,0.15)', fontSize: '15px', fontFamily: 'inherit', boxSizing: 'border-box' as const };
-  const sectionStyle = { marginBottom: '22px' };
-  const helpStyle = { fontSize: '12px', color: 'rgba(16,0,76,0.5)', margin: '4px 0 0' };
-
   return (
-    <div style={{ minHeight: '100vh', background: '#F3F0FF', fontFamily: "'Mulish', system-ui, sans-serif", color: '#10004C', padding: '50px 20px' }}>
-      <div style={{ maxWidth: '560px', margin: '0 auto' }}>
-        <Link href="/" style={{ color: '#7370E0', textDecoration: 'none', fontWeight: 700, fontSize: '15px' }}>
+    <div className={styles.pagina}>
+      <div className={styles.contenedor}>
+        <Link href="/" className={styles.volver}>
           ← Volver al inicio
         </Link>
 
-        <h1 style={{ fontSize: '30px', fontWeight: 800, margin: '20px 0 8px' }}>Unite al directorio</h1>
-        <p style={{ fontSize: '16px', color: 'rgba(16,0,76,0.7)', marginBottom: '30px' }}>
+        <h1 className={styles.titulo}>Unite al directorio</h1>
+        <p className={styles.intro}>
           Completá tus datos para activar o actualizar tu perfil. Revisamos cada solicitud antes de publicarla.
         </p>
 
         <form onSubmit={handleSubmit}>
-          <div style={sectionStyle}>
-            <label style={labelStyle}>Número de carné *</label>
-            <div style={{ display: 'flex', gap: '8px' }}>
+          <div className={styles.seccion}>
+            <label className={styles.etiqueta}>Número de carné *</label>
+            <div className={styles.filaCarne}>
               <input
                 name="carne"
                 required
                 value={carneValor}
                 onChange={(e) => { setCarneValor(e.target.value); setBusquedaHecha(false); }}
                 onBlur={buscarNombre}
-                style={{ ...inputStyle, flex: 1 }}
+                className={`${styles.input} ${styles.inputCarne}`}
                 placeholder="Ej. 0000-00"
               />
               <button
                 type="button"
                 onClick={buscarNombre}
                 disabled={buscando}
-                style={{ background: '#E4E0FB', color: '#10004C', border: 'none', borderRadius: '10px', padding: '0 16px', fontWeight: 700, fontSize: '14px', cursor: 'pointer', fontFamily: 'inherit' }}
+                className={styles.botonBuscar}
               >
                 {buscando ? 'Buscando...' : 'Buscar'}
               </button>
             </div>
 
             {busquedaHecha && nombreCPN && (
-              <div style={{ marginTop: '10px', background: '#E4E0FB', borderRadius: '10px', padding: '12px' }}>
-                <p style={{ fontSize: '14px', margin: '0 0 8px' }}>
+              <div className={styles.avisoNombre}>
+                <p className={styles.avisoNombreTexto}>
                   El nombre que aparece en el CPN es: <strong>{nombreCPN}</strong>. ¿Querés usar ese nombre o preferís que mostremos otro?
                 </p>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', marginBottom: '6px' }}>
+                <label className={styles.opcionRadio}>
                   <input type="radio" checked={usarNombreCPN} onChange={() => setUsarNombreCPN(true)} />
                   Usar ese nombre
                 </label>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px' }}>
+                <label className={styles.opcionRadio}>
                   <input type="radio" checked={!usarNombreCPN} onChange={() => setUsarNombreCPN(false)} />
                   Prefiero mostrar otro nombre
                 </label>
                 {!usarNombreCPN && (
-                  <input name="nombre_preferido" style={{ ...inputStyle, marginTop: '10px' }} placeholder="¿Cómo querés que te llamemos?" />
+                  <input name="nombre_preferido" className={styles.input} style={{ marginTop: '10px' }} placeholder="¿Cómo querés que te llamemos?" />
                 )}
               </div>
             )}
 
-{busquedaHecha && !nombreCPN && (
-              <div style={{ marginTop: '10px', background: '#FDECEC', borderRadius: '10px', padding: '12px' }}>
-                <p style={{ fontSize: '13px', color: '#c0392b', fontWeight: 700, margin: 0 }}>
+            {busquedaHecha && !nombreCPN && (
+              <div className={styles.avisoError}>
+                <p className={styles.avisoErrorTexto}>
                   No encontramos ese carné en el registro público del CPN. Verificá que esté correctamente escrito — no podés continuar sin un carné válido.
                 </p>
               </div>
             )}
           </div>
 
-          <div style={sectionStyle}>
-            <label style={labelStyle}>Foto de tu carné vigente *</label>            <input
+          <div className={styles.seccion}>
+            <label className={styles.etiqueta}>Foto de tu carné vigente *</label>
+            <input
               type="file"
               accept="image/*"
               required
               onChange={(e) => setFotoCarne(e.target.files?.[0] || null)}
-              style={inputStyle}
+              className={styles.input}
             />
-            <p style={helpStyle}>La usamos solo para confirmar que sos vos. No se publica en el sitio.</p>
+            <p className={styles.ayuda}>La usamos solo para confirmar que sos vos. No se publica en el sitio.</p>
           </div>
 
-          <div style={sectionStyle}>
-            <label style={labelStyle}>Nivel que te interesa</label>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <label style={{ display: 'flex', gap: '10px', background: '#E4E0FB', borderRadius: '10px', padding: '12px', alignItems: 'flex-start' }}>
-<input type="radio" name="tier" value="premium" checked={tier === 'premium'} onChange={() => setTier('premium')} style={{ marginTop: '3px' }} />                <span>
+          <div className={styles.seccion}>
+            <label className={styles.etiqueta}>Nivel que te interesa</label>
+            <div className={styles.tarjetasTier}>
+              <label className={`${styles.tarjetaTier} ${styles.tarjetaTierPremium}`}>
+                <input type="radio" name="tier" value="premium" checked={tier === 'premium'} onChange={() => setTier('premium')} className={styles.radioTier} />
+                <span>
                   <strong>Premium</strong> — máxima visibilidad, aparecés destacado en la portada.
                   <br />
-                  <span style={helpStyle}>Precio preliminar: $17/mes. Por ahora, sin costo mientras probamos el sistema.</span>
+                  <span className={styles.ayuda}>Precio preliminar: $17/mes. Por ahora, sin costo mientras probamos el sistema.</span>
                 </span>
               </label>
-              <label style={{ display: 'flex', gap: '10px', background: '#F3F0FF', borderRadius: '10px', padding: '12px', alignItems: 'flex-start' }}>
-<input type="radio" name="tier" value="contact" checked={tier === 'contact'} onChange={() => setTier('contact')} style={{ marginTop: '3px' }} />                <span>
+              <label className={`${styles.tarjetaTier} ${styles.tarjetaTierOtro}`}>
+                <input type="radio" name="tier" value="contact" checked={tier === 'contact'} onChange={() => setTier('contact')} className={styles.radioTier} />
+                <span>
                   <strong>Contacto</strong> — incluye enlace directo a tu WhatsApp.
                   <br />
-                  <span style={helpStyle}>Precio preliminar: $9/mes. Por ahora, sin costo mientras probamos el sistema.</span>
+                  <span className={styles.ayuda}>Precio preliminar: $9/mes. Por ahora, sin costo mientras probamos el sistema.</span>
                 </span>
               </label>
-              <label style={{ display: 'flex', gap: '10px', background: '#F3F0FF', borderRadius: '10px', padding: '12px', alignItems: 'flex-start' }}>
-<input type="radio" name="tier" value="free" checked={tier === 'free'} onChange={() => setTier('free')} style={{ marginTop: '3px' }} />
+              <label className={`${styles.tarjetaTier} ${styles.tarjetaTierOtro}`}>
+                <input type="radio" name="tier" value="free" checked={tier === 'free'} onChange={() => setTier('free')} className={styles.radioTier} />
                 <span>
                   <strong>Gratis</strong> — aparecés en el directorio con tu información básica.
                 </span>
@@ -272,58 +273,58 @@ email: (data.get('email') as string || '').trim() || null,
           </div>
 
           {tier === 'premium' && (
-            <div style={sectionStyle}>
-              <label style={labelStyle}>Foto de perfil</label>
+            <div className={styles.seccion}>
+              <label className={styles.etiqueta}>Foto de perfil</label>
               <input
                 type="file"
                 accept="image/*"
                 onChange={(e) => setFotoPerfil(e.target.files?.[0] || null)}
-                style={inputStyle}
+                className={styles.input}
               />
-              <p style={helpStyle}>Esta es la foto que se mostrará en tu tarjeta destacada. Opcional, pero recomendada.</p>
+              <p className={styles.ayuda}>Esta es la foto que se mostrará en tu tarjeta destacada. Opcional, pero recomendada.</p>
             </div>
           )}
 
- <div style={sectionStyle}>
-            <label style={labelStyle}>WhatsApp</label>
-            <input name="whatsapp" style={inputStyle} placeholder="Ej. 88887777" maxLength={8} />
-            <p style={helpStyle}>Solo escribí los 8 dígitos — nosotros agregamos el 506.</p>
+          <div className={styles.seccion}>
+            <label className={styles.etiqueta}>WhatsApp</label>
+            <input name="whatsapp" className={styles.input} placeholder="Ej. 88887777" maxLength={8} />
+            <p className={styles.ayuda}>Solo escribí los 8 dígitos — nosotros agregamos el 506.</p>
           </div>
 
-          <div style={sectionStyle}>
-            <label style={labelStyle}>Email</label>
-            <input name="email" type="email" style={inputStyle} placeholder="Opcional" />
+          <div className={styles.seccion}>
+            <label className={styles.etiqueta}>Email</label>
+            <input name="email" type="email" className={styles.input} placeholder="Opcional" />
           </div>
 
-<div style={sectionStyle}>
-            <label style={labelStyle}>Facebook</label>
-            <input name="facebook" style={inputStyle} placeholder="usuario o nombre de página" />
+          <div className={styles.seccion}>
+            <label className={styles.etiqueta}>Facebook</label>
+            <input name="facebook" className={styles.input} placeholder="usuario o nombre de página" />
           </div>
 
-          <div style={sectionStyle}>
-            <label style={labelStyle}>Instagram</label>
-            <input name="instagram" style={inputStyle} placeholder="usuario, sin @" />
+          <div className={styles.seccion}>
+            <label className={styles.etiqueta}>Instagram</label>
+            <input name="instagram" className={styles.input} placeholder="usuario, sin @" />
           </div>
 
-          <div style={sectionStyle}>
-            <label style={labelStyle}>TikTok</label>
-            <input name="tiktok" style={inputStyle} placeholder="usuario, sin @" />
+          <div className={styles.seccion}>
+            <label className={styles.etiqueta}>TikTok</label>
+            <input name="tiktok" className={styles.input} placeholder="usuario, sin @" />
           </div>
 
-          <div style={sectionStyle}>
-            <label style={labelStyle}>YouTube</label>
-            <input name="youtube" style={inputStyle} placeholder="Enlace al canal" />
+          <div className={styles.seccion}>
+            <label className={styles.etiqueta}>YouTube</label>
+            <input name="youtube" className={styles.input} placeholder="Enlace al canal" />
           </div>
 
-          <div style={sectionStyle}>
-            <label style={labelStyle}>LinkedIn</label>
-            <input name="linkedin" style={inputStyle} placeholder="Enlace al perfil" />
+          <div className={styles.seccion}>
+            <label className={styles.etiqueta}>LinkedIn</label>
+            <input name="linkedin" className={styles.input} placeholder="Enlace al perfil" />
           </div>
 
-          <div style={sectionStyle}>
-            <label style={labelStyle}>¿Cuál es tu canal de contacto principal?</label>
-            <select name="punto_contacto_primario" defaultValue="whatsapp" style={inputStyle}>
-<option value="whatsapp">WhatsApp</option>
+          <div className={styles.seccion}>
+            <label className={styles.etiqueta}>¿Cuál es tu canal de contacto principal?</label>
+            <select name="punto_contacto_primario" defaultValue="whatsapp" className={styles.input}>
+              <option value="whatsapp">WhatsApp</option>
               <option value="email">Email</option>
               <option value="facebook">Facebook</option>
               <option value="instagram">Instagram</option>
@@ -333,40 +334,40 @@ email: (data.get('email') as string || '').trim() || null,
             </select>
           </div>
 
-          <div style={sectionStyle}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '15px', fontWeight: 600 }}>
+          <div className={styles.seccion}>
+            <label className={styles.checkboxFila}>
               <input type="checkbox" name="citas_online" />
               Ofrezco citas online
             </label>
           </div>
 
-          <div style={sectionStyle}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '15px', fontWeight: 600 }}>
+          <div className={styles.seccion}>
+            <label className={styles.checkboxFila}>
               <input type="checkbox" name="visita_domicilio" />
               Ofrezco visitas a domicilio
             </label>
           </div>
 
-          <div style={sectionStyle}>
-            <label style={labelStyle}>¿Alguien te refirió? (su número de carné)</label>
-            <input name="referido_por" style={inputStyle} placeholder="Opcional" />
+          <div className={styles.seccion}>
+            <label className={styles.etiqueta}>¿Alguien te refirió? (su número de carné)</label>
+            <input name="referido_por" className={styles.input} placeholder="Opcional" />
           </div>
 
-          <div style={{ ...sectionStyle, background: '#E4E0FB', padding: '16px', borderRadius: '12px' }}>
-            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '13px', fontWeight: 600, lineHeight: 1.6 }}>
-              <input type="checkbox" name="consentimiento" required style={{ marginTop: '3px' }} />
+          <div className={`${styles.seccion} ${styles.cajaConsentimiento}`}>
+            <label className={styles.consentimientoLabel}>
+              <input type="checkbox" name="consentimiento" required className={styles.checkboxConsentimiento} />
               Autorizo la publicación de estos datos en nutricionistasencostarica.com. Entiendo que el sitio utiliza tecnología para proteger mi privacidad: mis datos de contacto no se muestran públicamente, sino que se usan únicamente para redirigir a quien haga clic hacia el canal de comunicación que yo indiqué. *
             </label>
           </div>
 
           {estado === 'error' && (
-            <p style={{ color: '#c0392b', fontWeight: 700, fontSize: '14px', marginBottom: '16px' }}>{errorMsg}</p>
+            <p className={styles.errorEnvio}>{errorMsg}</p>
           )}
 
           <button
             type="submit"
             disabled={estado === 'enviando'}
-            style={{ width: '100%', background: '#7370E0', color: '#ffffff', border: 'none', borderRadius: '12px', padding: '14px', fontSize: '16px', fontWeight: 800, cursor: 'pointer', fontFamily: 'inherit' }}
+            className={styles.botonEnviar}
           >
             {estado === 'enviando' ? 'Enviando...' : 'Enviar solicitud'}
           </button>
