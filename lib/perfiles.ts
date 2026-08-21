@@ -18,6 +18,9 @@ export type PerfilCompleto = {
   tier: 'free' | 'contact' | 'premium';
   citasOnline: boolean | null;
   visitaDomicilio: boolean | null;
+  citasGrupales: boolean | null;
+  serviciosEmpresas: boolean | null;
+  hablaIngles: boolean | null;
   puntoContactoPrimario: 'whatsapp' | 'instagram' | 'tiktok' | 'youtube' | 'linkedin' | 'email' | 'facebook';
 };
 
@@ -47,6 +50,9 @@ email: fila.email,
     tier: (fila.tier as 'free' | 'contact' | 'premium') || 'free',
     citasOnline: fila.citas_online,
     visitaDomicilio: fila.visita_domicilio,
+    citasGrupales: fila.citas_grupales,
+    serviciosEmpresas: fila.servicios_empresas,
+    hablaIngles: fila.habla_ingles,
     puntoContactoPrimario: (fila.punto_contacto_primario as PerfilCompleto['puntoContactoPrimario']) || 'whatsapp',
   };
 }
@@ -91,7 +97,7 @@ async function getPerfilesElegibles(): Promise<PerfilCompleto[]> {
 export async function ordenarResultadosDirectorio(
   especialidad?: string,
   maxTotal = 50,
-  filtros?: { online?: boolean; presencial?: boolean; premiumSolamente?: boolean }
+  filtros?: { online?: boolean; presencial?: boolean; premiumSolamente?: boolean; grupal?: boolean; serviciosEmpresas?: boolean; hablaIngles?: boolean }
 ): Promise<{ resultados: PerfilCompleto[]; total: number }> {
   let perfiles = await getPerfilesElegibles();
 
@@ -105,7 +111,21 @@ export async function ordenarResultadosDirectorio(
     );
   }
 
+  if (filtros?.grupal) {
+    perfiles = perfiles.filter((p) => p.citasGrupales === true);
+  }
+
+  if (filtros?.serviciosEmpresas) {
+    perfiles = perfiles.filter((p) => p.serviciosEmpresas === true);
+  }
+
+  if (filtros?.hablaIngles) {
+    perfiles = perfiles.filter((p) => p.hablaIngles === true);
+  }
+
   if (filtros?.premiumSolamente) {
+
+
     perfiles = perfiles.filter((p) => p.tier === 'premium');
     const total = perfiles.length;
     const resultados = perfiles.sort(() => Math.random() - 0.5).slice(0, maxTotal);
