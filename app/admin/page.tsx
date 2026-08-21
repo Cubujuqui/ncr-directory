@@ -3,6 +3,7 @@ import { isValidAdminToken } from '@/lib/admin-auth';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import LoginForm from './LoginForm';
 import { aprobarSolicitud, rechazarSolicitud } from './actions';
+import BotonAprobar from './BotonAprobar';
 import Link from 'next/link';
 
 export default async function AdminPage() {
@@ -39,7 +40,7 @@ export default async function AdminPage() {
           <h1 style={{ fontSize: '28px', fontWeight: 800, margin: 0 }}>Solicitudes pendientes</h1>
           <Link href="/admin/reportes" style={{ color: '#7370E0', textDecoration: 'none', fontWeight: 700, fontSize: '14px' }}>Ver reporte de clics →</Link>
         </div>
-                <p style={{ color: 'rgba(16,0,76,0.6)', marginBottom: '30px' }}>{solicitudesConFoto.length} esperando revisión</p>
+        <p style={{ color: 'rgba(16,0,76,0.6)', marginBottom: '30px' }}>{solicitudesConFoto.length} esperando revisión</p>
 
         {solicitudesConFoto.length === 0 && (
           <p style={{ color: 'rgba(16,0,76,0.5)' }}>No hay solicitudes pendientes.</p>
@@ -48,9 +49,9 @@ export default async function AdminPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {solicitudesConFoto.map((s) => (
             <div key={s.id} style={{ background: '#fff', borderRadius: '16px', padding: '22px', boxShadow: '0 4px 14px rgba(16,0,76,0.06)' }}>
-<div style={{ display: 'flex', gap: '20px' }}>
+              <div style={{ display: 'flex', gap: '20px' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', flexShrink: 0 }}>
-{s.fotoUrlFirmada && (
+                  {s.fotoUrlFirmada && (
                     <div>
                       <p style={{ fontSize: '11px', fontWeight: 700, color: 'rgba(16,0,76,0.5)', margin: '0 0 4px' }}>Carné (verificación)</p>
                       <a href={s.fotoUrlFirmada} target="_blank" rel="noopener noreferrer">
@@ -58,7 +59,7 @@ export default async function AdminPage() {
                         <img src={s.fotoUrlFirmada} alt="Carné" style={{ width: '140px', height: '140px', objectFit: 'cover', borderRadius: '10px', cursor: 'zoom-in' }} />
                       </a>
                     </div>
-                  )}                  
+                  )}
                   {s.foto_url && (
                     <div>
                       <p style={{ fontSize: '11px', fontWeight: 700, color: 'rgba(16,0,76,0.5)', margin: '0 0 4px' }}>Foto de perfil (pública)</p>
@@ -73,10 +74,10 @@ export default async function AdminPage() {
                     Enviado: {new Date(s.created_at).toLocaleString('es-CR')}
                   </p>
 
-<div style={{ fontSize: '14px', lineHeight: 1.8 }}>
+                  <div style={{ fontSize: '14px', lineHeight: 1.8 }}>
                     <p><strong>Nivel solicitado:</strong> {s.tier}</p>
                     <p><strong>Nombre preferido:</strong> {s.nombre_preferido || 'No indica'}</p>
-<p><strong>WhatsApp:</strong> {s.whatsapp || 'No indica'}</p>
+                    <p><strong>WhatsApp:</strong> {s.whatsapp || 'No indica'}</p>
                     <p><strong>Email:</strong> {s.email || 'No indica'}</p>
                     <p><strong>Facebook:</strong> {s.facebook || 'No indica'}</p>
                     <p><strong>Instagram:</strong> {s.instagram || 'No indica'}</p>
@@ -89,13 +90,10 @@ export default async function AdminPage() {
                     <p><strong>Citas grupales:</strong> {s.citas_grupales ? 'Sí' : 'No'}</p>
                     <p><strong>Servicios a empresas:</strong> {s.servicios_empresas ? 'Sí' : 'No'}</p>
                     <p><strong>Habla inglés:</strong> {s.habla_ingles ? 'Sí' : 'No'}</p>
-                    <p><strong>Referido por:</strong> {s.referido_por || 'No indica'}</p>                  </div>
-                  <div style={{ display: 'flex', gap: '10px', marginTop: '16px' }}>
-                    <form action={aprobarSolicitud.bind(null, s.id)}>
-                      <button type="submit" style={{ background: '#4ECECE', color: '#003333', border: 'none', borderRadius: '10px', padding: '10px 20px', fontWeight: 800, cursor: 'pointer', fontFamily: 'inherit' }}>
-                        Aprobar
-                      </button>
-                    </form>
+                    <p><strong>Referido por:</strong> {s.referido_por || 'No indica'}</p>
+                  </div>
+                  <div style={{ display: 'flex', gap: '10px', marginTop: '16px', flexWrap: 'wrap' }}>
+                    <BotonAprobar id={s.id} whatsapp={s.whatsapp} aprobar={aprobarSolicitud} />
                     <form action={rechazarSolicitud.bind(null, s.id)}>
                       <button type="submit" style={{ background: '#F3F0FF', color: '#10004C', border: '1.5px solid rgba(16,0,76,0.2)', borderRadius: '10px', padding: '10px 20px', fontWeight: 800, cursor: 'pointer', fontFamily: 'inherit' }}>
                         Rechazar
