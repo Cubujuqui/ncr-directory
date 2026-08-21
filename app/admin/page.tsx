@@ -86,8 +86,10 @@ export default async function AdminPage() {
                     <p><strong>Canal principal:</strong> {s.punto_contacto_primario}</p>
                     <p><strong>Citas online:</strong> {s.citas_online ? 'Sí' : 'No'}</p>
                     <p><strong>Visita a domicilio:</strong> {s.visita_domicilio ? 'Sí' : 'No'}</p>
-                    <p><strong>Referido por:</strong> {s.referido_por || 'No indica'}</p>
-                  </div>
+                    <p><strong>Citas grupales:</strong> {s.citas_grupales ? 'Sí' : 'No'}</p>
+                    <p><strong>Servicios a empresas:</strong> {s.servicios_empresas ? 'Sí' : 'No'}</p>
+                    <p><strong>Habla inglés:</strong> {s.habla_ingles ? 'Sí' : 'No'}</p>
+                    <p><strong>Referido por:</strong> {s.referido_por || 'No indica'}</p>                  </div>
                   <div style={{ display: 'flex', gap: '10px', marginTop: '16px' }}>
                     <form action={aprobarSolicitud.bind(null, s.id)}>
                       <button type="submit" style={{ background: '#4ECECE', color: '#003333', border: 'none', borderRadius: '10px', padding: '10px 20px', fontWeight: 800, cursor: 'pointer', fontFamily: 'inherit' }}>

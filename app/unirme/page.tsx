@@ -137,6 +137,9 @@ export default function Unirme() {
       punto_contacto_primario: data.get('punto_contacto_primario') as string,
       citas_online: data.get('citas_online') === 'on',
       visita_domicilio: data.get('visita_domicilio') === 'on',
+      citas_grupales: data.get('citas_grupales') === 'on',
+      servicios_empresas: data.get('servicios_empresas') === 'on',
+      habla_ingles: data.get('habla_ingles') === 'on',
       referido_por: referidoPor,
       referido_timestamp: referidoPor ? new Date().toISOString() : null,
       consentimiento: true,
@@ -182,6 +185,18 @@ export default function Unirme() {
         </p>
 
         <form onSubmit={handleSubmit}>
+          <div className={styles.seccion}>
+            <label className={styles.etiqueta}>Foto de tu carné vigente *</label>
+            <input
+              type="file"
+              accept="image/*"
+              required
+              onChange={(e) => setFotoCarne(e.target.files?.[0] || null)}
+              className={styles.input}
+            />
+            <p className={styles.ayuda}>La usamos solo para confirmar que sos vos. No se publica en el sitio.</p>
+          </div>
+
           <div className={styles.seccion}>
             <label className={styles.etiqueta}>Número de carné *</label>
             <div className={styles.filaCarne}>
@@ -233,57 +248,57 @@ export default function Unirme() {
           </div>
 
           <div className={styles.seccion}>
-            <label className={styles.etiqueta}>Foto de tu carné vigente *</label>
-            <input
-              type="file"
-              accept="image/*"
-              required
-              onChange={(e) => setFotoCarne(e.target.files?.[0] || null)}
-              className={styles.input}
-            />
-            <p className={styles.ayuda}>La usamos solo para confirmar que sos vos. No se publica en el sitio.</p>
+            <label className={styles.etiqueta}>¿Alguien te refirió? (su número de carné)</label>
+            <input name="referido_por" className={styles.input} placeholder="Opcional" />
           </div>
 
           <div className={styles.seccion}>
-            <label className={styles.etiqueta}>Nivel que te interesa</label>
-            <div className={styles.tarjetasTier}>
-              <label className={`${styles.tarjetaTier} ${styles.tarjetaTierPremium}`}>
-                <input type="radio" name="tier" value="premium" checked={tier === 'premium'} onChange={() => setTier('premium')} className={styles.radioTier} />
-                <span>
-                  <strong>Premium</strong> — máxima visibilidad, aparecés destacado en la portada.
-                  <br />
-                  <span className={styles.ayuda}>Precio preliminar: $17/mes. Por ahora, sin costo mientras probamos el sistema.</span>
-                </span>
-              </label>
-              <label className={`${styles.tarjetaTier} ${styles.tarjetaTierOtro}`}>
-                <input type="radio" name="tier" value="contact" checked={tier === 'contact'} onChange={() => setTier('contact')} className={styles.radioTier} />
-                <span>
-                  <strong>Contacto</strong> — incluye enlace directo a tu WhatsApp.
-                  <br />
-                  <span className={styles.ayuda}>Precio preliminar: $9/mes. Por ahora, sin costo mientras probamos el sistema.</span>
-                </span>
-              </label>
-              <label className={`${styles.tarjetaTier} ${styles.tarjetaTierOtro}`}>
-                <input type="radio" name="tier" value="free" checked={tier === 'free'} onChange={() => setTier('free')} className={styles.radioTier} />
-                <span>
-                  <strong>Gratis</strong> — aparecés en el directorio con tu información básica.
-                </span>
-              </label>
-            </div>
+            <label className={styles.checkboxFila}>
+              <input type="checkbox" name="citas_online" />
+              Ofrezco citas online
+            </label>
           </div>
 
-          {tier === 'premium' && (
-            <div className={styles.seccion}>
-              <label className={styles.etiqueta}>Foto de perfil</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => setFotoPerfil(e.target.files?.[0] || null)}
-                className={styles.input}
-              />
-              <p className={styles.ayuda}>Esta es la foto que se mostrará en tu tarjeta destacada. Opcional, pero recomendada.</p>
-            </div>
-          )}
+          <div className={styles.seccion}>
+            <label className={styles.checkboxFila}>
+              <input type="checkbox" name="visita_domicilio" />
+              Ofrezco visitas a domicilio
+            </label>
+          </div>
+
+          <div className={styles.seccion}>
+            <label className={styles.checkboxFila}>
+              <input type="checkbox" name="citas_grupales" />
+              Ofrezco citas grupales
+            </label>
+          </div>
+
+          <div className={styles.seccion}>
+            <label className={styles.checkboxFila}>
+              <input type="checkbox" name="servicios_empresas" />
+              Ofrezco servicios a empresas
+            </label>
+          </div>
+
+          <div className={styles.seccion}>
+            <label className={styles.checkboxFila}>
+              <input type="checkbox" name="habla_ingles" />
+              Hablo inglés
+            </label>
+          </div>
+
+          <div className={styles.seccion}>
+            <label className={styles.etiqueta}>¿Cuál es tu canal de contacto principal?</label>
+            <select name="punto_contacto_primario" defaultValue="whatsapp" className={styles.input}>
+              <option value="whatsapp">WhatsApp</option>
+              <option value="email">Email</option>
+              <option value="facebook">Facebook</option>
+              <option value="instagram">Instagram</option>
+              <option value="tiktok">TikTok</option>
+              <option value="youtube">YouTube</option>
+              <option value="linkedin">LinkedIn</option>
+            </select>
+          </div>
 
           <div className={styles.seccion}>
             <label className={styles.etiqueta}>WhatsApp</label>
@@ -322,36 +337,45 @@ export default function Unirme() {
           </div>
 
           <div className={styles.seccion}>
-            <label className={styles.etiqueta}>¿Cuál es tu canal de contacto principal?</label>
-            <select name="punto_contacto_primario" defaultValue="whatsapp" className={styles.input}>
-              <option value="whatsapp">WhatsApp</option>
-              <option value="email">Email</option>
-              <option value="facebook">Facebook</option>
-              <option value="instagram">Instagram</option>
-              <option value="tiktok">TikTok</option>
-              <option value="youtube">YouTube</option>
-              <option value="linkedin">LinkedIn</option>
-            </select>
+            <label className={styles.etiqueta}>Nivel que te interesa</label>
+            <div className={styles.tarjetasTier}>
+              <label className={`${styles.tarjetaTier} ${styles.tarjetaTierPremium}`}>
+                <input type="radio" name="tier" value="premium" checked={tier === 'premium'} onChange={() => setTier('premium')} className={styles.radioTier} />
+                <span>
+                  <strong>Premium</strong> — máxima visibilidad, aparecés destacado en la portada.
+                  <br />
+                  <span className={styles.ayuda}>Sin costo mientras probamos el sistema.</span>
+                </span>
+              </label>
+              <label className={`${styles.tarjetaTier} ${styles.tarjetaTierOtro}`}>
+                <input type="radio" name="tier" value="contact" checked={tier === 'contact'} onChange={() => setTier('contact')} className={styles.radioTier} />
+                <span>
+                  <strong>Contacto</strong> — incluye enlace directo a tu WhatsApp.
+                  <br />
+                  <span className={styles.ayuda}>Sin costo mientras probamos el sistema.</span>
+                </span>
+              </label>
+              <label className={`${styles.tarjetaTier} ${styles.tarjetaTierOtro}`}>
+                <input type="radio" name="tier" value="free" checked={tier === 'free'} onChange={() => setTier('free')} className={styles.radioTier} />
+                <span>
+                  <strong>Gratis</strong> — aparecés en el directorio con tu información básica.
+                </span>
+              </label>
+            </div>
           </div>
 
-          <div className={styles.seccion}>
-            <label className={styles.checkboxFila}>
-              <input type="checkbox" name="citas_online" />
-              Ofrezco citas online
-            </label>
-          </div>
-
-          <div className={styles.seccion}>
-            <label className={styles.checkboxFila}>
-              <input type="checkbox" name="visita_domicilio" />
-              Ofrezco visitas a domicilio
-            </label>
-          </div>
-
-          <div className={styles.seccion}>
-            <label className={styles.etiqueta}>¿Alguien te refirió? (su número de carné)</label>
-            <input name="referido_por" className={styles.input} placeholder="Opcional" />
-          </div>
+          {tier === 'premium' && (
+            <div className={styles.seccion}>
+              <label className={styles.etiqueta}>Foto de perfil</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setFotoPerfil(e.target.files?.[0] || null)}
+                className={styles.input}
+              />
+              <p className={styles.ayuda}>Esta es la foto que se mostrará en tu tarjeta destacada. Opcional, pero recomendada.</p>
+            </div>
+          )}
 
           <div className={`${styles.seccion} ${styles.cajaConsentimiento}`}>
             <label className={styles.consentimientoLabel}>

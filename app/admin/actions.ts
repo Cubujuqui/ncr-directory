@@ -57,6 +57,9 @@ export async function aprobarSolicitud(id: number) {
     tier: solicitud.tier,
     citas_online: solicitud.citas_online,
     visita_domicilio: solicitud.visita_domicilio,
+    citas_grupales: solicitud.citas_grupales,
+    servicios_empresas: solicitud.servicios_empresas,
+    habla_ingles: solicitud.habla_ingles,
     aprobado_timestamp: new Date().toISOString(),
   };
 
