@@ -1,0 +1,127 @@
+.pagina {
+  min-height: 100vh;
+  background: #F3F0FF;
+  font-family: 'Mulish', system-ui, sans-serif;
+  color: #10004C;
+}
+
+.contenedor {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.volver {
+  color: #7370E0;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.titulo {
+  font-size: 26px;
+  font-weight: 800;
+  margin: 24px 0 8px;
+  line-height: 1.25;
+}
+
+.intro {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #10004C;
+  margin-top: 24px;
+}
+
+.h2 {
+  font-size: 20px;
+  font-weight: 800;
+  margin-top: 34px;
+}
+
+.h3 {
+  font-size: 17px;
+  font-weight: 700;
+  margin-top: 22px;
+}
+
+.parrafo {
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.enlaceExterno {
+  color: #7370E0;
+  font-weight: 700;
+}
+
+.cajaCta {
+  background: #BFB6FF;
+  border-radius: 18px;
+  padding: 22px;
+  margin-top: 40px;
+}
+
+.cajaCtaTitulo {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0 0 10px;
+}
+
+.cajaCtaTexto {
+  font-size: 15px;
+  line-height: 1.7;
+  margin: 0 0 20px;
+}
+
+.botonCta {
+  display: inline-flex;
+  background: #7370E0;
+  color: #ffffff;
+  padding: 12px 26px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 15px;
+}
+
+@media (min-width: 768px) {
+  .contenedor {
+    padding: 60px 24px;
+  }
+
+  .titulo {
+    font-size: 32px;
+  }
+
+  .intro {
+    font-size: 17px;
+    margin-top: 28px;
+  }
+
+  .h2 {
+    font-size: 22px;
+    margin-top: 40px;
+  }
+
+  .h3 {
+    font-size: 18px;
+    margin-top: 24px;
+  }
+
+  .parrafo {
+    font-size: 16px;
+  }
+
+  .cajaCta {
+    padding: 28px;
+    margin-top: 48px;
+  }
+
+  .cajaCtaTitulo {
+    font-size: 22px;
+  }
+
+  .cajaCtaTexto {
+    font-size: 16px;
+  }
+}
