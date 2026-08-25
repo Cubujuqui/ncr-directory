@@ -96,7 +96,7 @@ export default async function AdminPage() {
                   </div>
                   <div style={{ display: 'flex', gap: '10px', marginTop: '16px', flexWrap: 'wrap' }}>
                     {s.whatsapp && (
-                      
+                      <a
                         href={`https://wa.me/${s.whatsapp}?text=${encodeURIComponent('¡Hola! Vimos una solicitud de actualización para tu perfil en nutricionistasencostarica.com. ¿Fuiste vos quien la envió?')}`}
                         target="_blank"
                         rel="noopener noreferrer"
