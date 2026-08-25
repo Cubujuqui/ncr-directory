@@ -93,3 +93,62 @@ export async function rechazarSolicitud(id: number) {
 
   revalidatePath('/admin');
 }
+
+export async function buscarPerfilPorCarne(carne: string) {
+  await checkAuth();
+
+  const { data, error } = await supabaseAdmin
+    .from('perfiles')
+    .select('*')
+    .eq('carne', carne.trim())
+    .maybeSingle();
+
+  if (error || !data) return null;
+  return data;
+}
+
+const CAMPOS_EDITABLES = [
+  'whatsapp',
+  'email',
+  'facebook',
+  'instagram',
+  'tiktok',
+  'youtube',
+  'linkedin',
+  'especialidad_manual',
+  'nombre_preferido',
+  'punto_contacto_primario',
+  'tier',
+  'citas_online',
+  'visita_domicilio',
+  'citas_grupales',
+  'servicios_empresas',
+  'habla_ingles',
+] as const;
+
+export async function actualizarCampoPerfil(carne: string, campo: string, valorCrudo: string | boolean) {
+  await checkAuth();
+
+  if (!CAMPOS_EDITABLES.includes(campo as any)) {
+    throw new Error('Campo no editable');
+  }
+
+  let valorFinal: string | boolean | null = valorCrudo;
+
+  if (campo === 'whatsapp' && typeof valorCrudo === 'string') {
+    const digitos = valorCrudo.replace(/\D/g, '');
+    valorFinal = digitos ? `506${digitos}` : null;
+  } else if (typeof valorCrudo === 'string' && valorCrudo.trim() === '') {
+    valorFinal = null;
+  }
+
+  const { error } = await supabaseAdmin
+    .from('perfiles')
+    .update({ [campo]: valorFinal })
+    .eq('carne', carne.trim());
+
+  if (error) throw new Error('No se pudo actualizar');
+
+  revalidatePath('/directorio');
+  revalidatePath('/');
+}

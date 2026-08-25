@@ -36,11 +36,13 @@ export default async function AdminPage() {
   return (
     <div style={{ minHeight: '100vh', background: '#F3F0FF', fontFamily: "'Mulish', system-ui, sans-serif", color: '#10004C', padding: '40px 20px' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px', flexWrap: 'wrap', gap: '10px' }}>
           <h1 style={{ fontSize: '28px', fontWeight: 800, margin: 0 }}>Solicitudes pendientes</h1>
-          <Link href="/admin/reportes" style={{ color: '#7370E0', textDecoration: 'none', fontWeight: 700, fontSize: '14px' }}>Ver reporte de clics →</Link>
-        </div>
-        <p style={{ color: 'rgba(16,0,76,0.6)', marginBottom: '30px' }}>{solicitudesConFoto.length} esperando revisión</p>
+          <div style={{ display: 'flex', gap: '16px' }}>
+            <Link href="/admin/editar" style={{ color: '#7370E0', textDecoration: 'none', fontWeight: 700, fontSize: '14px' }}>Editar perfil →</Link>
+            <Link href="/admin/reportes" style={{ color: '#7370E0', textDecoration: 'none', fontWeight: 700, fontSize: '14px' }}>Ver reporte de clics →</Link>
+          </div>
+        </div>        <p style={{ color: 'rgba(16,0,76,0.6)', marginBottom: '30px' }}>{solicitudesConFoto.length} esperando revisión</p>
 
         {solicitudesConFoto.length === 0 && (
           <p style={{ color: 'rgba(16,0,76,0.5)' }}>No hay solicitudes pendientes.</p>

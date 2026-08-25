@@ -1,0 +1,166 @@
+'use client';
+
+import { useState } from 'react';
+import { buscarPerfilPorCarne, actualizarCampoPerfil } from '../actions';
+
+const CAMPOS: { valor: string; etiqueta: string; tipo: 'texto' | 'booleano' | 'tier' }[] = [
+  { valor: 'whatsapp', etiqueta: 'WhatsApp', tipo: 'texto' },
+  { valor: 'email', etiqueta: 'Email', tipo: 'texto' },
+  { valor: 'facebook', etiqueta: 'Facebook', tipo: 'texto' },
+  { valor: 'instagram', etiqueta: 'Instagram', tipo: 'texto' },
+  { valor: 'tiktok', etiqueta: 'TikTok', tipo: 'texto' },
+  { valor: 'youtube', etiqueta: 'YouTube', tipo: 'texto' },
+  { valor: 'linkedin', etiqueta: 'LinkedIn', tipo: 'texto' },
+  { valor: 'especialidad_manual', etiqueta: 'Especialidad', tipo: 'texto' },
+  { valor: 'nombre_preferido', etiqueta: 'Nombre preferido', tipo: 'texto' },
+  { valor: 'punto_contacto_primario', etiqueta: 'Canal de contacto principal', tipo: 'tier' },
+  { valor: 'tier', etiqueta: 'Nivel', tipo: 'tier' },
+  { valor: 'citas_online', etiqueta: 'Citas online', tipo: 'booleano' },
+  { valor: 'visita_domicilio', etiqueta: 'Visita a domicilio', tipo: 'booleano' },
+  { valor: 'citas_grupales', etiqueta: 'Citas grupales', tipo: 'booleano' },
+  { valor: 'servicios_empresas', etiqueta: 'Servicios a empresas', tipo: 'booleano' },
+  { valor: 'habla_ingles', etiqueta: 'Habla inglés', tipo: 'booleano' },
+];
+
+const OPCIONES_CANAL = ['whatsapp', 'email', 'facebook', 'instagram', 'tiktok', 'youtube', 'linkedin'];
+const OPCIONES_TIER = ['premium', 'contact', 'free'];
+
+export default function EditorPerfil() {
+  const [carneBuscado, setCarneBuscado] = useState('');
+  const [perfil, setPerfil] = useState<any>(null);
+  const [buscando, setBuscando] = useState(false);
+  const [noEncontrado, setNoEncontrado] = useState(false);
+
+  const [campoElegido, setCampoElegido] = useState(CAMPOS[0].valor);
+  const [valorNuevo, setValorNuevo] = useState('');
+  const [guardando, setGuardando] = useState(false);
+  const [mensaje, setMensaje] = useState<{ tipo: 'exito' | 'error'; texto: string } | null>(null);
+
+  async function buscar() {
+    if (!carneBuscado.trim()) return;
+    setBuscando(true);
+    setNoEncontrado(false);
+    setMensaje(null);
+    const resultado = await buscarPerfilPorCarne(carneBuscado);
+    setPerfil(resultado);
+    setNoEncontrado(!resultado);
+    setBuscando(false);
+  }
+
+  const campoInfo = CAMPOS.find((c) => c.valor === campoElegido)!;
+
+  async function guardar() {
+    setGuardando(true);
+    setMensaje(null);
+    try {
+      const valorAEnviar = campoInfo.tipo === 'booleano' ? valorNuevo === 'true' : valorNuevo;
+      await actualizarCampoPerfil(perfil.carne, campoElegido, valorAEnviar);
+      setMensaje({ tipo: 'exito', texto: `${campoInfo.etiqueta} actualizado correctamente.` });
+      const actualizado = await buscarPerfilPorCarne(perfil.carne);
+      setPerfil(actualizado);
+      setValorNuevo('');
+    } catch {
+      setMensaje({ tipo: 'error', texto: 'No se pudo guardar el cambio. Intentá de nuevo.' });
+    } finally {
+      setGuardando(false);
+    }
+  }
+
+  return (
+    <div>
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
+        <input
+          value={carneBuscado}
+          onChange={(e) => setCarneBuscado(e.target.value)}
+          placeholder="Ej. 1987-15"
+          style={{ flex: 1, padding: '10px 14px', borderRadius: '10px', border: '1.5px solid rgba(16,0,76,0.15)', fontSize: '15px', fontFamily: 'inherit' }}
+        />
+        <button
+          onClick={buscar}
+          disabled={buscando}
+          style={{ background: '#E4E0FB', color: '#10004C', border: 'none', borderRadius: '10px', padding: '10px 20px', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}
+        >
+          {buscando ? 'Buscando...' : 'Buscar'}
+        </button>
+      </div>
+
+      {noEncontrado && (
+        <p style={{ color: '#c0392b', fontWeight: 700, fontSize: '14px' }}>No se encontró ningún perfil con ese Carné.</p>
+      )}
+
+      {perfil && (
+        <div style={{ background: '#fff', borderRadius: '16px', padding: '22px', boxShadow: '0 4px 14px rgba(16,0,76,0.06)' }}>
+          <p style={{ fontWeight: 800, fontSize: '17px', margin: '0 0 4px' }}>
+            {perfil.nombre_manual} {perfil.apellido_manual} {perfil.segundo_apellido_manual}
+          </p>
+          <p style={{ fontSize: '13px', color: 'rgba(16,0,76,0.5)', margin: '0 0 20px' }}>Carné {perfil.carne}</p>
+
+          <label style={{ display: 'block', fontSize: '14px', fontWeight: 700, marginBottom: '6px' }}>Campo a actualizar</label>
+          <select
+            value={campoElegido}
+            onChange={(e) => { setCampoElegido(e.target.value); setValorNuevo(''); setMensaje(null); }}
+            style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid rgba(16,0,76,0.15)', fontSize: '15px', fontFamily: 'inherit', marginBottom: '16px' }}
+          >
+            {CAMPOS.map((c) => (
+              <option key={c.valor} value={c.valor}>{c.etiqueta}</option>
+            ))}
+          </select>
+
+          <p style={{ fontSize: '13px', color: 'rgba(16,0,76,0.5)', marginBottom: '6px' }}>
+            Valor actual: <strong>{String(perfil[campoElegido] ?? 'No indica')}</strong>
+          </p>
+
+          <label style={{ display: 'block', fontSize: '14px', fontWeight: 700, marginBottom: '6px' }}>Nuevo valor</label>
+
+          {campoInfo.tipo === 'texto' && (
+            <input
+              value={valorNuevo}
+              onChange={(e) => setValorNuevo(e.target.value)}
+              placeholder={campoElegido === 'whatsapp' ? 'Solo 8 dígitos' : ''}
+              style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid rgba(16,0,76,0.15)', fontSize: '15px', fontFamily: 'inherit', marginBottom: '16px', boxSizing: 'border-box' }}
+            />
+          )}
+
+          {campoInfo.tipo === 'booleano' && (
+            <select
+              value={valorNuevo}
+              onChange={(e) => setValorNuevo(e.target.value)}
+              style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid rgba(16,0,76,0.15)', fontSize: '15px', fontFamily: 'inherit', marginBottom: '16px' }}
+            >
+              <option value="">Elegí una opción</option>
+              <option value="true">Sí</option>
+              <option value="false">No</option>
+            </select>
+          )}
+
+          {campoInfo.tipo === 'tier' && (
+            <select
+              value={valorNuevo}
+              onChange={(e) => setValorNuevo(e.target.value)}
+              style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid rgba(16,0,76,0.15)', fontSize: '15px', fontFamily: 'inherit', marginBottom: '16px' }}
+            >
+              <option value="">Elegí una opción</option>
+              {(campoElegido === 'tier' ? OPCIONES_TIER : OPCIONES_CANAL).map((op) => (
+                <option key={op} value={op}>{op}</option>
+              ))}
+            </select>
+          )}
+
+          {mensaje && (
+            <p style={{ color: mensaje.tipo === 'exito' ? '#1a7a4c' : '#c0392b', fontWeight: 700, fontSize: '14px', marginBottom: '16px' }}>
+              {mensaje.texto}
+            </p>
+          )}
+
+          <button
+            onClick={guardar}
+            disabled={guardando || valorNuevo === ''}
+            style={{ background: '#7370E0', color: '#ffffff', border: 'none', borderRadius: '10px', padding: '12px 24px', fontWeight: 800, cursor: 'pointer', fontFamily: 'inherit', opacity: guardando || valorNuevo === '' ? 0.6 : 1 }}
+          >
+            {guardando ? 'Guardando...' : 'Guardar cambio'}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
