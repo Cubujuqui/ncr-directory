@@ -26,6 +26,7 @@ export default async function Home() {
 
       <main className={styles.hero}>
         <h1 className={styles.titulo}>¿Buscás nutricionistas en Costa Rica?</h1>
+        <p className={styles.subtitulo}>Te conectamos en un clic. Simple.</p>
         <SearchBar especialidades={especialidades} />
       </main>
 
