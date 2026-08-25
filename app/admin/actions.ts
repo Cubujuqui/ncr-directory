@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { isValidAdminToken } from '@/lib/admin-auth';
+import { calcularCubreHasta } from '@/lib/pagos';
 
 async function checkAuth() {
   const cookieStore = await cookies();
@@ -151,4 +152,79 @@ export async function actualizarCampoPerfil(carne: string, campo: string, valorC
 
   revalidatePath('/directorio');
   revalidatePath('/');
+}
+
+export async function buscarPagosPorCarne(carne: string) {
+  await checkAuth();
+
+  const { data } = await supabaseAdmin
+    .from('pagos')
+    .select('*')
+    .eq('carne', carne.trim())
+    .order('fecha_pago', { ascending: false });
+
+  return data || [];
+}
+
+export async function registrarPago(
+  carne: string,
+  monto: number | null,
+  metodoPago: string,
+  nivelPagado: string,
+  fechaPago: string
+) {
+  await checkAuth();
+
+  const carneLimpio = carne.trim();
+
+  const { data: ultimoPago } = await supabaseAdmin
+    .from('pagos')
+    .select('cubre_hasta')
+    .eq('carne', carneLimpio)
+    .order('fecha_pago', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  const fechaPagoDate = new Date(`${fechaPago}T00:00:00Z`);
+  const cubreHastaAnteriorDate = ultimoPago?.cubre_hasta
+    ? new Date(`${ultimoPago.cubre_hasta}T00:00:00Z`)
+    : null;
+
+  const cubreHasta = calcularCubreHasta(fechaPagoDate, cubreHastaAnteriorDate);
+  const cubreHastaTexto = cubreHasta.toISOString().slice(0, 10);
+
+  const { error: errorInsert } = await supabaseAdmin.from('pagos').insert({
+    carne: carneLimpio,
+    monto,
+    metodo_pago: metodoPago,
+    nivel_pagado: nivelPagado,
+    fecha_pago: fechaPago,
+    cubre_hasta: cubreHastaTexto,
+  });
+
+  if (errorInsert) throw new Error('No se pudo registrar el pago');
+
+  await supabaseAdmin
+    .from('perfiles')
+    .update({ tier: nivelPagado })
+    .eq('carne', carneLimpio);
+
+  revalidatePath('/admin/pagos');
+  revalidatePath('/directorio');
+  revalidatePath('/');
+
+  return { cubreHasta: cubreHastaTexto };
+}
+
+export async function actualizarNumeroFactura(pagoId: number, numeroFactura: string) {
+  await checkAuth();
+
+  const { error } = await supabaseAdmin
+    .from('pagos')
+    .update({ numero_factura: numeroFactura.trim() || null })
+    .eq('id', pagoId);
+
+  if (error) throw new Error('No se pudo actualizar el número de factura');
+
+  revalidatePath('/admin/pagos');
 }

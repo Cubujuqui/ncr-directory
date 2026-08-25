@@ -40,7 +40,7 @@ export default async function AdminPage() {
           <h1 style={{ fontSize: '28px', fontWeight: 800, margin: 0 }}>Solicitudes pendientes</h1>
           <div style={{ display: 'flex', gap: '16px' }}>
             <Link href="/admin/editar" style={{ color: '#7370E0', textDecoration: 'none', fontWeight: 700, fontSize: '14px' }}>Editar perfil →</Link>
-            <Link href="/admin/reportes" style={{ color: '#7370E0', textDecoration: 'none', fontWeight: 700, fontSize: '14px' }}>Ver reporte de clics →</Link>
+            <Link href="/admin/pagos" style={{ color: '#7370E0', textDecoration: 'none', fontWeight: 700, fontSize: '14px' }}>Registrar pago →</Link>            <Link href="/admin/reportes" style={{ color: '#7370E0', textDecoration: 'none', fontWeight: 700, fontSize: '14px' }}>Ver reporte de clics →</Link>
           </div>
         </div>        <p style={{ color: 'rgba(16,0,76,0.6)', marginBottom: '30px' }}>{solicitudesConFoto.length} esperando revisión</p>
 
