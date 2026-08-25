@@ -5,6 +5,11 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import styles from './page.module.css';
 
+// Temporalmente deshabilitado — feedback de usuarios indica que la foto del carné
+// genera fricción. Verificación de identidad se hace manualmente por WhatsApp.
+// Para reactivar: cambiar a true.
+const MOSTRAR_FOTO_CARNE = false;
+
 export default function Unirme() {
   const [estado, setEstado] = useState<'idle' | 'enviando' | 'exito' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
@@ -59,7 +64,7 @@ export default function Unirme() {
       setErrorMsg('Debés autorizar la publicación de tus datos para continuar.');
       return;
     }
-    if (!fotoCarne) {
+    if (MOSTRAR_FOTO_CARNE && !fotoCarne) {
       setEstado('error');
       setErrorMsg('Necesitamos una foto de tu carné para verificar tu identidad.');
       return;
@@ -91,18 +96,21 @@ export default function Unirme() {
     const referidoPor = (data.get('referido_por') as string || '').trim() || null;
     const nombrePreferido = usarNombreCPN ? null : ((data.get('nombre_preferido') as string || '').trim() || null);
 
-    const extension = fotoCarne.name.split('.').pop();
-    const rutaFoto = `${carne}-${Date.now()}.${extension}`;
+    let rutaFoto: string | null = null;
+    if (fotoCarne) {
+      const extension = fotoCarne.name.split('.').pop();
+      rutaFoto = `${carne}-${Date.now()}.${extension}`;
 
-    const { error: errorSubida } = await supabase.storage
-      .from('carnes-verificacion')
-      .upload(rutaFoto, fotoCarne);
+      const { error: errorSubida } = await supabase.storage
+        .from('carnes-verificacion')
+        .upload(rutaFoto, fotoCarne);
 
-    if (errorSubida) {
-      setEstado('error');
-      setErrorMsg('No pudimos subir la foto de tu carné. Intentá de nuevo.');
-      console.error(errorSubida);
-      return;
+      if (errorSubida) {
+        setEstado('error');
+        setErrorMsg('No pudimos subir la foto de tu carné. Intentá de nuevo.');
+        console.error(errorSubida);
+        return;
+      }
     }
 
     let fotoPerfilUrl: string | null = null;
@@ -190,17 +198,19 @@ export default function Unirme() {
         </p>
 
         <form onSubmit={handleSubmit}>
-          <div className={styles.seccion}>
-            <label className={styles.etiqueta}>Foto de tu carné vigente *</label>
-            <input
-              type="file"
-              accept="image/*"
-              required
-              onChange={(e) => setFotoCarne(e.target.files?.[0] || null)}
-              className={styles.input}
-            />
-            <p className={styles.ayuda}>La usamos solo para confirmar que sos vos. No se publica en el sitio.</p>
-          </div>
+          {MOSTRAR_FOTO_CARNE && (
+            <div className={styles.seccion}>
+              <label className={styles.etiqueta}>Foto de tu carné vigente *</label>
+              <input
+                type="file"
+                accept="image/*"
+                required
+                onChange={(e) => setFotoCarne(e.target.files?.[0] || null)}
+                className={styles.input}
+              />
+              <p className={styles.ayuda}>La usamos solo para confirmar que sos vos. No se publica en el sitio.</p>
+            </div>
+          )}
 
           <div className={styles.seccion}>
             <label className={styles.etiqueta}>Número de carné *</label>
@@ -386,8 +396,7 @@ export default function Unirme() {
             <label className={styles.consentimientoLabel}>
               <input type="checkbox" name="consentimiento" required className={styles.checkboxConsentimiento} />
               <span>
-                Entiendo que: 1) la foto de mi carné NO será mostrada en el sitio. 2) Los datos provistos (WhatsApp, redes sociales, email, foto de perfil) serán utilizados para redirigir clientes potenciales hacia los canales que agregué. 3) El sitio utiliza tecnología para proteger la privacidad de mis datos de acuerdo a la legislación local y mejores prácticas disponibles. 4) Estoy de acuerdo en que los datos provistos se usen según lo descrito en este espacio y en <Link href="/aviso-legal" className={styles.enlaceConsentimiento}>Información Importante</Link>. ¿Dudas? <a href="/go/whatsapp/solicitar" className={styles.enlaceConsentimiento}>Escribir aquí</a>. *
-              </span>
+                Entiendo que: 1) Los datos provistos (WhatsApp, redes sociales, email, foto de perfil) serán utilizados para redirigir clientes potenciales hacia los canales que agregué. 2) El sitio utiliza tecnología para proteger la privacidad de mis datos de acuerdo a la legislación local y mejores prácticas disponibles. 3) Estoy de acuerdo en que los datos provistos se usen según lo descrito en este espacio y en <Link href="/aviso-legal" className={styles.enlaceConsentimiento}>Información Importante</Link>. ¿Dudas? <a href="/go/whatsapp/solicitar" className={styles.enlaceConsentimiento}>Escribir aquí</a>. *              </span>
             </label>
           </div>
 

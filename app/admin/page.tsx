@@ -95,6 +95,16 @@ export default async function AdminPage() {
                     <p><strong>Referido por:</strong> {s.referido_por || 'No indica'}</p>
                   </div>
                   <div style={{ display: 'flex', gap: '10px', marginTop: '16px', flexWrap: 'wrap' }}>
+                    {s.whatsapp && (
+                      
+                        href={`https://wa.me/${s.whatsapp}?text=${encodeURIComponent('¡Hola! Vimos una solicitud de actualización para tu perfil en nutricionistasencostarica.com. ¿Fuiste vos quien la envió?')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ display: 'inline-flex', alignItems: 'center', background: '#F3F0FF', color: '#10004C', border: '1.5px solid rgba(16,0,76,0.2)', borderRadius: '10px', padding: '10px 20px', fontWeight: 800, textDecoration: 'none', fontFamily: 'inherit' }}
+                      >
+                        Verificar identidad
+                      </a>
+                    )}
                     <BotonAprobar id={s.id} whatsapp={s.whatsapp} aprobar={aprobarSolicitud} />
                     <form action={rechazarSolicitud.bind(null, s.id)}>
                       <button type="submit" style={{ background: '#F3F0FF', color: '#10004C', border: '1.5px solid rgba(16,0,76,0.2)', borderRadius: '10px', padding: '10px 20px', fontWeight: 800, cursor: 'pointer', fontFamily: 'inherit' }}>
