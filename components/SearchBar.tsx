@@ -100,10 +100,6 @@ export default function SearchBar({ especialidades }: { especialidades: string[]
               <input type="checkbox" checked={hablaIngles} onChange={() => setHablaIngles((v) => !v)} />
               Habla inglés
             </label>
-            <label className={`${styles.opcion} ${styles.opcionDeshabilitada}`} title="Próximamente">
-              <input type="checkbox" disabled />
-              Acepta seguros
-            </label>
           </div>
         )}
       </div>
