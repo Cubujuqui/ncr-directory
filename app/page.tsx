@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import SearchBar from '@/components/SearchBar';
 import Spotlight from '@/components/Spotlight';
 import { getPerfilesDestacados } from '@/lib/perfiles';
@@ -13,6 +15,7 @@ export default async function Home() {
   return (
     <div className={styles.pagina}>
       <SiteHeader />
+      
       <main className={styles.hero}>
         <h1 className={styles.titulo}>¿Buscás nutricionistas en Costa Rica?</h1>
         <p className={styles.subtitulo}>Te conectamos en un clic. Simple.</p>

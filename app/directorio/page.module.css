@@ -3,12 +3,12 @@
   background: #BFB6FF;
   font-family: 'Mulish', system-ui, sans-serif;
   color: #10004C;
-  padding: 20px;
 }
 
 .contenedor {
   max-width: 900px;
   margin: 0 auto;
+  padding: 20px;
 }
 
 .volver {
@@ -80,7 +80,7 @@
 }
 
 @media (min-width: 768px) {
-  .pagina {
+  .contenedor {
     padding: 40px;
   }
 
