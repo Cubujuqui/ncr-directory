@@ -7,7 +7,8 @@ import styles from './SearchBar.module.css';
 export default function SearchBar({ especialidades }: { especialidades: string[] }) {
   const router = useRouter();
   const [online, setOnline] = useState(false);
-  const [presencial, setPresencial] = useState(false);
+  const [domicilio, setDomicilio] = useState(false);
+  const [consultorio, setConsultorio] = useState(false);
   const [premiumSolamente, setPremiumSolamente] = useState(false);
   const [grupal, setGrupal] = useState(false);
   const [serviciosEmpresas, setServiciosEmpresas] = useState(false);
@@ -40,7 +41,8 @@ export default function SearchBar({ especialidades }: { especialidades: string[]
     const params = new URLSearchParams();
     if (especialidad) params.set('especialidad', especialidad);
     if (online) params.set('online', '1');
-    if (presencial) params.set('presencial', '1');
+    if (domicilio) params.set('domicilio', '1');
+    if (consultorio) params.set('consultorio', '1');
     if (premiumSolamente) params.set('premium', '1');
     if (grupal) params.set('grupal', '1');
     if (serviciosEmpresas) params.set('empresas', '1');
@@ -48,7 +50,7 @@ export default function SearchBar({ especialidades }: { especialidades: string[]
     router.push(`/directorio?${params.toString()}`);
   }
 
-  const filtrosActivos = [online, presencial, premiumSolamente, grupal, serviciosEmpresas, hablaIngles].filter(Boolean).length;
+  const filtrosActivos = [online, domicilio, consultorio, premiumSolamente, grupal, serviciosEmpresas, hablaIngles].filter(Boolean).length;
 
   return (
     <div className={styles.contenedor}>
@@ -71,20 +73,28 @@ export default function SearchBar({ especialidades }: { especialidades: string[]
         {panelAbierto && (
           <div className={styles.panel}>
             <label className={styles.opcion}>
-              <input type="checkbox" checked={presencial} onChange={() => setPresencial((v) => !v)} />
-              Visita presencial
+              <input type="checkbox" checked={online} onChange={() => setOnline((v) => !v)} />
+              Atiende Online
+            </label>
+            <label className={styles.opcion}>
+              <input type="checkbox" checked={domicilio} onChange={() => setDomicilio((v) => !v)} />
+              Atiende a domicilio
+            </label>
+            <label className={styles.opcion}>
+              <input type="checkbox" checked={consultorio} onChange={() => setConsultorio((v) => !v)} />
+              Atiende en consultorio
             </label>
             <label className={styles.opcion}>
               <input type="checkbox" checked={grupal} onChange={() => setGrupal((v) => !v)} />
-              Ofrezco citas grupales
+              Ofrece citas grupales
             </label>
             <label className={styles.opcion}>
               <input type="checkbox" checked={serviciosEmpresas} onChange={() => setServiciosEmpresas((v) => !v)} />
-              Ofrezco servicios a empresas
+              Ofrece servicios a empresas
             </label>
             <label className={styles.opcion}>
               <input type="checkbox" checked={hablaIngles} onChange={() => setHablaIngles((v) => !v)} />
-              Hablo inglés
+              Habla inglés
             </label>
             <label className={styles.opcion}>
               <input type="checkbox" checked={premiumSolamente} onChange={() => setPremiumSolamente((v) => !v)} />
@@ -92,7 +102,7 @@ export default function SearchBar({ especialidades }: { especialidades: string[]
             </label>
             <label className={`${styles.opcion} ${styles.opcionDeshabilitada}`} title="Próximamente">
               <input type="checkbox" disabled />
-              ¿Acepta seguros?
+              Acepta seguros
             </label>
                       </div>
         )}

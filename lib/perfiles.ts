@@ -18,6 +18,7 @@ export type PerfilCompleto = {
   tier: 'free' | 'contact' | 'premium';
   citasOnline: boolean | null;
   visitaDomicilio: boolean | null;
+  atiendeConsultorio: boolean | null;
   citasGrupales: boolean | null;
   serviciosEmpresas: boolean | null;
   hablaIngles: boolean | null;
@@ -40,7 +41,7 @@ function mapearPerfil(fila: any): PerfilCompleto {
     segundoApellido: toTitleCase(fila.segundo_apellido_manual),
     especialidad: fila.especialidad_manual,
     whatsapp: fila.whatsapp,
-email: fila.email,
+    email: fila.email,
     facebook: fila.facebook,
     instagram: fila.instagram,
     tiktok: fila.tiktok,
@@ -50,6 +51,7 @@ email: fila.email,
     tier: (fila.tier as 'free' | 'contact' | 'premium') || 'free',
     citasOnline: fila.citas_online,
     visitaDomicilio: fila.visita_domicilio,
+    atiendeConsultorio: fila.atiende_consultorio,
     citasGrupales: fila.citas_grupales,
     serviciosEmpresas: fila.servicios_empresas,
     hablaIngles: fila.habla_ingles,
@@ -133,8 +135,8 @@ export async function ordenarResultadosDirectorio(
   }
 
   const total = perfiles.length;
-  const premium = perfiles.filter((p) => p.tier === 'premium').slice(0, 3);
-  const contacto = perfiles.filter((p) => p.tier === 'contact').slice(0, 3);
+  const premium = perfiles.filter((p) => p.tier === 'premium').sort(() => Math.random() - 0.5);
+  const contacto = perfiles.filter((p) => p.tier === 'contact').sort(() => Math.random() - 0.5);
   const gratis = perfiles
     .filter((p) => p.tier === 'free')
     .sort(() => Math.random() - 0.5);

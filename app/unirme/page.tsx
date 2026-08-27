@@ -150,6 +150,7 @@ export default function Unirme() {
       punto_contacto_primario: data.get('punto_contacto_primario') as string,
       citas_online: data.get('citas_online') === 'on',
       visita_domicilio: data.get('visita_domicilio') === 'on',
+      atiende_consultorio: data.get('atiende_consultorio') === 'on',
       citas_grupales: data.get('citas_grupales') === 'on',
       servicios_empresas: data.get('servicios_empresas') === 'on',
       habla_ingles: data.get('habla_ingles') === 'on',
@@ -270,14 +271,21 @@ export default function Unirme() {
           <div className={styles.seccion}>
             <label className={styles.checkboxFila}>
               <input type="checkbox" name="citas_online" />
-              Ofrezco citas online
+              Atiende Online
             </label>
           </div>
 
           <div className={styles.seccion}>
             <label className={styles.checkboxFila}>
               <input type="checkbox" name="visita_domicilio" />
-              Ofrezco visitas a domicilio
+              Atiende a Domicilio
+            </label>
+          </div>
+
+          <div className={styles.seccion}>
+            <label className={styles.checkboxFila}>
+              <input type="checkbox" name="atiende_consultorio" />
+              Atiende en Consultorio
             </label>
           </div>
 
