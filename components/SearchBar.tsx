@@ -73,6 +73,10 @@ export default function SearchBar({ especialidades }: { especialidades: string[]
         {panelAbierto && (
           <div className={styles.panel}>
             <label className={styles.opcion}>
+              <input type="checkbox" checked={premiumSolamente} onChange={() => setPremiumSolamente((v) => !v)} />
+              Miembros Premium
+            </label>
+            <label className={styles.opcion}>
               <input type="checkbox" checked={online} onChange={() => setOnline((v) => !v)} />
               Atiende Online
             </label>
@@ -96,15 +100,11 @@ export default function SearchBar({ especialidades }: { especialidades: string[]
               <input type="checkbox" checked={hablaIngles} onChange={() => setHablaIngles((v) => !v)} />
               Habla inglés
             </label>
-            <label className={styles.opcion}>
-              <input type="checkbox" checked={premiumSolamente} onChange={() => setPremiumSolamente((v) => !v)} />
-              Miembros Premium
-            </label>
             <label className={`${styles.opcion} ${styles.opcionDeshabilitada}`} title="Próximamente">
               <input type="checkbox" disabled />
               Acepta seguros
             </label>
-                      </div>
+          </div>
         )}
       </div>
 

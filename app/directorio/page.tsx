@@ -18,12 +18,13 @@ function calcularEnlacePrincipal(perfil: { tier: string; puntoContactoPrimario: 
 export default async function Directorio({
   searchParams,
 }: {
-  searchParams: Promise<{ especialidad?: string; online?: string; presencial?: string; premium?: string; grupal?: string; empresas?: string; ingles?: string }>;
+  searchParams: Promise<{ especialidad?: string; online?: string; domicilio?: string; consultorio?: string; premium?: string; grupal?: string; empresas?: string; ingles?: string }>;
 }) {
-  const { especialidad, online, presencial, premium, grupal, empresas, ingles } = await searchParams;
+  const { especialidad, online, domicilio, consultorio, premium, grupal, empresas, ingles } = await searchParams;
   const { resultados, total } = await ordenarResultadosDirectorio(especialidad, 50, {
     online: online === '1',
-    presencial: presencial === '1',
+    domicilio: domicilio === '1',
+    consultorio: consultorio === '1',
     premiumSolamente: premium === '1',
     grupal: grupal === '1',
     serviciosEmpresas: empresas === '1',
