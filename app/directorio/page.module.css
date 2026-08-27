@@ -30,12 +30,6 @@
   font-size: 14px;
 }
 
-.nota {
-  margin-bottom: 10px;
-  color: rgba(16,0,76,0.5);
-  font-size: 12px;
-}
-
 .notaUltima {
   margin-bottom: 24px;
   color: rgba(16,0,76,0.5);
@@ -93,14 +87,11 @@
     font-size: 16px;
   }
 
-  .nota, .notaUltima {
-    font-size: 13px;
-  }
-
   .notaUltima {
-    margin-bottom: 30px;
+      font-size: 13px;
+      margin-bottom: 30px;
   }
-
+  
   .nombre {
     font-size: 16px;
   }
