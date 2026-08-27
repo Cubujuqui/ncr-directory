@@ -1,0 +1,60 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  background: #BFB6FF;
+  border-bottom: 1px solid rgba(16, 0, 76, 0.12);
+}
+
+.contenido {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-left: auto;
+}
+
+.botonNutricionista {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1.5px solid rgba(16,0,76,0.55);
+  border-radius: 999px;
+  padding: 8px 16px;
+  color: #10004C;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .contenido {
+    padding: 12px 40px;
+  }
+
+  .botonNutricionista {
+    padding: 9px 20px;
+    font-size: 14px;
+  }
+}
