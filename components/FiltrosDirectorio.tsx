@@ -36,7 +36,6 @@ export default function FiltrosDirectorio() {
       <FiltroToggle activo={grupal} onClick={() => alternar('grupal', grupal)}>Ofrece citas grupales</FiltroToggle>
       <FiltroToggle activo={empresas} onClick={() => alternar('empresas', empresas)}>Ofrece servicios a empresas</FiltroToggle>
       <FiltroToggle activo={ingles} onClick={() => alternar('ingles', ingles)}>Habla inglés</FiltroToggle>
-      <FiltroToggle activo={false} disabled>Acepta seguros</FiltroToggle>
-    </div>
+      div>
   );
 }
