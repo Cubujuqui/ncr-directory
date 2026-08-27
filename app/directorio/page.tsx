@@ -42,7 +42,6 @@ export default async function Directorio({
         <FiltrosDirectorio />
 
         <p className={styles.conteo}>{total} nutricionistas encontrados</p>
-        <p className={styles.nota}>Nota: los filtros de Individual/Grupal y seguros estarán disponibles próximamente.</p>
         <p className={styles.notaUltima}>Mostrando 50 resultados solamente para garantizar igualdad y performance del sitio.</p>
 
         <div className={styles.grilla}>
