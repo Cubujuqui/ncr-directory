@@ -2,7 +2,8 @@ import { ordenarResultadosDirectorio } from '@/lib/perfiles';
 import SocialIcons, { getHref } from '@/components/SocialIcons';
 import TarjetaClicable from '@/components/TarjetaClicable';
 import FiltrosDirectorio from '@/components/FiltrosDirectorio';
-import Link from 'next/link';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
 import styles from './page.module.css';
 
 function calcularEnlacePrincipal(perfil: { tier: string; puntoContactoPrimario: string; carne: string | null; whatsapp: string | null; email: string | null; facebook: string | null; instagram: string | null; tiktok: string | null; youtube: string | null; linkedin: string | null }) {
@@ -31,9 +32,8 @@ export default async function Directorio({
 
   return (
     <div className={styles.pagina}>
+      <SiteHeader />
       <div className={styles.contenedor}>
-        <Link href="/" className={styles.volver}>← Volver</Link>
-
         <h1 className={styles.titulo}>
           {especialidad ? especialidad : 'Todos los nutricionistas activos'}
         </h1>
@@ -76,6 +76,7 @@ export default async function Directorio({
           })}
         </div>
       </div>
+      <SiteFooter />
     </div>
   );
 }

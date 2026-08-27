@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
 
 export const metadata: Metadata = {
   title: 'Aviso Legal | Nutricionistas en Costa Rica',
@@ -9,11 +11,8 @@ export const metadata: Metadata = {
 export default function AvisoLegal() {
   return (
     <div style={{ minHeight: '100vh', background: '#F3F0FF', fontFamily: "'Mulish', system-ui, sans-serif", color: '#10004C' }}>
+      <SiteHeader />
       <div style={{ maxWidth: '780px', margin: '0 auto', padding: '60px 24px' }}>
-        <Link href="/" style={{ color: '#7370E0', textDecoration: 'none', fontWeight: 700, fontSize: '15px' }}>
-          ← Volver al inicio
-        </Link>
-
         <h1 style={{ fontSize: '32px', fontWeight: 800, margin: '24px 0 32px', lineHeight: 1.2 }}>
           Aviso Legal
         </h1>
@@ -95,6 +94,7 @@ export default function AvisoLegal() {
           Para consultas sobre este Aviso Legal, puede escribir a: <strong>[correo de contacto pendiente]</strong>
         </p>
       </div>
+      <SiteFooter />
     </div>
   );
 }

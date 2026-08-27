@@ -1,5 +1,8 @@
+import React from 'react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
@@ -11,11 +14,8 @@ export const metadata: Metadata = {
 export default function QueHaceUnNutricionista() {
   return (
     <div className={styles.pagina}>
+      <SiteHeader />
       <div className={styles.contenedor}>
-        <Link href="/" className={styles.volver}>
-          ← Volver al inicio
-        </Link>
-
         <h1 className={styles.titulo}>¿Qué hace un nutricionista? Guía completa</h1>
 
         <p className={styles.intro}>
@@ -78,6 +78,7 @@ export default function QueHaceUnNutricionista() {
           </Link>
         </div>
       </div>
+      <SiteFooter />
     </div>
   );
 }

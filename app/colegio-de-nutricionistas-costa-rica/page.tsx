@@ -1,6 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
@@ -12,11 +14,8 @@ export const metadata: Metadata = {
 export default function ColegioNutricionistas() {
   return (
     <div className={styles.pagina}>
+      <SiteHeader />
       <div className={styles.contenedor}>
-        <Link href="/" className={styles.volver}>
-          ← Volver al inicio
-        </Link>
-
         <h1 className={styles.titulo}>
           Colegio de Profesionales en Nutrición de Costa Rica: qué es y cómo verificar si un nutricionista está colegiado
         </h1>
@@ -96,6 +95,7 @@ export default function ColegioNutricionistas() {
           </Link>
         </div>
       </div>
+      <SiteFooter />
     </div>
   );
 }
