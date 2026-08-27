@@ -6,6 +6,7 @@ import { getPerfilesDestacados } from '@/lib/perfiles';
 import { getEspecialidades } from '@/lib/nutricionistas';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import FaqAccordion from '@/components/FaqAccordion';
 import styles from './page.module.css';
 
 export default async function Home() {
@@ -23,6 +24,8 @@ export default async function Home() {
       </main>
 
       <Spotlight perfiles={perfilesDestacados} />
+
+      <FaqAccordion />
 
       <SiteFooter />
     </div>
