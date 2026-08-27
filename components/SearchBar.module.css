@@ -57,11 +57,6 @@
   cursor: pointer;
 }
 
-.opcionDeshabilitada {
-  color: #B0AEB8;
-  cursor: not-allowed;
-}
-
 .filaBusqueda {
   display: flex;
   flex-direction: column;
