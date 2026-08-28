@@ -95,16 +95,28 @@
   font-size: 12px;
 }
 
-.detalle {
-  margin: 4px 0 2px;
-  font-size: 12px;
+.lineaIcono {
+    margin: 4px 0 0;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
-.detalleUltimo {
-  margin: 0 0 14px;
-  font-size: 12px;
+.grillaAtributos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 7px;
+    column-gap: 6px;
+    margin: 12px 0 14px;
 }
 
+.atributo {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
 @media (min-width: 768px) {
   .seccion {
     padding: 50px 40px;
