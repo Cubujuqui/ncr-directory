@@ -17,6 +17,13 @@
   gap: 16px;
 }
 
+.etiquetaSocial {
+    color: rgba(16,0,76,0.6);
+    font-size: 13px;
+    font-weight: 700;
+    margin: 0;
+}
+
 .avisoLegal {
   color: rgba(16,0,76,0.6);
   text-decoration: none;
