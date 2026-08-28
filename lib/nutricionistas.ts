@@ -26,8 +26,9 @@ export function getEspecialidades(): string[] {
   const all = getNutricionistas();
   const set = new Set<string>();
   for (const n of all) {
-    if (n.Especialidad && n.Especialidad.trim()) {
-      set.add(n.Especialidad.trim());
+    const valor = n.Especialidad && n.Especialidad.trim();
+    if (valor && valor.toLowerCase() !== 'sin especialidad') {
+      set.add(valor);
     }
   }
   return Array.from(set).sort((a, b) => a.localeCompare(b, 'es'));
