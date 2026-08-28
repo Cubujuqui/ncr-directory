@@ -3,7 +3,7 @@ import "./globals.css";
 import { GoogleAnalytics } from '@next/third-parties/google';
 
 export const metadata: Metadata = {
-  title: "Nutricionistas en Costa Rica | Agenda tu Cita Online",
+    title: "Nutricionistas en Costa Rica | Te conectamos en un clic. Simple.",
   description:
     "Encontrá las mejores nutricionistas en Costa Rica. Especialistas en pérdida de peso, nutrición deportiva, infantil y más. Agendá tu cita online o presencial.",
 };
