@@ -6,6 +6,7 @@ import styles from './SiteFooter.module.css';
 export default function SiteFooter() {
   return (
     <footer className={styles.footer}>
+      <p className={styles.etiquetaSocial}>Conectemos en</p>
       <div className={styles.iconosFooter}>
         <SocialIcons
           tier="premium"
