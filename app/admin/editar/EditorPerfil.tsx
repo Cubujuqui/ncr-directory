@@ -52,6 +52,21 @@ export default function EditorPerfil() {
   async function guardar() {
     setGuardando(true);
     setMensaje(null);
+    
+        if (campoElegido === 'nombre_preferido') {
+                const valorLower = valorNuevo.toLowerCase();
+                const apellido1 = (perfil.apellido_manual || '').toLowerCase().trim();
+                const apellido2 = (perfil.segundo_apellido_manual || '').toLowerCase().trim();
+                const incluyeApellido =
+                          (apellido1 && valorLower.includes(apellido1)) ||
+                          (apellido2 && valorLower.includes(apellido2));
+                if (incluyeApellido) {
+                          setMensaje({ tipo: 'error', texto: 'El nombre preferido no debe incluir los apellidos — se agregan automáticamente en todo el sitio. Escribí solo el nombre.' });
+                          setGuardando(false);
+                          return;
+                }
+        }
+    
     try {
       const valorAEnviar = campoInfo.tipo === 'booleano' ? valorNuevo === 'true' : valorNuevo;
       await actualizarCampoPerfil(perfil.carne, campoElegido, valorAEnviar);
@@ -111,6 +126,11 @@ export default function EditorPerfil() {
           </p>
 
           <label style={{ display: 'block', fontSize: '14px', fontWeight: 700, marginBottom: '6px' }}>Nuevo valor</label>
+                    {campoElegido === 'nombre_preferido' && (
+            <p style={{ fontSize: '12px', color: 'rgba(16,0,76,0.5)', marginTop: '-2px', marginBottom: '8px' }}>
+              Solo el nombre — los apellidos ({perfil.apellido_manual} {perfil.segundo_apellido_manual}) se agregan automáticamente en todo el sitio.
+            </p>
+          )}
 
           {campoInfo.tipo === 'texto' && (
             <input
