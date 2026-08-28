@@ -1,6 +1,7 @@
 import { PerfilCompleto } from '@/lib/perfiles';
 import SocialIcons, { getHref } from './SocialIcons';
 import TarjetaClicable from './TarjetaClicable';
+import { ICONOS_PERFIL } from './IconosPerfil';
 import styles from './Spotlight.module.css';
 
 const PALETAS = [
@@ -42,15 +43,36 @@ function PremiumCard({ perfil, paleta }: { perfil: PerfilCompleto; paleta: typeo
             Carné {perfil.carne}
           </p>
         )}
-        <p className={styles.detalle} style={{ color: perfil.especialidad ? paleta.dark : `${paleta.dark}66`, fontWeight: perfil.especialidad ? 700 : 400 }}>
-          Especialidad: {perfil.especialidad || 'No indica'}
+        {perfil.aniosExperiencia !== null && (
+          <p className={styles.lineaIcono} style={{ color: paleta.dark }}>
+            {ICONOS_PERFIL.experiencia(paleta.dark)}
+            {perfil.aniosExperiencia} {perfil.aniosExperiencia === 1 ? 'año' : 'años'} de experiencia
+          </p>
+        )}
+
+        <p className={styles.lineaIcono} style={{ color: paleta.dark, visibility: perfil.especialidad ? 'visible' : 'hidden' }}>
+          {ICONOS_PERFIL.especialidad(paleta.dark)}
+          Especialista en {perfil.especialidad}
         </p>
-        <p className={styles.detalle} style={{ color: perfil.citasOnline ? paleta.dark : `${paleta.dark}66`, fontWeight: perfil.citasOnline ? 700 : 400 }}>
-          Citas online: {perfil.citasOnline ? 'Sí' : 'No indica'}
-        </p>
-        <p className={styles.detalleUltimo} style={{ color: perfil.visitaDomicilio ? paleta.dark : `${paleta.dark}66`, fontWeight: perfil.visitaDomicilio ? 700 : 400 }}>
-          Visita a domicilio: {perfil.visitaDomicilio ? 'Sí' : 'No indica'}
-        </p>
+
+        <div className={styles.grillaAtributos}>
+          <span className={styles.atributo} style={{ color: perfil.atiendeConsultorio ? paleta.dark : `${paleta.dark}66` }}>
+            {ICONOS_PERFIL.consultorio(perfil.atiendeConsultorio ? paleta.dark : `${paleta.dark}4d`)}
+            Consultorio
+          </span>
+          <span className={styles.atributo} style={{ color: perfil.citasOnline ? paleta.dark : `${paleta.dark}66` }}>
+            {ICONOS_PERFIL.online(perfil.citasOnline ? paleta.dark : `${paleta.dark}4d`)}
+            Online
+          </span>
+          <span className={styles.atributo} style={{ color: perfil.visitaDomicilio ? paleta.dark : `${paleta.dark}66` }}>
+            {ICONOS_PERFIL.domicilio(perfil.visitaDomicilio ? paleta.dark : `${paleta.dark}4d`)}
+            Domicilio
+          </span>
+          <span className={styles.atributo} style={{ color: perfil.hablaIngles ? paleta.dark : `${paleta.dark}66` }}>
+            {ICONOS_PERFIL.ingles(perfil.hablaIngles ? paleta.dark : `${paleta.dark}4d`)}
+            Habla inglés
+          </span>
+        </div>
 
         <SocialIcons
           tier="premium"
