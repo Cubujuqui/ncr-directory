@@ -5,9 +5,9 @@ const CANALES_VALIDOS = ['facebook', 'instagram', 'tiktok', 'youtube', 'linkedin
 type Canal = typeof CANALES_VALIDOS[number];
 
 function construirUrl(canal: Canal, valor: string): string {
-  if (canal === 'facebook') return 'https://facebook.com/' + valor;
-  if (canal === 'instagram') return 'https://instagram.com/' + valor;
-  if (canal === 'tiktok') return 'https://tiktok.com/@' + valor;
+    if (canal === 'facebook') return 'https://m.me/' + valor;
+    if (canal === 'instagram') return 'https://ig.me/m/' + valor;
+    if (canal === 'tiktok') return 'https://tiktok.com/@' + valor;
   return valor;
 }
 
