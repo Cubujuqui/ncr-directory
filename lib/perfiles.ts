@@ -23,7 +23,32 @@ export type PerfilCompleto = {
   serviciosEmpresas: boolean | null;
   hablaIngles: boolean | null;
   puntoContactoPrimario: 'whatsapp' | 'instagram' | 'tiktok' | 'youtube' | 'linkedin' | 'email' | 'facebook';
+  aniosExperiencia: number | null;
 };
+
+// El campo especialidad_manual a veces trae literalmente el texto "Sin especialidad"
+// (viene así registrado en el CPN), lo cual no es una especialidad real.
+// Se trata igual que un campo vacío.
+function normalizarEspecialidad(valor: string | null | undefined): string | null {
+  if (!valor) return null;
+  const limpio = valor.trim();
+  if (!limpio) return null;
+  if (limpio.toLowerCase() === 'sin especialidad') return null;
+  return limpio;
+}
+
+// El carné tiene el formato {numero}-{AA}, donde AA son los últimos dos dígitos
+// del año de incorporación al CPN (ej. "2925-20" = incorporado en 2020).
+function calcularAniosExperiencia(carne: string | null): number | null {
+  if (!carne) return null;
+  const partes = carne.split('-');
+  const aa = partes[partes.length - 1];
+  if (!aa || !/^\d{2}$/.test(aa)) return null;
+  const anioIncorporacion = 2000 + parseInt(aa, 10);
+  const anioActual = new Date().getFullYear();
+  const experiencia = anioActual - anioIncorporacion;
+  return experiencia >= 0 ? experiencia : null;
+}
 
 export function toTitleCase(texto: string | null): string {  if (!texto) return '';
   return texto
@@ -39,7 +64,7 @@ function mapearPerfil(fila: any): PerfilCompleto {
     nombre: fila.nombre_preferido ? toTitleCase(fila.nombre_preferido) : toTitleCase(fila.nombre_manual),
     primerApellido: toTitleCase(fila.apellido_manual),
     segundoApellido: toTitleCase(fila.segundo_apellido_manual),
-    especialidad: fila.especialidad_manual,
+    especialidad: normalizarEspecialidad(fila.especialidad_manual),
     whatsapp: fila.whatsapp,
     email: fila.email,
     facebook: fila.facebook,
@@ -56,6 +81,7 @@ function mapearPerfil(fila: any): PerfilCompleto {
     serviciosEmpresas: fila.servicios_empresas,
     hablaIngles: fila.habla_ingles,
     puntoContactoPrimario: (fila.punto_contacto_primario as PerfilCompleto['puntoContactoPrimario']) || 'whatsapp',
+    aniosExperiencia: calcularAniosExperiencia(fila.carne),
   };
 }
 
