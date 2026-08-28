@@ -3,43 +3,251 @@
   background: #BFB6FF;
   font-family: 'Mulish', system-ui, sans-serif;
   color: #10004C;
-  position: relative;
+  padding: 30px 20px;
 }
 
-.hero {
-  position: relative;
-  max-width: 760px;
+.contenedor {
+  max-width: 560px;
   margin: 0 auto;
-  padding: 40px 20px 60px;
+}
+
+.volver {
+  color: #7370E0;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
 }
 
 .titulo {
-  font-size: 30px;
-  line-height: 1.15;
+  font-size: 24px;
   font-weight: 800;
+  margin: 18px 0 8px;
+}
+
+.intro {
+  font-size: 15px;
+  color: rgba(16,0,76,0.7);
+  margin-bottom: 26px;
+}
+
+.seccion {
+  margin-bottom: 20px;
+}
+
+.etiqueta {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #10004C;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(16,0,76,0.15);
+  font-size: 15px;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.ayuda {
+  font-size: 12px;
+  color: rgba(16,0,76,0.5);
+  margin: 4px 0 0;
+}
+
+.filaCarne {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inputCarne {
+  flex: 1;
+}
+
+.botonBuscar {
+  background: #E4E0FB;
+  color: #10004C;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.avisoNombre {
+  margin-top: 10px;
+  background: #E4E0FB;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.avisoNombreTexto {
+  font-size: 14px;
   margin: 0 0 8px;
-  letter-spacing: -0.5px;
 }
 
-.subtitulo {
-  font-size: 22px;
+.opcionRadio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.avisoError {
+  margin-top: 10px;
+  background: #FDECEC;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.avisoErrorTexto {
+  font-size: 13px;
+  color: #c0392b;
+  font-weight: 700;
+  margin: 0;
+}
+
+.tarjetasTier {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tarjetaTier {
+  display: flex;
+  gap: 10px;
+  border-radius: 10px;
+  padding: 12px;
+  align-items: flex-start;
+}
+
+.tarjetaTierPremium {
+  background: #E4E0FB;
+}
+
+.tarjetaTierOtro {
+  background: #BFB6FF;
+}
+
+.radioTier {
+  margin-top: 3px;
+}
+
+.checkboxFila {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.cajaConsentimiento {
+  background: #E4E0FB;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.consentimientoLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.checkboxConsentimiento {
+  margin-top: 3px;
+}
+
+.errorEnvio {
+  color: #c0392b;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.botonEnviar {
+  width: 100%;
+  background: #7370E0;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 16px;
   font-weight: 800;
-  color: rgba(16,0,76,0.6);
-  margin: 0 0 18px;
+  cursor: pointer;
+  font-family: inherit;
 }
 
-@media (min-width: 768px) {
-  .hero {
-    max-width: 1000px;
-    padding: 70px 40px 90px;
+.paginaExito {
+  min-height: 100vh;
+  background: #BFB6FF;
+  font-family: 'Mulish', system-ui, sans-serif;
+  color: #10004C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.contenedorExito {
+  max-width: 480px;
+  text-align: center;
+}
+
+.tituloExito {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0 0 14px;
+}
+
+.textoExito {
+  font-size: 16px;
+  line-height: 1.7;
+  color: rgba(16,0,76,0.75);
+}
+
+.volverExito {
+  display: inline-block;
+  margin-top: 20px;
+  color: #7370E0;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.enlaceConsentimiento {
+  color: #7370E0;
+  text-decoration: underline;
+  font-weight: 700;
+}
+
+@media (min-width: 600px) {
+  .pagina {
+    padding: 50px 20px;
   }
 
   .titulo {
-    font-size: 42px;
-    white-space: nowrap;
+    font-size: 30px;
   }
 
-  .subtitulo {
-    font-size: 26px;
+  .intro {
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+
+  .filaCarne {
+    flex-direction: row;
+  }
+
+  .botonBuscar {
+    padding: 0 16px;
   }
 }
