@@ -50,9 +50,9 @@ export function getHref(platform: keyof typeof ICONOS, value: string, identifica
   if (identificador) {
     return '/go/social/' + platform + '/' + encodeURIComponent(identificador);
   }
-  if (platform === 'facebook') return 'https://facebook.com/' + value;
-  if (platform === 'instagram') return 'https://instagram.com/' + value;
-  if (platform === 'tiktok') return 'https://tiktok.com/@' + value;
+    if (platform === 'facebook') return 'https://m.me/' + value;
+    if (platform === 'instagram') return 'https://ig.me/m/' + value;
+    if (platform === 'tiktok') return 'https://tiktok.com/@' + value;
   return value;
 }
 
