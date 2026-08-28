@@ -61,17 +61,30 @@
   color: rgba(16,0,76,0.5);
 }
 
-.detalle {
-  margin: 0 0 2px;
-  font-size: 12px;
-  color: rgba(16,0,76,0.4);
+.lineaIcono {
+    margin: 4px 0 0;
+    font-size: 12px;
+    color: rgba(16,0,76,0.7);
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
-.detalleUltimo {
-  margin: 0 0 12px;
-  font-size: 12px;
-  color: rgba(16,0,76,0.4);
+.grillaAtributos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 7px;
+    column-gap: 6px;
+    margin: 10px 0 12px;
 }
+
+.atributo {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
 
 @media (min-width: 768px) {
   .contenedor {
