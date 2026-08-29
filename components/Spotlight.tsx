@@ -25,7 +25,7 @@ function PremiumCard({ perfil, paleta }: { perfil: PerfilCompleto; paleta: typeo
       <div className={styles.fotoContenedor} style={{ background: `${paleta.dark}0d` }}>
         {perfil.fotoUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={perfil.fotoUrl} alt={nombreCompleto} className={styles.fotoImg} style={{ objectPosition: `center ${perfil.fotoPosicionY}%` }} />
+                    <img src={perfil.fotoUrl} alt={nombreCompleto} className={styles.fotoImg} style={{ objectPosition: `${perfil.fotoPosicionX}% ${perfil.fotoPosicionY}%`, transform: `scale(${perfil.fotoZoom / 100})`, transformOrigin: `${perfil.fotoPosicionX}% ${perfil.fotoPosicionY}%` }} />
         ) : (
           <div className={styles.fotoPlaceholder} style={{ border: `1.5px dashed ${paleta.dark}66`, backgroundImage: `repeating-linear-gradient(135deg, ${paleta.dark}14 0 6px, ${paleta.dark}05 6px 12px)` }}>
             <span className={styles.fotoPlaceholderTexto} style={{ color: `${paleta.dark}99` }}>foto</span>
