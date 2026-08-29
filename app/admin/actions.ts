@@ -27,6 +27,7 @@ const CAMPOS_OPCIONALES = [
   'youtube',
   'linkedin',
   'foto_url',
+    'foto_posicion_y',
   'referido_por',
   'referido_timestamp',
   'nombre_preferido',
@@ -125,6 +126,7 @@ const CAMPOS_EDITABLES = [
   'citas_grupales',
   'servicios_empresas',
   'habla_ingles',
+    'foto_posicion_y',
 ] as const;
 
 export async function actualizarCampoPerfil(carne: string, campo: string, valorCrudo: string | boolean) {
@@ -134,11 +136,14 @@ export async function actualizarCampoPerfil(carne: string, campo: string, valorC
     throw new Error('Campo no editable');
   }
 
-  let valorFinal: string | boolean | null = valorCrudo;
+    let valorFinal: string | boolean | number | null = valorCrudo;
 
   if (campo === 'whatsapp' && typeof valorCrudo === 'string') {
-    const digitos = valorCrudo.replace(/\D/g, '');
-    valorFinal = digitos ? `506${digitos}` : null;
+        const digitos = valorCrudo.replace(/\D/g, '');
+        valorFinal = digitos ? `506${digitos}` : null;
+  } else if (campo === 'foto_posicion_y' && typeof valorCrudo === 'string') {
+        const numero = parseInt(valorCrudo, 10);
+        valorFinal = Number.isNaN(numero) ? null : Math.max(0, Math.min(100, numero));
   } else if (typeof valorCrudo === 'string' && valorCrudo.trim() === '') {
     valorFinal = null;
   }
