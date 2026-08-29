@@ -16,6 +16,8 @@ export type PerfilCompleto = {
   linkedin: string | null;
   fotoUrl: string | null;
     fotoPosicionY: number;
+    fotoPosicionX: number;
+    fotoZoom: number;
   tier: 'free' | 'contact' | 'premium';
   citasOnline: boolean | null;
   visitaDomicilio: boolean | null;
@@ -75,6 +77,8 @@ function mapearPerfil(fila: any): PerfilCompleto {
     linkedin: fila.linkedin,
     fotoUrl: fila.foto_url,
         fotoPosicionY: typeof fila.foto_posicion_y === 'number' ? fila.foto_posicion_y : 50,
+        fotoPosicionX: typeof fila.foto_posicion_x === 'number' ? fila.foto_posicion_x : 50,
+        fotoZoom: typeof fila.foto_zoom === 'number' ? fila.foto_zoom : 100,
     tier: (fila.tier as 'free' | 'contact' | 'premium') || 'free',
     citasOnline: fila.citas_online,
     visitaDomicilio: fila.visita_domicilio,
