@@ -243,3 +243,25 @@ export async function actualizarNumeroFactura(pagoId: number, numeroFactura: str
 
   revalidatePath('/admin/pagos');
 }
+
+export async function actualizarEncuadreFoto(carne: string, posicionY: number, posicionX: number, zoom: number) {
+  await checkAuth();
+
+  const posicionYFinal = Math.max(0, Math.min(100, Math.round(posicionY)));
+  const posicionXFinal = Math.max(0, Math.min(100, Math.round(posicionX)));
+  const zoomFinal = Math.max(100, Math.min(200, Math.round(zoom)));
+
+  const { error } = await supabaseAdmin
+    .from('perfiles')
+    .update({
+      foto_posicion_y: posicionYFinal,
+      foto_posicion_x: posicionXFinal,
+      foto_zoom: zoomFinal,
+    })
+    .eq('carne', carne.trim());
+
+  if (error) throw new Error('No se pudo actualizar');
+
+  revalidatePath('/directorio');
+  revalidatePath('/');
+}
