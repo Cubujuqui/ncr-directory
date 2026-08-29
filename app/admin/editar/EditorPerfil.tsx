@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { buscarPerfilPorCarne, actualizarCampoPerfil } from '../actions';
+import { buscarPerfilPorCarne, actualizarCampoPerfil, actualizarEncuadreFoto } from '../actions';
 
-const CAMPOS: { valor: string; etiqueta: string; tipo: 'texto' | 'booleano' | 'tier' }[] = [
+const CAMPOS: { valor: string; etiqueta: string; tipo: 'texto' | 'booleano' | 'tier' | 'foto' }[] = [
   { valor: 'whatsapp', etiqueta: 'WhatsApp', tipo: 'texto' },
   { valor: 'email', etiqueta: 'Email', tipo: 'texto' },
   { valor: 'facebook', etiqueta: 'Facebook', tipo: 'texto' },
@@ -13,9 +13,7 @@ const CAMPOS: { valor: string; etiqueta: string; tipo: 'texto' | 'booleano' | 't
   { valor: 'linkedin', etiqueta: 'LinkedIn', tipo: 'texto' },
   { valor: 'especialidad_manual', etiqueta: 'Especialidad', tipo: 'texto' },
   { valor: 'nombre_preferido', etiqueta: 'Nombre preferido', tipo: 'texto' },
-  { valor: 'foto_posicion_y', etiqueta: 'Encuadre vertical', tipo: 'texto' },
-  { valor: 'foto_posicion_x', etiqueta: 'Encuadre horizontal', tipo: 'texto' },
-  { valor: 'foto_zoom', etiqueta: 'Zoom', tipo: 'texto' },
+  { valor: 'foto_encuadre', etiqueta: 'Foto: encuadre y zoom', tipo: 'foto' },
   { valor: 'punto_contacto_primario', etiqueta: 'Canal de contacto principal', tipo: 'tier' },
   { valor: 'tier', etiqueta: 'Nivel', tipo: 'tier' },
   { valor: 'citas_online', etiqueta: 'Citas online', tipo: 'booleano' },
@@ -27,7 +25,6 @@ const CAMPOS: { valor: string; etiqueta: string; tipo: 'texto' | 'booleano' | 't
 
 const OPCIONES_CANAL = ['whatsapp', 'email', 'facebook', 'instagram', 'tiktok', 'youtube', 'linkedin'];
 const OPCIONES_TIER = ['premium', 'contact', 'free'];
-const CAMPOS_FOTO = ['foto_posicion_y', 'foto_posicion_x', 'foto_zoom'];
 
 export default function EditorPerfil() {
   const [carneBuscado, setCarneBuscado] = useState('');
@@ -37,6 +34,9 @@ export default function EditorPerfil() {
 
   const [campoElegido, setCampoElegido] = useState(CAMPOS[0].valor);
   const [valorNuevo, setValorNuevo] = useState('');
+  const [posYNuevo, setPosYNuevo] = useState(50);
+  const [posXNuevo, setPosXNuevo] = useState(50);
+  const [zoomNuevo, setZoomNuevo] = useState(100);
   const [guardando, setGuardando] = useState(false);
   const [mensaje, setMensaje] = useState<{ tipo: 'exito' | 'error'; texto: string } | null>(null);
 
@@ -52,18 +52,20 @@ export default function EditorPerfil() {
   }
 
   const campoInfo = CAMPOS.find((c) => c.valor === campoElegido)!;
-  const esCampoFoto = CAMPOS_FOTO.includes(campoElegido);
+  const esCampoFoto = campoElegido === 'foto_encuadre';
 
-  function valorInicialPara(campo: string): string {
-    if (campo === 'foto_posicion_y') return String(perfil?.foto_posicion_y ?? 50);
-    if (campo === 'foto_posicion_x') return String(perfil?.foto_posicion_x ?? 50);
-    if (campo === 'foto_zoom') return String(perfil?.foto_zoom ?? 100);
-    return '';
+  function elegirCampo(nuevoCampo: string) {
+    setCampoElegido(nuevoCampo);
+    setMensaje(null);
+    if (nuevoCampo === 'foto_encuadre') {
+      setPosYNuevo(perfil?.foto_posicion_y ?? 50);
+      setPosXNuevo(perfil?.foto_posicion_x ?? 50);
+      setZoomNuevo(perfil?.foto_zoom ?? 100);
+      setValorNuevo('');
+    } else {
+      setValorNuevo('');
+    }
   }
-
-  const posX = perfil ? (campoElegido === 'foto_posicion_x' ? Number(valorNuevo) : (perfil.foto_posicion_x ?? 50)) : 50;
-  const posY = perfil ? (campoElegido === 'foto_posicion_y' ? Number(valorNuevo) : (perfil.foto_posicion_y ?? 50)) : 50;
-  const zoom = perfil ? (campoElegido === 'foto_zoom' ? Number(valorNuevo) : (perfil.foto_zoom ?? 100)) : 100;
 
   async function guardar() {
     setGuardando(true);
@@ -84,9 +86,14 @@ export default function EditorPerfil() {
     }
 
     try {
-      const valorAEnviar = campoInfo.tipo === 'booleano' ? valorNuevo === 'true' : valorNuevo;
-      await actualizarCampoPerfil(perfil.carne, campoElegido, valorAEnviar);
-      setMensaje({ tipo: 'exito', texto: `${campoInfo.etiqueta} actualizado correctamente.` });
+      if (campoElegido === 'foto_encuadre') {
+        await actualizarEncuadreFoto(perfil.carne, posYNuevo, posXNuevo, zoomNuevo);
+        setMensaje({ tipo: 'exito', texto: 'Encuadre de foto actualizado correctamente.' });
+      } else {
+        const valorAEnviar = campoInfo.tipo === 'booleano' ? valorNuevo === 'true' : valorNuevo;
+        await actualizarCampoPerfil(perfil.carne, campoElegido, valorAEnviar);
+        setMensaje({ tipo: 'exito', texto: `${campoInfo.etiqueta} actualizado correctamente.` });
+      }
       const actualizado = await buscarPerfilPorCarne(perfil.carne);
       setPerfil(actualizado);
       setValorNuevo('');
@@ -96,6 +103,8 @@ export default function EditorPerfil() {
       setGuardando(false);
     }
   }
+
+  const puedeGuardar = esCampoFoto ? !!perfil?.foto_url : valorNuevo !== '';
 
   return (
     <div>
@@ -129,12 +138,7 @@ export default function EditorPerfil() {
           <label style={{ display: 'block', fontSize: '14px', fontWeight: 700, marginBottom: '6px' }}>Campo a actualizar</label>
           <select
             value={campoElegido}
-            onChange={(e) => {
-              const nuevoCampo = e.target.value;
-              setCampoElegido(nuevoCampo);
-              setValorNuevo(valorInicialPara(nuevoCampo));
-              setMensaje(null);
-            }}
+            onChange={(e) => elegirCampo(e.target.value)}
             style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid rgba(16,0,76,0.15)', fontSize: '15px', fontFamily: 'inherit', marginBottom: '16px' }}
           >
             {CAMPOS.map((c) => (
@@ -142,20 +146,12 @@ export default function EditorPerfil() {
             ))}
           </select>
 
-          <p style={{ fontSize: '13px', color: 'rgba(16,0,76,0.5)', marginBottom: '6px' }}>
-            Valor actual: <strong>{String(perfil[campoElegido] ?? 'No indica')}</strong>
-          </p>
-
-          <label style={{ display: 'block', fontSize: '14px', fontWeight: 700, marginBottom: '6px' }}>Nuevo valor</label>
-          {campoElegido === 'nombre_preferido' && (
-            <p style={{ fontSize: '12px', color: 'rgba(16,0,76,0.5)', marginTop: '-2px', marginBottom: '8px' }}>
-              Solo el nombre — los apellidos ({perfil.apellido_manual} {perfil.segundo_apellido_manual}) se agregan automáticamente en todo el sitio.
-            </p>
-          )}
-
           {esCampoFoto ? (
             perfil.foto_url ? (
               <div style={{ marginBottom: '16px' }}>
+                <p style={{ fontSize: '13px', color: 'rgba(16,0,76,0.5)', marginBottom: '10px' }}>
+                  Vista previa combinada — ajustá los tres controles y guardalos juntos.
+                </p>
                 <div style={{ width: '160px', aspectRatio: '1 / 1', overflow: 'hidden', borderRadius: '10px', background: '#E4E0FB' }}>
                   <img
                     src={perfil.foto_url}
@@ -164,66 +160,109 @@ export default function EditorPerfil() {
                       width: '100%',
                       height: '100%',
                       objectFit: 'cover',
-                      objectPosition: `${posX}% ${posY}%`,
-                      transform: `scale(${zoom / 100})`,
-                      transformOrigin: `${posX}% ${posY}%`,
+                      objectPosition: `${posXNuevo}% ${posYNuevo}%`,
+                      transform: `scale(${zoomNuevo / 100})`,
+                      transformOrigin: `${posXNuevo}% ${posYNuevo}%`,
                       display: 'block',
                     }}
                   />
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '160px', marginTop: '8px' }}>
-                  <span style={{ fontSize: '12px', color: 'rgba(16,0,76,0.5)' }}>
-                    {campoElegido === 'foto_posicion_y' ? 'Arriba' : campoElegido === 'foto_posicion_x' ? 'Izquierda' : 'Menos zoom'}
-                  </span>
+
+                <p style={{ fontSize: '12px', fontWeight: 700, color: '#10004C', margin: '14px 0 4px' }}>Vertical</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '220px' }}>
+                  <span style={{ fontSize: '12px', color: 'rgba(16,0,76,0.5)' }}>Arriba</span>
                   <input
                     type="range"
-                    min={campoElegido === 'foto_zoom' ? 100 : 0}
-                    max={campoElegido === 'foto_zoom' ? 200 : 100}
+                    min={0}
+                    max={100}
                     step={1}
-                    value={valorNuevo}
-                    onChange={(e) => setValorNuevo(e.target.value)}
+                    value={posYNuevo}
+                    onChange={(e) => setPosYNuevo(Number(e.target.value))}
                     style={{ flex: 1 }}
                   />
-                  <span style={{ fontSize: '12px', color: 'rgba(16,0,76,0.5)' }}>
-                    {campoElegido === 'foto_posicion_y' ? 'Abajo' : campoElegido === 'foto_posicion_x' ? 'Derecha' : 'Más zoom'}
-                  </span>
+                  <span style={{ fontSize: '12px', color: 'rgba(16,0,76,0.5)' }}>Abajo</span>
+                </div>
+
+                <p style={{ fontSize: '12px', fontWeight: 700, color: '#10004C', margin: '14px 0 4px' }}>Horizontal</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '220px' }}>
+                  <span style={{ fontSize: '12px', color: 'rgba(16,0,76,0.5)' }}>Izquierda</span>
+                  <input
+                    type="range"
+                    min={0}
+                    max={100}
+                    step={1}
+                    value={posXNuevo}
+                    onChange={(e) => setPosXNuevo(Number(e.target.value))}
+                    style={{ flex: 1 }}
+                  />
+                  <span style={{ fontSize: '12px', color: 'rgba(16,0,76,0.5)' }}>Derecha</span>
+                </div>
+
+                <p style={{ fontSize: '12px', fontWeight: 700, color: '#10004C', margin: '14px 0 4px' }}>Zoom</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '220px' }}>
+                  <span style={{ fontSize: '12px', color: 'rgba(16,0,76,0.5)' }}>Menos</span>
+                  <input
+                    type="range"
+                    min={100}
+                    max={200}
+                    step={1}
+                    value={zoomNuevo}
+                    onChange={(e) => setZoomNuevo(Number(e.target.value))}
+                    style={{ flex: 1 }}
+                  />
+                  <span style={{ fontSize: '12px', color: 'rgba(16,0,76,0.5)' }}>Más</span>
                 </div>
               </div>
             ) : (
               <p style={{ fontSize: '13px', color: 'rgba(16,0,76,0.5)', marginBottom: '16px' }}>Este perfil no tiene foto cargada todavía.</p>
             )
-          ) : campoInfo.tipo === 'texto' && (
-            <input
-              value={valorNuevo}
-              onChange={(e) => setValorNuevo(e.target.value)}
-              placeholder={campoElegido === 'whatsapp' ? 'Solo 8 dígitos' : ''}
-              style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid rgba(16,0,76,0.15)', fontSize: '15px', fontFamily: 'inherit', marginBottom: '16px', boxSizing: 'border-box' }}
-            />
-          )}
+          ) : (
+            <>
+              <p style={{ fontSize: '13px', color: 'rgba(16,0,76,0.5)', marginBottom: '6px' }}>
+                Valor actual: <strong>{String(perfil[campoElegido] ?? 'No indica')}</strong>
+              </p>
 
-          {campoInfo.tipo === 'booleano' && (
-            <select
-              value={valorNuevo}
-              onChange={(e) => setValorNuevo(e.target.value)}
-              style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid rgba(16,0,76,0.15)', fontSize: '15px', fontFamily: 'inherit', marginBottom: '16px' }}
-            >
-              <option value="">Elegí una opción</option>
-              <option value="true">Sí</option>
-              <option value="false">No</option>
-            </select>
-          )}
+              <label style={{ display: 'block', fontSize: '14px', fontWeight: 700, marginBottom: '6px' }}>Nuevo valor</label>
+              {campoElegido === 'nombre_preferido' && (
+                <p style={{ fontSize: '12px', color: 'rgba(16,0,76,0.5)', marginTop: '-2px', marginBottom: '8px' }}>
+                  Solo el nombre — los apellidos ({perfil.apellido_manual} {perfil.segundo_apellido_manual}) se agregan automáticamente en todo el sitio.
+                </p>
+              )}
 
-          {campoInfo.tipo === 'tier' && (
-            <select
-              value={valorNuevo}
-              onChange={(e) => setValorNuevo(e.target.value)}
-              style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid rgba(16,0,76,0.15)', fontSize: '15px', fontFamily: 'inherit', marginBottom: '16px' }}
-            >
-              <option value="">Elegí una opción</option>
-              {(campoElegido === 'tier' ? OPCIONES_TIER : OPCIONES_CANAL).map((op) => (
-                <option key={op} value={op}>{op}</option>
-              ))}
-            </select>
+              {campoInfo.tipo === 'texto' && (
+                <input
+                  value={valorNuevo}
+                  onChange={(e) => setValorNuevo(e.target.value)}
+                  placeholder={campoElegido === 'whatsapp' ? 'Solo 8 dígitos' : ''}
+                  style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid rgba(16,0,76,0.15)', fontSize: '15px', fontFamily: 'inherit', marginBottom: '16px', boxSizing: 'border-box' }}
+                />
+              )}
+
+              {campoInfo.tipo === 'booleano' && (
+                <select
+                  value={valorNuevo}
+                  onChange={(e) => setValorNuevo(e.target.value)}
+                  style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid rgba(16,0,76,0.15)', fontSize: '15px', fontFamily: 'inherit', marginBottom: '16px' }}
+                >
+                  <option value="">Elegí una opción</option>
+                  <option value="true">Sí</option>
+                  <option value="false">No</option>
+                </select>
+              )}
+
+              {campoInfo.tipo === 'tier' && (
+                <select
+                  value={valorNuevo}
+                  onChange={(e) => setValorNuevo(e.target.value)}
+                  style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid rgba(16,0,76,0.15)', fontSize: '15px', fontFamily: 'inherit', marginBottom: '16px' }}
+                >
+                  <option value="">Elegí una opción</option>
+                  {(campoElegido === 'tier' ? OPCIONES_TIER : OPCIONES_CANAL).map((op) => (
+                    <option key={op} value={op}>{op}</option>
+                  ))}
+                </select>
+              )}
+            </>
           )}
 
           {mensaje && (
@@ -234,8 +273,8 @@ export default function EditorPerfil() {
 
           <button
             onClick={guardar}
-            disabled={guardando || valorNuevo === '' || (esCampoFoto && !perfil.foto_url)}
-            style={{ background: '#7370E0', color: '#ffffff', border: 'none', borderRadius: '10px', padding: '12px 24px', fontWeight: 800, cursor: 'pointer', fontFamily: 'inherit', opacity: (guardando || valorNuevo === '' || (esCampoFoto && !perfil.foto_url)) ? 0.6 : 1 }}
+            disabled={guardando || !puedeGuardar}
+            style={{ background: '#7370E0', color: '#ffffff', border: 'none', borderRadius: '10px', padding: '12px 24px', fontWeight: 800, cursor: 'pointer', fontFamily: 'inherit', opacity: (guardando || !puedeGuardar) ? 0.6 : 1 }}
           >
             {guardando ? 'Guardando...' : 'Guardar cambio'}
           </button>
@@ -244,4 +283,3 @@ export default function EditorPerfil() {
     </div>
   );
 }
-
