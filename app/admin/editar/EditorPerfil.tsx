@@ -13,6 +13,7 @@ const CAMPOS: { valor: string; etiqueta: string; tipo: 'texto' | 'booleano' | 't
   { valor: 'linkedin', etiqueta: 'LinkedIn', tipo: 'texto' },
   { valor: 'especialidad_manual', etiqueta: 'Especialidad', tipo: 'texto' },
   { valor: 'nombre_preferido', etiqueta: 'Nombre preferido', tipo: 'texto' },
+  { valor: 'foto_posicion_y', etiqueta: 'Encuadre de foto', tipo: 'texto' },
   { valor: 'punto_contacto_primario', etiqueta: 'Canal de contacto principal', tipo: 'tier' },
   { valor: 'tier', etiqueta: 'Nivel', tipo: 'tier' },
   { valor: 'citas_online', etiqueta: 'Citas online', tipo: 'booleano' },
@@ -52,21 +53,21 @@ export default function EditorPerfil() {
   async function guardar() {
     setGuardando(true);
     setMensaje(null);
-    
-        if (campoElegido === 'nombre_preferido') {
-                const valorLower = valorNuevo.toLowerCase();
-                const apellido1 = (perfil.apellido_manual || '').toLowerCase().trim();
-                const apellido2 = (perfil.segundo_apellido_manual || '').toLowerCase().trim();
-                const incluyeApellido =
-                          (apellido1 && valorLower.includes(apellido1)) ||
-                          (apellido2 && valorLower.includes(apellido2));
-                if (incluyeApellido) {
-                          setMensaje({ tipo: 'error', texto: 'El nombre preferido no debe incluir los apellidos — se agregan automáticamente en todo el sitio. Escribí solo el nombre.' });
-                          setGuardando(false);
-                          return;
-                }
-        }
-    
+
+    if (campoElegido === 'nombre_preferido') {
+      const valorLower = valorNuevo.toLowerCase();
+      const apellido1 = (perfil.apellido_manual || '').toLowerCase().trim();
+      const apellido2 = (perfil.segundo_apellido_manual || '').toLowerCase().trim();
+      const incluyeApellido =
+        (apellido1 && valorLower.includes(apellido1)) ||
+        (apellido2 && valorLower.includes(apellido2));
+      if (incluyeApellido) {
+        setMensaje({ tipo: 'error', texto: 'El nombre preferido no debe incluir los apellidos — se agregan automáticamente en todo el sitio. Escribí solo el nombre.' });
+        setGuardando(false);
+        return;
+      }
+    }
+
     try {
       const valorAEnviar = campoInfo.tipo === 'booleano' ? valorNuevo === 'true' : valorNuevo;
       await actualizarCampoPerfil(perfil.carne, campoElegido, valorAEnviar);
@@ -113,7 +114,12 @@ export default function EditorPerfil() {
           <label style={{ display: 'block', fontSize: '14px', fontWeight: 700, marginBottom: '6px' }}>Campo a actualizar</label>
           <select
             value={campoElegido}
-            onChange={(e) => { setCampoElegido(e.target.value); setValorNuevo(''); setMensaje(null); }}
+            onChange={(e) => {
+              const nuevoCampo = e.target.value;
+              setCampoElegido(nuevoCampo);
+              setValorNuevo(nuevoCampo === 'foto_posicion_y' ? String(perfil.foto_posicion_y ?? 50) : '');
+              setMensaje(null);
+            }}
             style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid rgba(16,0,76,0.15)', fontSize: '15px', fontFamily: 'inherit', marginBottom: '16px' }}
           >
             {CAMPOS.map((c) => (
@@ -126,13 +132,40 @@ export default function EditorPerfil() {
           </p>
 
           <label style={{ display: 'block', fontSize: '14px', fontWeight: 700, marginBottom: '6px' }}>Nuevo valor</label>
-                    {campoElegido === 'nombre_preferido' && (
+          {campoElegido === 'nombre_preferido' && (
             <p style={{ fontSize: '12px', color: 'rgba(16,0,76,0.5)', marginTop: '-2px', marginBottom: '8px' }}>
               Solo el nombre — los apellidos ({perfil.apellido_manual} {perfil.segundo_apellido_manual}) se agregan automáticamente en todo el sitio.
             </p>
           )}
 
-          {campoInfo.tipo === 'texto' && (
+          {campoElegido === 'foto_posicion_y' ? (
+            perfil.foto_url ? (
+              <div style={{ marginBottom: '16px' }}>
+                <div style={{ width: '160px', aspectRatio: '1 / 1', overflow: 'hidden', borderRadius: '10px', background: '#E4E0FB' }}>
+                  <img
+                    src={perfil.foto_url}
+                    alt="Vista previa"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: `center ${valorNuevo}%`, display: 'block' }}
+                  />
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '160px', marginTop: '8px' }}>
+                  <span style={{ fontSize: '12px', color: 'rgba(16,0,76,0.5)' }}>Arriba</span>
+                  <input
+                    type="range"
+                    min={0}
+                    max={100}
+                    step={1}
+                    value={valorNuevo}
+                    onChange={(e) => setValorNuevo(e.target.value)}
+                    style={{ flex: 1 }}
+                  />
+                  <span style={{ fontSize: '12px', color: 'rgba(16,0,76,0.5)' }}>Abajo</span>
+                </div>
+              </div>
+            ) : (
+              <p style={{ fontSize: '13px', color: 'rgba(16,0,76,0.5)', marginBottom: '16px' }}>Este perfil no tiene foto cargada todavía.</p>
+            )
+          ) : campoInfo.tipo === 'texto' && (
             <input
               value={valorNuevo}
               onChange={(e) => setValorNuevo(e.target.value)}
@@ -174,8 +207,8 @@ export default function EditorPerfil() {
 
           <button
             onClick={guardar}
-            disabled={guardando || valorNuevo === ''}
-            style={{ background: '#7370E0', color: '#ffffff', border: 'none', borderRadius: '10px', padding: '12px 24px', fontWeight: 800, cursor: 'pointer', fontFamily: 'inherit', opacity: guardando || valorNuevo === '' ? 0.6 : 1 }}
+            disabled={guardando || valorNuevo === '' || (campoElegido === 'foto_posicion_y' && !perfil.foto_url)}
+            style={{ background: '#7370E0', color: '#ffffff', border: 'none', borderRadius: '10px', padding: '12px 24px', fontWeight: 800, cursor: 'pointer', fontFamily: 'inherit', opacity: (guardando || valorNuevo === '' || (campoElegido === 'foto_posicion_y' && !perfil.foto_url)) ? 0.6 : 1 }}
           >
             {guardando ? 'Guardando...' : 'Guardar cambio'}
           </button>
