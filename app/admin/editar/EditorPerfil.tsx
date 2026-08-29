@@ -13,7 +13,9 @@ const CAMPOS: { valor: string; etiqueta: string; tipo: 'texto' | 'booleano' | 't
   { valor: 'linkedin', etiqueta: 'LinkedIn', tipo: 'texto' },
   { valor: 'especialidad_manual', etiqueta: 'Especialidad', tipo: 'texto' },
   { valor: 'nombre_preferido', etiqueta: 'Nombre preferido', tipo: 'texto' },
-  { valor: 'foto_posicion_y', etiqueta: 'Encuadre de foto', tipo: 'texto' },
+  { valor: 'foto_posicion_y', etiqueta: 'Encuadre vertical', tipo: 'texto' },
+  { valor: 'foto_posicion_x', etiqueta: 'Encuadre horizontal', tipo: 'texto' },
+  { valor: 'foto_zoom', etiqueta: 'Zoom', tipo: 'texto' },
   { valor: 'punto_contacto_primario', etiqueta: 'Canal de contacto principal', tipo: 'tier' },
   { valor: 'tier', etiqueta: 'Nivel', tipo: 'tier' },
   { valor: 'citas_online', etiqueta: 'Citas online', tipo: 'booleano' },
@@ -25,6 +27,7 @@ const CAMPOS: { valor: string; etiqueta: string; tipo: 'texto' | 'booleano' | 't
 
 const OPCIONES_CANAL = ['whatsapp', 'email', 'facebook', 'instagram', 'tiktok', 'youtube', 'linkedin'];
 const OPCIONES_TIER = ['premium', 'contact', 'free'];
+const CAMPOS_FOTO = ['foto_posicion_y', 'foto_posicion_x', 'foto_zoom'];
 
 export default function EditorPerfil() {
   const [carneBuscado, setCarneBuscado] = useState('');
@@ -49,6 +52,18 @@ export default function EditorPerfil() {
   }
 
   const campoInfo = CAMPOS.find((c) => c.valor === campoElegido)!;
+  const esCampoFoto = CAMPOS_FOTO.includes(campoElegido);
+
+  function valorInicialPara(campo: string): string {
+    if (campo === 'foto_posicion_y') return String(perfil?.foto_posicion_y ?? 50);
+    if (campo === 'foto_posicion_x') return String(perfil?.foto_posicion_x ?? 50);
+    if (campo === 'foto_zoom') return String(perfil?.foto_zoom ?? 100);
+    return '';
+  }
+
+  const posX = perfil ? (campoElegido === 'foto_posicion_x' ? Number(valorNuevo) : (perfil.foto_posicion_x ?? 50)) : 50;
+  const posY = perfil ? (campoElegido === 'foto_posicion_y' ? Number(valorNuevo) : (perfil.foto_posicion_y ?? 50)) : 50;
+  const zoom = perfil ? (campoElegido === 'foto_zoom' ? Number(valorNuevo) : (perfil.foto_zoom ?? 100)) : 100;
 
   async function guardar() {
     setGuardando(true);
@@ -117,7 +132,7 @@ export default function EditorPerfil() {
             onChange={(e) => {
               const nuevoCampo = e.target.value;
               setCampoElegido(nuevoCampo);
-              setValorNuevo(nuevoCampo === 'foto_posicion_y' ? String(perfil.foto_posicion_y ?? 50) : '');
+              setValorNuevo(valorInicialPara(nuevoCampo));
               setMensaje(null);
             }}
             style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid rgba(16,0,76,0.15)', fontSize: '15px', fontFamily: 'inherit', marginBottom: '16px' }}
@@ -138,28 +153,40 @@ export default function EditorPerfil() {
             </p>
           )}
 
-          {campoElegido === 'foto_posicion_y' ? (
+          {esCampoFoto ? (
             perfil.foto_url ? (
               <div style={{ marginBottom: '16px' }}>
                 <div style={{ width: '160px', aspectRatio: '1 / 1', overflow: 'hidden', borderRadius: '10px', background: '#E4E0FB' }}>
                   <img
                     src={perfil.foto_url}
                     alt="Vista previa"
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: `center ${valorNuevo}%`, display: 'block' }}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      objectPosition: `${posX}% ${posY}%`,
+                      transform: `scale(${zoom / 100})`,
+                      transformOrigin: `${posX}% ${posY}%`,
+                      display: 'block',
+                    }}
                   />
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '160px', marginTop: '8px' }}>
-                  <span style={{ fontSize: '12px', color: 'rgba(16,0,76,0.5)' }}>Arriba</span>
+                  <span style={{ fontSize: '12px', color: 'rgba(16,0,76,0.5)' }}>
+                    {campoElegido === 'foto_posicion_y' ? 'Arriba' : campoElegido === 'foto_posicion_x' ? 'Izquierda' : 'Menos zoom'}
+                  </span>
                   <input
                     type="range"
-                    min={0}
-                    max={100}
+                    min={campoElegido === 'foto_zoom' ? 100 : 0}
+                    max={campoElegido === 'foto_zoom' ? 200 : 100}
                     step={1}
                     value={valorNuevo}
                     onChange={(e) => setValorNuevo(e.target.value)}
                     style={{ flex: 1 }}
                   />
-                  <span style={{ fontSize: '12px', color: 'rgba(16,0,76,0.5)' }}>Abajo</span>
+                  <span style={{ fontSize: '12px', color: 'rgba(16,0,76,0.5)' }}>
+                    {campoElegido === 'foto_posicion_y' ? 'Abajo' : campoElegido === 'foto_posicion_x' ? 'Derecha' : 'Más zoom'}
+                  </span>
                 </div>
               </div>
             ) : (
@@ -207,8 +234,8 @@ export default function EditorPerfil() {
 
           <button
             onClick={guardar}
-            disabled={guardando || valorNuevo === '' || (campoElegido === 'foto_posicion_y' && !perfil.foto_url)}
-            style={{ background: '#7370E0', color: '#ffffff', border: 'none', borderRadius: '10px', padding: '12px 24px', fontWeight: 800, cursor: 'pointer', fontFamily: 'inherit', opacity: (guardando || valorNuevo === '' || (campoElegido === 'foto_posicion_y' && !perfil.foto_url)) ? 0.6 : 1 }}
+            disabled={guardando || valorNuevo === '' || (esCampoFoto && !perfil.foto_url)}
+            style={{ background: '#7370E0', color: '#ffffff', border: 'none', borderRadius: '10px', padding: '12px 24px', fontWeight: 800, cursor: 'pointer', fontFamily: 'inherit', opacity: (guardando || valorNuevo === '' || (esCampoFoto && !perfil.foto_url)) ? 0.6 : 1 }}
           >
             {guardando ? 'Guardando...' : 'Guardar cambio'}
           </button>
@@ -217,3 +244,4 @@ export default function EditorPerfil() {
     </div>
   );
 }
+
