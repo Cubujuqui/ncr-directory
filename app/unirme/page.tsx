@@ -22,6 +22,7 @@ export default function Unirme() {
 
   const [fotoCarne, setFotoCarne] = useState<File | null>(null);
   const [fotoPerfil, setFotoPerfil] = useState<File | null>(null);
+  const [acercaDeLength, setAcercaDeLength] = useState(0);
   const [tier, setTier] = useState('');
 
   async function buscarNombre() {
@@ -147,6 +148,7 @@ export default function Unirme() {
       tiktok: (data.get('tiktok') as string || '').trim() || null,
       youtube: (data.get('youtube') as string || '').trim() || null,
       linkedin: (data.get('linkedin') as string || '').trim() || null,
+      acerca_de: (data.get('acerca_de') as string || '').trim().slice(0, 280) || null,
       punto_contacto_primario: data.get('punto_contacto_primario') as string,
       citas_online: data.get('citas_online') === 'on',
       visita_domicilio: data.get('visita_domicilio') === 'on',
@@ -386,6 +388,21 @@ export default function Unirme() {
               </label>
             </div>
           </div>
+
+          {(tier === 'premium' || tier === 'contact') && (
+            <div className={styles.seccion}>
+              <label className={styles.etiqueta}>Acerca de vos</label>
+              <textarea
+                name="acerca_de"
+                maxLength={280}
+                rows={4}
+                onChange={(e) => setAcercaDeLength(e.target.value.length)}
+                className={styles.input}
+                placeholder="Una breve descripción sobre vos y tu enfoque como nutricionista."
+              />
+              <p className={styles.ayuda}>{acercaDeLength}/280 — Se muestra en tu perfil. Opcional.</p>
+            </div>
+          )}
 
           {tier === 'premium' && (
             <div className={styles.seccion}>
