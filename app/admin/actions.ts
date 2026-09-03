@@ -30,6 +30,7 @@ const CAMPOS_OPCIONALES = [
     'foto_posicion_y',
     'foto_posicion_x',
     'foto_zoom',
+  'acerca_de',
   'referido_por',
   'referido_timestamp',
   'nombre_preferido',
@@ -131,6 +132,7 @@ const CAMPOS_EDITABLES = [
     'foto_posicion_y',
     'foto_posicion_x',
     'foto_zoom',
+  'acerca_de',
 ] as const;
 
 export async function actualizarCampoPerfil(carne: string, campo: string, valorCrudo: string | boolean) {
@@ -154,6 +156,9 @@ export async function actualizarCampoPerfil(carne: string, campo: string, valorC
   } else if (campo === 'foto_zoom' && typeof valorCrudo === 'string') {
         const numero = parseInt(valorCrudo, 10);
         valorFinal = Number.isNaN(numero) ? null : Math.max(100, Math.min(200, numero));
+  } else if (campo === 'acerca_de' && typeof valorCrudo === 'string') {
+    const texto = valorCrudo.trim();
+    valorFinal = texto ? texto.slice(0, 280) : null;
   } else if (typeof valorCrudo === 'string' && valorCrudo.trim() === '') {
     valorFinal = null;
   }
