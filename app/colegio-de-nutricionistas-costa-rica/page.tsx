@@ -16,6 +16,10 @@ export default function ColegioNutricionistas() {
     <div className={styles.pagina}>
       <SiteHeader />
       <div className={styles.contenedor}>
+        <Link href="/" className={styles.volver}>
+          ← Volver al inicio
+        </Link>
+
         <h1 className={styles.titulo}>
           Colegio de Profesionales en Nutrición de Costa Rica: qué es y cómo verificar si un nutricionista está colegiado
         </h1>
