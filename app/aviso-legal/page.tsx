@@ -13,6 +13,10 @@ export default function AvisoLegal() {
     <div style={{ minHeight: '100vh', background: '#F3F0FF', fontFamily: "'Mulish', system-ui, sans-serif", color: '#10004C' }}>
       <SiteHeader />
       <div style={{ maxWidth: '780px', margin: '0 auto', padding: '60px 24px' }}>
+        <Link href="/" style={{ color: '#7370E0', textDecoration: 'none', fontWeight: 700, fontSize: '14px' }}>
+          ← Volver al inicio
+        </Link>
+
         <h1 style={{ fontSize: '32px', fontWeight: 800, margin: '24px 0 32px', lineHeight: 1.2 }}>
           Aviso Legal
         </h1>
