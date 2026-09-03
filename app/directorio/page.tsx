@@ -1,4 +1,5 @@
 import { ordenarResultadosDirectorio } from '@/lib/perfiles';
+import Link from 'next/link';
 import SocialIcons, { getHref } from '@/components/SocialIcons';
 import TarjetaClicable from '@/components/TarjetaClicable';
 import FiltrosDirectorio from '@/components/FiltrosDirectorio';
@@ -36,6 +37,10 @@ export default async function Directorio({
     <div className={styles.pagina}>
       <SiteHeader />
       <div className={styles.contenedor}>
+        <Link href="/" className={styles.volver}>
+          ← Volver al inicio
+        </Link>
+
         <h1 className={styles.titulo}>
           {especialidad ? especialidad : 'Todos los nutricionistas activos'}
         </h1>
