@@ -18,6 +18,7 @@ export type PerfilCompleto = {
     fotoPosicionY: number;
     fotoPosicionX: number;
     fotoZoom: number;
+  acercaDe: string | null;
   tier: 'free' | 'contact' | 'premium';
   citasOnline: boolean | null;
   visitaDomicilio: boolean | null;
@@ -79,6 +80,7 @@ function mapearPerfil(fila: any): PerfilCompleto {
         fotoPosicionY: typeof fila.foto_posicion_y === 'number' ? fila.foto_posicion_y : 50,
         fotoPosicionX: typeof fila.foto_posicion_x === 'number' ? fila.foto_posicion_x : 50,
         fotoZoom: typeof fila.foto_zoom === 'number' ? fila.foto_zoom : 100,
+    acercaDe: fila.acerca_de || null,
     tier: (fila.tier as 'free' | 'contact' | 'premium') || 'free',
     citasOnline: fila.citas_online,
     visitaDomicilio: fila.visita_domicilio,
