@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { buscarPerfilPorCarne, actualizarCampoPerfil, actualizarEncuadreFoto } from '../actions';
 
-const CAMPOS: { valor: string; etiqueta: string; tipo: 'texto' | 'booleano' | 'tier' | 'foto' }[] = [
+const CAMPOS: { valor: string; etiqueta: string; tipo: 'texto' | 'booleano' | 'tier' | 'foto' | 'textarea' }[] = [
   { valor: 'whatsapp', etiqueta: 'WhatsApp', tipo: 'texto' },
   { valor: 'email', etiqueta: 'Email', tipo: 'texto' },
   { valor: 'facebook', etiqueta: 'Facebook', tipo: 'texto' },
@@ -13,6 +13,7 @@ const CAMPOS: { valor: string; etiqueta: string; tipo: 'texto' | 'booleano' | 't
   { valor: 'linkedin', etiqueta: 'LinkedIn', tipo: 'texto' },
   { valor: 'especialidad_manual', etiqueta: 'Especialidad', tipo: 'texto' },
   { valor: 'nombre_preferido', etiqueta: 'Nombre preferido', tipo: 'texto' },
+  { valor: 'acerca_de', etiqueta: 'Acerca de (biografía corta)', tipo: 'textarea' },
   { valor: 'foto_encuadre', etiqueta: 'Foto: encuadre y zoom', tipo: 'foto' },
   { valor: 'punto_contacto_primario', etiqueta: 'Canal de contacto principal', tipo: 'tier' },
   { valor: 'tier', etiqueta: 'Nivel', tipo: 'tier' },
@@ -236,6 +237,21 @@ export default function EditorPerfil() {
                   placeholder={campoElegido === 'whatsapp' ? 'Solo 8 dígitos' : ''}
                   style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid rgba(16,0,76,0.15)', fontSize: '15px', fontFamily: 'inherit', marginBottom: '16px', boxSizing: 'border-box' }}
                 />
+              )}
+
+              {campoInfo.tipo === 'textarea' && (
+                <div style={{ marginBottom: '16px' }}>
+                  <textarea
+                    value={valorNuevo}
+                    onChange={(e) => setValorNuevo(e.target.value.slice(0, 280))}
+                    maxLength={280}
+                    rows={4}
+                    style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid rgba(16,0,76,0.15)', fontSize: '15px', fontFamily: 'inherit', boxSizing: 'border-box', resize: 'vertical' }}
+                  />
+                  <p style={{ fontSize: '12px', color: 'rgba(16,0,76,0.5)', margin: '4px 0 0', textAlign: 'right' }}>
+                    {valorNuevo.length}/280
+                  </p>
+                </div>
               )}
 
               {campoInfo.tipo === 'booleano' && (
