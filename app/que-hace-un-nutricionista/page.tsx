@@ -16,6 +16,10 @@ export default function QueHaceUnNutricionista() {
     <div className={styles.pagina}>
       <SiteHeader />
       <div className={styles.contenedor}>
+        <Link href="/" className={styles.volver}>
+          ← Volver al inicio
+        </Link>
+
         <h1 className={styles.titulo}>¿Qué hace un nutricionista? Guía completa</h1>
 
         <p className={styles.intro}>
