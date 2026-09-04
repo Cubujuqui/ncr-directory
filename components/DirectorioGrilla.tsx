@@ -47,7 +47,10 @@ export default function DirectorioGrilla({ resultados }: { resultados: PerfilCom
               onClick={esClicableParaModal ? () => setPerfilAbierto(perfil) : undefined}
               className={styles.tarjeta}
             >
-              <p className={styles.nombre}>{perfil.nombre} {perfil.primerApellido} {perfil.segundoApellido}<BadgeTier tier={perfil.tier} /></p>
+              <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 6 }}>
+                <p className={styles.nombre}>{perfil.nombre} {perfil.primerApellido} {perfil.segundoApellido}</p>
+                <BadgeTier tier={perfil.tier} />
+              </div>
               <p className={styles.carne}>Carné {perfil.carne}</p>
               {perfil.aniosExperiencia !== null && (
                 <p className={styles.lineaIcono}>
