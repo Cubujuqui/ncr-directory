@@ -1,7 +1,11 @@
+'use client';
+
+import { useState } from 'react';
 import { PerfilCompleto } from '@/lib/perfiles';
-import SocialIcons, { getHref } from './SocialIcons';
+import SocialIcons from './SocialIcons';
 import TarjetaClicable from './TarjetaClicable';
 import { ICONOS_PERFIL } from './IconosPerfil';
+import PerfilLightbox from './PerfilLightbox';
 import styles from './Spotlight.module.css';
 
 const PALETAS = [
@@ -13,15 +17,11 @@ const PALETAS = [
 
 const SECTION_BG = '#FFA589';
 
-function PremiumCard({ perfil, paleta }: { perfil: PerfilCompleto; paleta: typeof PALETAS[number] }) {
+function PremiumCard({ perfil, paleta, onAbrir }: { perfil: PerfilCompleto; paleta: typeof PALETAS[number]; onAbrir: (perfil: PerfilCompleto) => void }) {
   const nombreCompleto = `${perfil.nombre} ${perfil.primerApellido} ${perfil.segundoApellido}`.trim();
 
-  const canal = perfil.puntoContactoPrimario;
-  const valorCanal = perfil[canal];
-  const enlacePrincipal = valorCanal ? getHref(canal, valorCanal, perfil.carne ?? undefined) : null;
-
   return (
-    <TarjetaClicable href={enlacePrincipal} className={styles.tarjeta} style={{ background: paleta.light }}>
+    <TarjetaClicable onClick={() => onAbrir(perfil)} href={null} className={styles.tarjeta} style={{ background: paleta.light }}>
       <div className={styles.fotoContenedor} style={{ background: `${paleta.dark}0d` }}>
         {perfil.fotoUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -93,6 +93,8 @@ function PremiumCard({ perfil, paleta }: { perfil: PerfilCompleto; paleta: typeo
 }
 
 export default function Spotlight({ perfiles }: { perfiles: PerfilCompleto[] }) {
+  const [perfilAbierto, setPerfilAbierto] = useState<PerfilCompleto | null>(null);
+
   if (perfiles.length === 0) return null;
 
   return (
@@ -107,10 +109,12 @@ export default function Spotlight({ perfiles }: { perfiles: PerfilCompleto[] }) 
 
         <div className={styles.grilla} style={{ '--num-columnas': perfiles.length } as React.CSSProperties}>
           {perfiles.map((p, i) => (
-            <PremiumCard key={i} perfil={p} paleta={PALETAS[i % PALETAS.length]} />
+            <PremiumCard key={i} perfil={p} paleta={PALETAS[i % PALETAS.length]} onAbrir={setPerfilAbierto} />
           ))}
         </div>
       </div>
+
+      <PerfilLightbox perfil={perfilAbierto} onCerrar={() => setPerfilAbierto(null)} />
     </section>
   );
 }
