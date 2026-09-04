@@ -272,42 +272,42 @@ export default function Unirme() {
 
           <div className={styles.seccion}>
             <label className={styles.checkboxFila}>
-              <input type="checkbox" name="citas_online" />
+              <input type="checkbox" name="citas_online" defaultChecked />
               Atiende Online
             </label>
           </div>
 
           <div className={styles.seccion}>
             <label className={styles.checkboxFila}>
-              <input type="checkbox" name="visita_domicilio" />
+              <input type="checkbox" name="visita_domicilio" defaultChecked />
               Atiende a Domicilio
             </label>
           </div>
 
           <div className={styles.seccion}>
             <label className={styles.checkboxFila}>
-              <input type="checkbox" name="atiende_consultorio" />
+              <input type="checkbox" name="atiende_consultorio" defaultChecked />
               Atiende en Consultorio
             </label>
           </div>
 
           <div className={styles.seccion}>
             <label className={styles.checkboxFila}>
-              <input type="checkbox" name="citas_grupales" />
+              <input type="checkbox" name="citas_grupales" defaultChecked />
               Ofrezco citas grupales
             </label>
           </div>
 
           <div className={styles.seccion}>
             <label className={styles.checkboxFila}>
-              <input type="checkbox" name="servicios_empresas" />
+              <input type="checkbox" name="servicios_empresas" defaultChecked />
               Ofrezco servicios a empresas
             </label>
           </div>
 
           <div className={styles.seccion}>
             <label className={styles.checkboxFila}>
-              <input type="checkbox" name="habla_ingles" />
+              <input type="checkbox" name="habla_ingles" defaultChecked />
               Hablo inglés
             </label>
           </div>
