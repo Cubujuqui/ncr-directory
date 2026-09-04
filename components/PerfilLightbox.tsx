@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { PerfilCompleto } from '@/lib/perfiles';
 import SocialIcons, { getHref } from './SocialIcons';
 import { ICONOS_PERFIL } from './IconosPerfil';
+import BadgeTier from './BadgeTier';
 import styles from './PerfilLightbox.module.css';
 
 const COLOR_PRIMARIO = '#7370E0';
@@ -57,7 +58,7 @@ export default function PerfilLightbox({ perfil, onCerrar }: { perfil: PerfilCom
         </div>
 
         <div className={styles.infoLado}>
-          <p className={styles.nombre}>{nombreCompleto}</p>
+          <p className={styles.nombre}>{nombreCompleto}<BadgeTier tier={perfil.tier} /></p>
           {perfil.carne && <p className={styles.carne}>Carné {perfil.carne}</p>}
 
           {perfil.aniosExperiencia !== null && (
