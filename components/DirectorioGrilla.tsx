@@ -6,6 +6,7 @@ import SocialIcons, { getHref } from './SocialIcons';
 import TarjetaClicable from './TarjetaClicable';
 import { ICONOS_PERFIL } from './IconosPerfil';
 import PerfilLightbox from './PerfilLightbox';
+import BadgeTier from './BadgeTier';
 import styles from '@/app/directorio/page.module.css';
 
 function calcularEnlacePrincipal(perfil: PerfilCompleto) {
@@ -46,7 +47,7 @@ export default function DirectorioGrilla({ resultados }: { resultados: PerfilCom
               onClick={esClicableParaModal ? () => setPerfilAbierto(perfil) : undefined}
               className={styles.tarjeta}
             >
-              <p className={styles.nombre}>{perfil.nombre} {perfil.primerApellido} {perfil.segundoApellido}</p>
+              <p className={styles.nombre}>{perfil.nombre} {perfil.primerApellido} {perfil.segundoApellido}<BadgeTier tier={perfil.tier} /></p>
               <p className={styles.carne}>Carné {perfil.carne}</p>
               {perfil.aniosExperiencia !== null && (
                 <p className={styles.lineaIcono}>
