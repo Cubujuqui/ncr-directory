@@ -1,0 +1,171 @@
+.fondo {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.panel {
+  position: relative;
+  background: #fff;
+  border-radius: 18px;
+  display: flex;
+  width: 100%;
+  max-width: 780px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.botonCerrar {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  color: #10004C;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.fotoLado {
+  width: 42%;
+  flex-shrink: 0;
+  aspect-ratio: 1 / 1;
+  align-self: stretch;
+  overflow: hidden;
+  background: #E4E0FB;
+}
+
+.foto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.fotoPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px dashed rgba(16, 0, 76, 0.4);
+  background-image: repeating-linear-gradient(135deg, rgba(16,0,76,0.08) 0 6px, rgba(16,0,76,0.02) 6px 12px);
+  box-sizing: border-box;
+}
+
+.fotoPlaceholderTexto {
+  color: rgba(16, 0, 76, 0.6);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.infoLado {
+  flex: 1;
+  padding: 28px;
+  overflow-y: auto;
+}
+
+.nombre {
+  font-size: 22px;
+  font-weight: 800;
+  color: #10004C;
+  margin: 0 0 4px;
+}
+
+.carne {
+  font-size: 14px;
+  color: rgba(16, 0, 76, 0.6);
+  margin: 0 0 16px;
+}
+
+.lineaIcono {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  color: #10004C;
+  margin: 0 0 10px;
+}
+
+.grillaAtributos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 16px;
+  margin: 14px 0;
+}
+
+.atributo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.acercaDe {
+  margin: 18px 0;
+  padding: 14px 16px;
+  background: #F3F0FF;
+  border-radius: 12px;
+}
+
+.acercaDeTitulo {
+  font-size: 13px;
+  font-weight: 800;
+  color: #10004C;
+  margin: 0 0 6px;
+}
+
+.acercaDeTexto {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(16, 0, 76, 0.85);
+  margin: 0;
+}
+
+.social {
+  margin: 18px 0 22px;
+}
+
+.botonContactar {
+  display: block;
+  text-align: center;
+  background: #7370E0;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 15px;
+  padding: 13px 20px;
+  border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+  .panel {
+    flex-direction: column;
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+
+  .fotoLado {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+  }
+
+  .infoLado {
+    padding: 22px 20px;
+  }
+}
