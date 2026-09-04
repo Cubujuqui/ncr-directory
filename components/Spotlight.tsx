@@ -6,6 +6,7 @@ import SocialIcons from './SocialIcons';
 import TarjetaClicable from './TarjetaClicable';
 import { ICONOS_PERFIL } from './IconosPerfil';
 import PerfilLightbox from './PerfilLightbox';
+import BadgeTier from './BadgeTier';
 import styles from './Spotlight.module.css';
 
 const PALETAS = [
@@ -34,10 +35,7 @@ function PremiumCard({ perfil, paleta, onAbrir }: { perfil: PerfilCompleto; pale
       </div>
 
       <div className={styles.info}>
-        <span className={styles.badge} style={{ background: paleta.primary }}>
-          PERFIL PREMIUM
-        </span>
-        <p className={styles.nombre} style={{ color: paleta.dark }}>{nombreCompleto}</p>
+        <p className={styles.nombre} style={{ color: paleta.dark }}>{nombreCompleto}<BadgeTier tier="premium" /></p>
         {perfil.carne && (
           <p className={styles.carne} style={{ color: `${paleta.dark}99` }}>
             Carné {perfil.carne}
