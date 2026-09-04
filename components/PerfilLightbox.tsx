@@ -59,8 +59,8 @@ export default function PerfilLightbox({ perfil, onCerrar }: { perfil: PerfilCom
 
         <div className={styles.infoLado}>
           <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 6 }}>
-            <p className={styles.nombre}>{nombreCompleto}</p>
             <BadgeTier tier={perfil.tier} />
+            <p className={styles.nombre}>{nombreCompleto}</p>
           </div>
           {perfil.carne && <p className={styles.carne}>Carné {perfil.carne}</p>}
 
