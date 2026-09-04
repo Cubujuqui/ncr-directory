@@ -48,8 +48,8 @@ export default function DirectorioGrilla({ resultados }: { resultados: PerfilCom
               className={styles.tarjeta}
             >
               <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 6 }}>
-                <p className={styles.nombre}>{perfil.nombre} {perfil.primerApellido} {perfil.segundoApellido}</p>
                 <BadgeTier tier={perfil.tier} />
+                <p className={styles.nombre}>{perfil.nombre} {perfil.primerApellido} {perfil.segundoApellido}</p>
               </div>
               <p className={styles.carne}>Carné {perfil.carne}</p>
               {perfil.aniosExperiencia !== null && (
