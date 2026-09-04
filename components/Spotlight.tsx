@@ -36,8 +36,8 @@ function PremiumCard({ perfil, paleta, onAbrir }: { perfil: PerfilCompleto; pale
 
       <div className={styles.info}>
         <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 6 }}>
-          <p className={styles.nombre} style={{ color: paleta.dark }}>{nombreCompleto}</p>
           <BadgeTier tier="premium" />
+          <p className={styles.nombre} style={{ color: paleta.dark }}>{nombreCompleto}</p>
         </div>
         {perfil.carne && (
           <p className={styles.carne} style={{ color: `${paleta.dark}99` }}>
