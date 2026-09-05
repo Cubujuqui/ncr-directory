@@ -31,13 +31,6 @@
   font-weight: 400;
 }
 
-.credito {
-  color: rgba(16,0,76,0.4);
-  font-size: 12px;
-  font-weight: 400;
-  margin: 0;
-}
-
 @media (min-width: 768px) {
   .footer {
     padding: 16px 40px 32px;
