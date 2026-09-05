@@ -12,7 +12,7 @@ export default function SiteHeader() {
 
         <nav className={styles.nav}>
           <a href="/go/whatsapp/solicitar" className={styles.botonNutricionista}>
-            ¿Nutricionista? Clic aquí
+            ¿Eres nutricionista? Clic aquí
           </a>
         </nav>
       </div>
