@@ -1,8 +1,26 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './SiteHeader.module.css';
 
 export default function SiteHeader() {
+  const [menuAbierto, setMenuAbierto] = useState(false);
+
+  useEffect(() => {
+    if (!menuAbierto) return;
+    function manejarTecla(e: KeyboardEvent) {
+      if (e.key === 'Escape') setMenuAbierto(false);
+    }
+    window.addEventListener('keydown', manejarTecla);
+    return () => window.removeEventListener('keydown', manejarTecla);
+  }, [menuAbierto]);
+
+  function manejarFondoClick(e: React.MouseEvent<HTMLDivElement>) {
+    if (e.target === e.currentTarget) setMenuAbierto(false);
+  }
+
   return (
     <header className={styles.header}>
       <div className={styles.contenido}>
@@ -11,11 +29,25 @@ export default function SiteHeader() {
         </Link>
 
         <nav className={styles.nav}>
-          <a href="/go/whatsapp/solicitar" className={styles.botonNutricionista}>
+          <button onClick={() => setMenuAbierto(true)} className={styles.botonNutricionista}>
             ¿Eres nutricionista? Clic aquí
-          </a>
+          </button>
         </nav>
       </div>
+
+      {menuAbierto && (
+        <div className={styles.menuFondo} onClick={manejarFondoClick}>
+          <div className={styles.menuPanel}>
+            <p className={styles.menuTitulo}>¿Eres nutricionista?</p>
+            <a href="/go/whatsapp/solicitar" className={styles.menuOpcionSecundaria}>
+              Hablar con un humano
+            </a>
+            <Link href="/unirme" className={styles.menuOpcionPrimaria}>
+              Unirme
+            </Link>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
