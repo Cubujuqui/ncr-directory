@@ -1,25 +1,33 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './SiteHeader.module.css';
 
 export default function SiteHeader() {
   const [menuAbierto, setMenuAbierto] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!menuAbierto) return;
+
     function manejarTecla(e: KeyboardEvent) {
       if (e.key === 'Escape') setMenuAbierto(false);
     }
-    window.addEventListener('keydown', manejarTecla);
-    return () => window.removeEventListener('keydown', manejarTecla);
-  }, [menuAbierto]);
+    function manejarClickFuera(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuAbierto(false);
+      }
+    }
 
-  function manejarFondoClick(e: React.MouseEvent<HTMLDivElement>) {
-    if (e.target === e.currentTarget) setMenuAbierto(false);
-  }
+    window.addEventListener('keydown', manejarTecla);
+    document.addEventListener('mousedown', manejarClickFuera);
+    return () => {
+      window.removeEventListener('keydown', manejarTecla);
+      document.removeEventListener('mousedown', manejarClickFuera);
+    };
+  }, [menuAbierto]);
 
   return (
     <header className={styles.header}>
@@ -29,25 +37,24 @@ export default function SiteHeader() {
         </Link>
 
         <nav className={styles.nav}>
-          <button onClick={() => setMenuAbierto(true)} className={styles.botonNutricionista}>
-            ¿Eres nutricionista? Clic aquí
-          </button>
+          <div className={styles.menuContenedor} ref={menuRef}>
+            <button onClick={() => setMenuAbierto((v) => !v)} className={styles.botonNutricionista}>
+              ¿Eres nutricionista? Clic aquí
+            </button>
+
+            {menuAbierto && (
+              <div className={styles.menuDropdown}>
+                <a href="/go/whatsapp/solicitar" className={styles.menuOpcionSecundaria}>
+                  Hablar con un humano
+                </a>
+                <Link href="/unirme" className={styles.menuOpcionPrimaria}>
+                  Unirme
+                </Link>
+              </div>
+            )}
+          </div>
         </nav>
       </div>
-
-      {menuAbierto && (
-        <div className={styles.menuFondo} onClick={manejarFondoClick}>
-          <div className={styles.menuPanel}>
-            <p className={styles.menuTitulo}>¿Eres nutricionista?</p>
-            <a href="/go/whatsapp/solicitar" className={styles.menuOpcionSecundaria}>
-              Hablar con un humano
-            </a>
-            <Link href="/unirme" className={styles.menuOpcionPrimaria}>
-              Unirme
-            </Link>
-          </div>
-        </div>
-      )}
     </header>
   );
 }
