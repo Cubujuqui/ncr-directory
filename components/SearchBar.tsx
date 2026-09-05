@@ -108,7 +108,7 @@ export default function SearchBar({ especialidades }: { especialidades: string[]
         <div ref={wrapperRef} className={styles.especialidadWrapper}>
           <div onClick={() => setDropdownAbierto((v) => !v)} className={styles.especialidadBoton}>
             <span className={`${styles.especialidadTexto} ${especialidad ? styles.especialidadTextoActivo : ''}`}>
-              {especialidad || 'Todas las especialidades'}
+              {especialidad || 'Todos los nutricionistas'}
             </span>
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#8a908d" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
           </div>
@@ -119,7 +119,7 @@ export default function SearchBar({ especialidades }: { especialidades: string[]
                 onClick={() => elegirEspecialidad('')}
                 className={`${styles.opcionEspecialidad} ${styles.opcionEspecialidadVacia}`}
               >
-                Todas las especialidades
+                Todos los nutricionistas
               </div>
               {especialidades.map((esp) => (
                 <div
