@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { buscarPerfilPorCarne, actualizarCampoPerfil, actualizarEncuadreFoto } from '../actions';
+import { buscarPerfilPorCarne, actualizarCampoPerfil, actualizarEncuadreFoto, actualizarFotoPerfil } from '../actions';
+import { supabase } from '@/lib/supabase';
 
-const CAMPOS: { valor: string; etiqueta: string; tipo: 'texto' | 'booleano' | 'tier' | 'foto' | 'textarea' }[] = [
+const CAMPOS: { valor: string; etiqueta: string; tipo: 'texto' | 'booleano' | 'tier' | 'foto' | 'foto_subir' | 'textarea' }[] = [
   { valor: 'whatsapp', etiqueta: 'WhatsApp', tipo: 'texto' },
   { valor: 'email', etiqueta: 'Email', tipo: 'texto' },
   { valor: 'facebook', etiqueta: 'Facebook', tipo: 'texto' },
@@ -14,6 +15,7 @@ const CAMPOS: { valor: string; etiqueta: string; tipo: 'texto' | 'booleano' | 't
   { valor: 'especialidad_manual', etiqueta: 'Especialidad', tipo: 'texto' },
   { valor: 'nombre_preferido', etiqueta: 'Nombre preferido', tipo: 'texto' },
   { valor: 'acerca_de', etiqueta: 'Acerca de (biografía corta)', tipo: 'textarea' },
+  { valor: 'foto_subir', etiqueta: 'Foto: subir nueva', tipo: 'foto_subir' },
   { valor: 'foto_encuadre', etiqueta: 'Foto: encuadre y zoom', tipo: 'foto' },
   { valor: 'punto_contacto_primario', etiqueta: 'Canal de contacto principal', tipo: 'tier' },
   { valor: 'tier', etiqueta: 'Nivel', tipo: 'tier' },
@@ -38,6 +40,8 @@ export default function EditorPerfil() {
   const [posYNuevo, setPosYNuevo] = useState(50);
   const [posXNuevo, setPosXNuevo] = useState(50);
   const [zoomNuevo, setZoomNuevo] = useState(100);
+  const [archivoFoto, setArchivoFoto] = useState<File | null>(null);
+  const [previaFoto, setPreviaFoto] = useState<string | null>(null);
   const [guardando, setGuardando] = useState(false);
   const [mensaje, setMensaje] = useState<{ tipo: 'exito' | 'error'; texto: string } | null>(null);
 
@@ -54,10 +58,13 @@ export default function EditorPerfil() {
 
   const campoInfo = CAMPOS.find((c) => c.valor === campoElegido)!;
   const esCampoFoto = campoElegido === 'foto_encuadre';
+  const esCampoSubirFoto = campoElegido === 'foto_subir';
 
   function elegirCampo(nuevoCampo: string) {
     setCampoElegido(nuevoCampo);
     setMensaje(null);
+    setArchivoFoto(null);
+    setPreviaFoto(null);
     if (nuevoCampo === 'foto_encuadre') {
       setPosYNuevo(perfil?.foto_posicion_y ?? 50);
       setPosXNuevo(perfil?.foto_posicion_x ?? 50);
@@ -66,6 +73,13 @@ export default function EditorPerfil() {
     } else {
       setValorNuevo('');
     }
+  }
+
+  function elegirArchivo(archivo: File | null) {
+    setArchivoFoto(archivo);
+    setMensaje(null);
+    if (previaFoto) URL.revokeObjectURL(previaFoto);
+    setPreviaFoto(archivo ? URL.createObjectURL(archivo) : null);
   }
 
   async function guardar() {
@@ -90,6 +104,26 @@ export default function EditorPerfil() {
       if (campoElegido === 'foto_encuadre') {
         await actualizarEncuadreFoto(perfil.carne, posYNuevo, posXNuevo, zoomNuevo);
         setMensaje({ tipo: 'exito', texto: 'Encuadre de foto actualizado correctamente.' });
+      } else if (campoElegido === 'foto_subir') {
+        if (!archivoFoto) throw new Error('No hay archivo seleccionado');
+        const extension = archivoFoto.name.split('.').pop();
+        const ruta = `${perfil.carne}-${Date.now()}.${extension}`;
+
+        const { error: errorSubida } = await supabase.storage
+          .from('fotos-perfil')
+          .upload(ruta, archivoFoto);
+
+        if (errorSubida) throw errorSubida;
+
+        const { data: urlData } = supabase.storage.from('fotos-perfil').getPublicUrl(ruta);
+        await actualizarFotoPerfil(perfil.carne, urlData.publicUrl);
+        setMensaje({ tipo: 'exito', texto: 'Foto subida correctamente. Ajustá el encuadre si hace falta.' });
+        setCampoElegido('foto_encuadre');
+        setArchivoFoto(null);
+        setPreviaFoto(null);
+        setPosYNuevo(50);
+        setPosXNuevo(50);
+        setZoomNuevo(100);
       } else {
         const valorAEnviar = campoInfo.tipo === 'booleano' ? valorNuevo === 'true' : valorNuevo;
         await actualizarCampoPerfil(perfil.carne, campoElegido, valorAEnviar);
@@ -105,7 +139,7 @@ export default function EditorPerfil() {
     }
   }
 
-  const puedeGuardar = esCampoFoto ? !!perfil?.foto_url : valorNuevo !== '';
+  const puedeGuardar = esCampoSubirFoto ? !!archivoFoto : esCampoFoto ? !!perfil?.foto_url : valorNuevo !== '';
 
   return (
     <div>
@@ -147,7 +181,44 @@ export default function EditorPerfil() {
             ))}
           </select>
 
-          {esCampoFoto ? (
+          {esCampoSubirFoto ? (
+            <div style={{ marginBottom: '16px' }}>
+              {perfil.foto_url && !previaFoto && (
+                <>
+                  <p style={{ fontSize: '13px', color: 'rgba(16,0,76,0.5)', marginBottom: '10px' }}>
+                    Foto actual:
+                  </p>
+                  <div style={{ width: '120px', aspectRatio: '1 / 1', overflow: 'hidden', borderRadius: '10px', background: '#E4E0FB', marginBottom: '16px' }}>
+                    <img src={perfil.foto_url} alt="Foto actual" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                  </div>
+                </>
+              )}
+
+              {previaFoto && (
+                <>
+                  <p style={{ fontSize: '13px', color: 'rgba(16,0,76,0.5)', marginBottom: '10px' }}>
+                    Vista previa de la nueva foto:
+                  </p>
+                  <div style={{ width: '160px', aspectRatio: '1 / 1', overflow: 'hidden', borderRadius: '10px', background: '#E4E0FB', marginBottom: '16px' }}>
+                    <img src={previaFoto} alt="Vista previa" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                  </div>
+                </>
+              )}
+
+              <label style={{ display: 'block', fontSize: '14px', fontWeight: 700, marginBottom: '6px' }}>
+                {perfil.foto_url ? 'Reemplazar foto' : 'Subir foto'}
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => elegirArchivo(e.target.files?.[0] ?? null)}
+                style={{ width: '100%', fontSize: '14px', fontFamily: 'inherit' }}
+              />
+              <p style={{ fontSize: '12px', color: 'rgba(16,0,76,0.5)', margin: '8px 0 0' }}>
+                Al guardar, el encuadre y zoom se reinician — vas a poder ajustarlos justo después.
+              </p>
+            </div>
+          ) : esCampoFoto ? (
             perfil.foto_url ? (
               <div style={{ marginBottom: '16px' }}>
                 <p style={{ fontSize: '13px', color: 'rgba(16,0,76,0.5)', marginBottom: '10px' }}>
