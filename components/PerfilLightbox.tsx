@@ -44,6 +44,8 @@ export default function PerfilLightbox({ perfil, onCerrar }: { perfil: PerfilCom
               src={perfil.fotoUrl}
               alt={nombreCompleto}
               className={styles.foto}
+              draggable={false}
+              onContextMenu={(e) => e.preventDefault()}
               style={{
                 objectPosition: `${perfil.fotoPosicionX}% ${perfil.fotoPosicionY}%`,
                 transform: `scale(${perfil.fotoZoom / 100})`,
