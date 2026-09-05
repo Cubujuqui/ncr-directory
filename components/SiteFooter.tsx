@@ -23,7 +23,6 @@ export default function SiteFooter() {
         />
       </div>
       <Link href="/aviso-legal" className={styles.avisoLegal}>Información Importante</Link>
-      <p className={styles.credito}>Construido en conjunto con Claude (Anthropic)</p>
     </footer>
   );
 }
