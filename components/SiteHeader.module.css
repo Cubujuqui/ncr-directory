@@ -40,12 +40,15 @@
   border: 1.5px solid rgba(16,0,76,0.55);
   border-radius: 999px;
   padding: 8px 16px;
+  background: transparent;
   color: #10004C;
   text-decoration: none;
   font-size: 13px;
   font-weight: 700;
+  font-family: inherit;
   text-align: center;
   white-space: nowrap;
+  cursor: pointer;
 }
 
 @media (min-width: 768px) {
@@ -57,4 +60,67 @@
     padding: 9px 20px;
     font-size: 14px;
   }
+}
+
+.menuFondo {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.menuPanel {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  width: 100%;
+  max-width: 300px;
+  box-sizing: border-box;
+}
+
+.menuTitulo {
+  font-weight: 700;
+  font-size: 16px;
+  color: #10004C;
+  margin: 0 0 16px;
+  text-align: center;
+}
+
+.menuOpcionSecundaria {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+  background: #fff;
+  color: #7370E0;
+  border: 1.5px solid #7370E0;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.menuOpcionPrimaria {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+  background: #7370E0;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
 }
