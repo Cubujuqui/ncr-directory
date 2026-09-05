@@ -32,6 +32,11 @@
   margin-left: auto;
 }
 
+.menuContenedor {
+  position: relative;
+  display: inline-block;
+}
+
 .botonNutricionista {
   display: inline-flex;
   align-items: center;
@@ -62,32 +67,17 @@
   }
 }
 
-.menuFondo {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.menuPanel {
+.menuDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
   background: #fff;
-  border-radius: 16px;
-  padding: 24px;
-  width: 100%;
-  max-width: 300px;
+  border-radius: 12px;
+  padding: 16px;
+  width: 220px;
   box-sizing: border-box;
-}
-
-.menuTitulo {
-  font-weight: 700;
-  font-size: 16px;
-  color: #10004C;
-  margin: 0 0 16px;
-  text-align: center;
+  box-shadow: 0 8px 24px rgba(16, 0, 76, 0.18);
+  z-index: 60;
 }
 
 .menuOpcionSecundaria {
