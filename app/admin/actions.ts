@@ -271,3 +271,22 @@ export async function actualizarEncuadreFoto(carne: string, posicionY: number, p
   revalidatePath('/directorio');
   revalidatePath('/');
 }
+
+export async function actualizarFotoPerfil(carne: string, fotoUrl: string) {
+  await checkAuth();
+
+  const { error } = await supabaseAdmin
+    .from('perfiles')
+    .update({
+      foto_url: fotoUrl,
+      foto_posicion_y: 50,
+      foto_posicion_x: 50,
+      foto_zoom: 100,
+    })
+    .eq('carne', carne.trim());
+
+  if (error) throw new Error('No se pudo actualizar');
+
+  revalidatePath('/directorio');
+  revalidatePath('/');
+}
