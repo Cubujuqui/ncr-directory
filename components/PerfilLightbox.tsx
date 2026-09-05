@@ -62,7 +62,7 @@ export default function PerfilLightbox({ perfil, onCerrar }: { perfil: PerfilCom
             <BadgeTier tier={perfil.tier} />
             <p className={styles.nombre}>{nombreCompleto}</p>
           </div>
-          {perfil.carne && <p className={styles.carne}>Carné {perfil.carne}</p>}
+          {perfil.carne && <p className={styles.carne} style={{ marginLeft: 24 }}>Carné {perfil.carne}</p>}
 
           {perfil.aniosExperiencia !== null && (
             <p className={styles.lineaIcono}>
