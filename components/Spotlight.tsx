@@ -40,7 +40,7 @@ function PremiumCard({ perfil, paleta, onAbrir }: { perfil: PerfilCompleto; pale
           <p className={styles.nombre} style={{ color: paleta.dark }}>{nombreCompleto}</p>
         </div>
         {perfil.carne && (
-          <p className={styles.carne} style={{ color: `${paleta.dark}99` }}>
+          <p className={styles.carne} style={{ color: `${paleta.dark}99`, marginLeft: 24 }}>
             Carné {perfil.carne}
           </p>
         )}
