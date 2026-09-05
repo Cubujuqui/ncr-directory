@@ -51,7 +51,7 @@ export default function DirectorioGrilla({ resultados }: { resultados: PerfilCom
                 <BadgeTier tier={perfil.tier} />
                 <p className={styles.nombre}>{perfil.nombre} {perfil.primerApellido} {perfil.segundoApellido}</p>
               </div>
-              <p className={styles.carne}>Carné {perfil.carne}</p>
+              <p className={styles.carne} style={{ marginLeft: perfil.tier === 'free' ? 0 : 24 }}>Carné {perfil.carne}</p>
               {perfil.aniosExperiencia !== null && (
                 <p className={styles.lineaIcono}>
                   {ICONOS_PERFIL.experiencia('#10004C')}
