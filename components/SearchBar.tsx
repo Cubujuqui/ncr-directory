@@ -63,7 +63,7 @@ export default function SearchBar({ especialidades }: { especialidades: string[]
             onClick={() => setPanelAbierto((v) => !v)}
             className={`${styles.botonFiltros} ${filtrosActivos > 0 ? styles.botonFiltrosActivo : ''}`}
           >
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#7370E0" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#7370E0" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
               <line x1="4" y1="6" x2="20" y2="6"></line>
               <circle cx="14" cy="6" r="2" fill="#7370E0"></circle>
               <line x1="4" y1="12" x2="20" y2="12"></line>
@@ -71,7 +71,22 @@ export default function SearchBar({ especialidades }: { especialidades: string[]
               <line x1="4" y1="18" x2="20" y2="18"></line>
               <circle cx="16" cy="18" r="2" fill="#7370E0"></circle>
             </svg>
-            Filtros{filtrosActivos > 0 ? ` (${filtrosActivos})` : ''}
+            <span className={styles.botonFiltrosTexto}>
+              {filtrosActivos > 0 ? `Filtros (${filtrosActivos})` : 'Todos los nutricionistas'}
+            </span>
+            <svg
+              viewBox="0 0 24 24"
+              width="18"
+              height="18"
+              fill="none"
+              stroke="#8a908d"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{ flexShrink: 0, transform: panelAbierto ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }}
+            >
+              <path d="M6 9l6 6 6-6"></path>
+            </svg>
           </button>
 
           {panelAbierto && (
@@ -149,10 +164,6 @@ export default function SearchBar({ especialidades }: { especialidades: string[]
               </label>
             </div>
           )}
-        </div>
-
-        <div className={styles.displayBar}>
-          {filtrosActivos > 0 ? 'Filtros aplicados' : 'Todos los nutricionistas'}
         </div>
 
         <button onClick={buscar} className={styles.botonBuscar}>
