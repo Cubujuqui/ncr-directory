@@ -10,10 +10,11 @@ import styles from './page.module.css';
 export default async function Directorio({
   searchParams,
 }: {
-  searchParams: Promise<{ especialidad?: string; online?: string; domicilio?: string; consultorio?: string; premium?: string; grupal?: string; empresas?: string; ingles?: string }>;
+  searchParams: Promise<{ especialidad?: string | string[]; online?: string; domicilio?: string; consultorio?: string; premium?: string; grupal?: string; empresas?: string; ingles?: string }>;
 }) {
   const { especialidad, online, domicilio, consultorio, premium, grupal, empresas, ingles } = await searchParams;
-  const { resultados, total } = await ordenarResultadosDirectorio(especialidad, 50, {
+  const especialidadesArr = especialidad ? (Array.isArray(especialidad) ? especialidad : [especialidad]) : [];
+  const { resultados, total } = await ordenarResultadosDirectorio(especialidadesArr, 50, {
     online: online === '1',
     domicilio: domicilio === '1',
     consultorio: consultorio === '1',
@@ -32,7 +33,7 @@ export default async function Directorio({
         </Link>
 
         <h1 className={styles.titulo}>
-          {especialidad ? especialidad : 'Todos los nutricionistas activos'}
+          {especialidadesArr.length > 0 ? especialidadesArr.join(', ') : 'Todos los nutricionistas activos'}
         </h1>
 
         <FiltrosDirectorio />
