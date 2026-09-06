@@ -16,28 +16,38 @@
 
 .filtrosWrapper {
   position: relative;
-  flex-shrink: 0;
+  flex: 1;
+  min-width: 0;
 }
 
 .botonFiltros {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 10px;
   border: none;
   cursor: pointer;
   background: #ffffff;
   color: #10004C;
-  border-radius: 999px;
-  padding: 0 16px;
+  border-radius: 12px;
+  padding: 0 14px;
   height: 46px;
+  width: 100%;
   font-family: inherit;
-  font-size: 14px;
-  font-weight: 700;
-  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 600;
 }
 
 .botonFiltrosActivo {
   background: #E4E0FB;
+}
+
+.botonFiltrosTexto {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .panel {
@@ -102,23 +112,6 @@
   cursor: pointer;
 }
 
-.displayBar {
-  flex: 1;
-  min-width: 0;
-  background: #ffffff;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  padding: 0 14px;
-  height: 46px;
-  color: #10004C;
-  font-size: 15px;
-  font-weight: 500;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .botonBuscar {
   display: inline-flex;
   align-items: center;
@@ -144,11 +137,7 @@
   }
 
   .botonFiltros {
-    padding: 0 20px;
-    font-size: 15px;
-  }
-
-  .displayBar {
+    padding: 0 18px;
     font-size: 16px;
   }
 
