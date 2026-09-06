@@ -131,14 +131,14 @@ async function getPerfilesElegibles(): Promise<PerfilCompleto[]> {
 }
 
 export async function ordenarResultadosDirectorio(
-  especialidad?: string,
+  especialidad?: string[],
   maxTotal = 50,
   filtros?: { online?: boolean; domicilio?: boolean; consultorio?: boolean; premiumSolamente?: boolean; grupal?: boolean; serviciosEmpresas?: boolean; hablaIngles?: boolean }
 ): Promise<{ resultados: PerfilCompleto[]; total: number }> {
   let perfiles = await getPerfilesElegibles();
 
-  if (especialidad) {
-    perfiles = perfiles.filter((p) => p.especialidad === especialidad);
+  if (especialidad && especialidad.length > 0) {
+    perfiles = perfiles.filter((p) => p.especialidad && especialidad.includes(p.especialidad));
   }
 
   if (filtros?.online || filtros?.domicilio || filtros?.consultorio) {
