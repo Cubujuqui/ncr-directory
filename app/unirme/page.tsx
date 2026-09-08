@@ -24,6 +24,20 @@ export default function Unirme() {
   const [fotoPerfil, setFotoPerfil] = useState<File | null>(null);
   const [acercaDeLength, setAcercaDeLength] = useState(0);
   const [tier, setTier] = useState('');
+  const [referidoValor, setReferidoValor] = useState('');
+
+  function formatearCarne(valor: string): string {
+    const digitos = valor.replace(/\D/g, '').slice(0, 6);
+    if (digitos.length <= 4) return digitos;
+    return `${digitos.slice(0, 4)}-${digitos.slice(4)}`;
+  }
+
+  function manejarEnterCarne(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      buscarNombre();
+    }
+  }
 
   async function buscarNombre() {
     if (!carneValor.trim()) return;
@@ -159,6 +173,7 @@ export default function Unirme() {
       referido_por: referidoPor,
       referido_timestamp: referidoPor ? new Date().toISOString() : null,
       consentimiento: true,
+      consentimiento_timestamp: new Date().toISOString(),
       carne_foto_url: rutaFoto,
       foto_url: fotoPerfilUrl,
     });
@@ -222,7 +237,8 @@ export default function Unirme() {
                 name="carne"
                 required
                 value={carneValor}
-                onChange={(e) => { setCarneValor(e.target.value); setBusquedaHecha(false); }}
+                onChange={(e) => { setCarneValor(formatearCarne(e.target.value)); setBusquedaHecha(false); }}
+                onKeyDown={manejarEnterCarne}
                 onBlur={buscarNombre}
                 className={`${styles.input} ${styles.inputCarne}`}
                 placeholder="Ej. 0000-00"
@@ -267,7 +283,13 @@ export default function Unirme() {
 
           <div className={styles.seccion}>
             <label className={styles.etiqueta}>¿Alguien te refirió? (su número de carné)</label>
-            <input name="referido_por" className={styles.input} placeholder="Opcional" />
+            <input
+              name="referido_por"
+              value={referidoValor}
+              onChange={(e) => setReferidoValor(formatearCarne(e.target.value))}
+              className={styles.input}
+              placeholder="Opcional. Ej. 0000-00"
+            />
           </div>
 
           <div className={styles.seccion}>
@@ -338,27 +360,27 @@ export default function Unirme() {
 
           <div className={styles.seccion}>
             <label className={styles.etiqueta}>Facebook</label>
-            <input name="facebook" className={styles.input} placeholder="usuario o nombre de página" />
+            <input name="facebook" className={styles.input} placeholder="Opcional. Usuario o nombre de página" />
           </div>
 
           <div className={styles.seccion}>
             <label className={styles.etiqueta}>Instagram</label>
-            <input name="instagram" className={styles.input} placeholder="usuario, sin @" />
+            <input name="instagram" className={styles.input} placeholder="Opcional. Usuario, sin @" />
           </div>
 
           <div className={styles.seccion}>
             <label className={styles.etiqueta}>TikTok</label>
-            <input name="tiktok" className={styles.input} placeholder="usuario, sin @" />
+            <input name="tiktok" className={styles.input} placeholder="Opcional. Usuario, sin @" />
           </div>
 
           <div className={styles.seccion}>
             <label className={styles.etiqueta}>YouTube</label>
-            <input name="youtube" className={styles.input} placeholder="Enlace al canal" />
+            <input name="youtube" className={styles.input} placeholder="Opcional. Enlace al canal" />
           </div>
 
           <div className={styles.seccion}>
             <label className={styles.etiqueta}>LinkedIn</label>
-            <input name="linkedin" className={styles.input} placeholder="Enlace al perfil" />
+            <input name="linkedin" className={styles.input} placeholder="Opcional. Enlace al perfil" />
           </div>
 
           <div className={styles.seccion}>
