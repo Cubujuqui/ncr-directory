@@ -72,7 +72,7 @@ export default function TarjetasPrecio() {
 
         <div className={styles.cajaFeatures}>
           <ul className={styles.listaFeatures}>
-            <li>Todo lo de Contacto</li>
+            <li>Todo lo de Contacto, más...</li>
             <li>Spotlight en portada</li>
             <li>Foto de perfil e Instagram, TikTok, YouTube</li>
           </ul>
@@ -110,7 +110,7 @@ export default function TarjetasPrecio() {
 
         <div className={styles.cajaFeatures}>
           <ul className={styles.listaFeatures}>
-            <li>Todo lo de Gratis</li>
+            <li>Todo lo de Gratis, más...</li>
             <li>Botón de WhatsApp</li>
             <li>Modalidades de atención</li>
           </ul>
