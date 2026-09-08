@@ -22,82 +22,94 @@ export default function TarjetasPrecio() {
   return (
     <div className={styles.grilla}>
       <div className={styles.tarjeta}>
-        <p className={styles.tarjetaNombre}>Gratis</p>
-        <p className={styles.tarjetaDescripcion}>Aparecés en el directorio con tu información básica.</p>
-        <p className={styles.tarjetaPrecio}>₡0</p>
-        <ul className={styles.listaFeatures}>
-          <li>Perfil en el directorio</li>
-          <li>Especialidad visible</li>
-        </ul>
+        <div className={styles.tarjetaEncabezado}>
+          <p className={styles.tarjetaNombre}>Gratis</p>
+          <p className={styles.tarjetaDescripcion}>Aparecés en el directorio con tu información básica.</p>
+          <p className={styles.tarjetaPrecio}>₡0</p>
+        </div>
+        <div className={styles.cajaFeatures}>
+          <ul className={styles.listaFeatures}>
+            <li>Perfil en el directorio</li>
+            <li>Especialidad visible</li>
+          </ul>
+        </div>
       </div>
 
       <div className={`${styles.tarjeta} ${styles.tarjetaDestacada}`}>
         <span className={styles.insignia}>Recomendado</span>
-        <p className={styles.tarjetaNombre}>Premium</p>
-        <p className={styles.tarjetaDescripcion}>Máxima visibilidad, aparecés destacado en la portada.</p>
+        <div className={styles.tarjetaEncabezado}>
+          <p className={styles.tarjetaNombre}>Premium</p>
+          <p className={styles.tarjetaDescripcion}>Máxima visibilidad, aparecés destacado en la portada.</p>
 
-        <div className={styles.toggle}>
-          <button
-            className={!premiumAnual ? styles.toggleOpcionActiva : styles.toggleOpcion}
-            onClick={() => setPremiumAnual(false)}
-          >
-            Mensual
-          </button>
-          <button
-            className={premiumAnual ? styles.toggleOpcionActiva : styles.toggleOpcion}
-            onClick={() => setPremiumAnual(true)}
-          >
-            Anual
-          </button>
+          <div className={styles.toggle}>
+            <button
+              className={!premiumAnual ? styles.toggleOpcionActiva : styles.toggleOpcion}
+              onClick={() => setPremiumAnual(false)}
+            >
+              Mensual
+            </button>
+            <button
+              className={premiumAnual ? styles.toggleOpcionActiva : styles.toggleOpcion}
+              onClick={() => setPremiumAnual(true)}
+            >
+              Anual
+            </button>
+          </div>
+
+          <p className={styles.tarjetaPrecio}>
+            {premiumAnual ? formatearColones(PREMIUM_ANUAL) : formatearColones(PREMIUM_MENSUAL)}
+            <span className={styles.tarjetaPrecioUnidad}>{premiumAnual ? ' / año' : ' / mes'}</span>
+          </p>
+          {premiumAnual && (
+            <p className={styles.ahorro}>Ahorrás {formatearColones(ahorroPremium)} al año</p>
+          )}
         </div>
 
-        <p className={styles.tarjetaPrecio}>
-          {premiumAnual ? formatearColones(PREMIUM_ANUAL) : formatearColones(PREMIUM_MENSUAL)}
-          <span className={styles.tarjetaPrecioUnidad}>{premiumAnual ? ' / año' : ' / mes'}</span>
-        </p>
-        {premiumAnual && (
-          <p className={styles.ahorro}>Ahorrás {formatearColones(ahorroPremium)} al año</p>
-        )}
-
-        <ul className={styles.listaFeatures}>
-          <li>Todo lo de Contacto</li>
-          <li>Spotlight en portada</li>
-          <li>Foto de perfil e Instagram, TikTok, YouTube</li>
-        </ul>
+        <div className={styles.cajaFeatures}>
+          <ul className={styles.listaFeatures}>
+            <li>Todo lo de Contacto</li>
+            <li>Spotlight en portada</li>
+            <li>Foto de perfil e Instagram, TikTok, YouTube</li>
+          </ul>
+        </div>
       </div>
 
       <div className={styles.tarjeta}>
-        <p className={styles.tarjetaNombre}>Contacto</p>
-        <p className={styles.tarjetaDescripcion}>Incluye enlace directo a tu WhatsApp.</p>
+        <div className={styles.tarjetaEncabezado}>
+          <p className={styles.tarjetaNombre}>Contacto</p>
+          <p className={styles.tarjetaDescripcion}>Incluye enlace directo a tu WhatsApp.</p>
 
-        <div className={styles.toggle}>
-          <button
-            className={!contactoAnual ? styles.toggleOpcionActiva : styles.toggleOpcion}
-            onClick={() => setContactoAnual(false)}
-          >
-            Mensual
-          </button>
-          <button
-            className={contactoAnual ? styles.toggleOpcionActiva : styles.toggleOpcion}
-            onClick={() => setContactoAnual(true)}
-          >
-            Anual
-          </button>
+          <div className={styles.toggle}>
+            <button
+              className={!contactoAnual ? styles.toggleOpcionActiva : styles.toggleOpcion}
+              onClick={() => setContactoAnual(false)}
+            >
+              Mensual
+            </button>
+            <button
+              className={contactoAnual ? styles.toggleOpcionActiva : styles.toggleOpcion}
+              onClick={() => setContactoAnual(true)}
+            >
+              Anual
+            </button>
+          </div>
+
+          <p className={styles.tarjetaPrecio}>
+            {contactoAnual ? formatearColones(CONTACTO_ANUAL) : formatearColones(CONTACTO_MENSUAL)}
+            <span className={styles.tarjetaPrecioUnidad}>{contactoAnual ? ' / año' : ' / mes'}</span>
+          </p>
+          {contactoAnual && (
+            <p className={styles.ahorro}>Ahorrás {formatearColones(ahorroContacto)} al año</p>
+          )}
         </div>
 
-        <p className={styles.tarjetaPrecio}>
-          {contactoAnual ? formatearColones(CONTACTO_ANUAL) : formatearColones(CONTACTO_MENSUAL)}
-          <span className={styles.tarjetaPrecioUnidad}>{contactoAnual ? ' / año' : ' / mes'}</span>
-        </p>
-        {contactoAnual && (
-          <p className={styles.ahorro}>Ahorrás {formatearColones(ahorroContacto)} al año</p>
-        )}
-
-        <ul className={styles.listaFeatures}>
-          <li>Todo lo de Gratis</li>
-          <li>Botón de WhatsApp</li>
-          <li>Modalidades de atención</li>
-        </ul>
+        <div className={styles.cajaFeatures}>
+          <ul className={styles.listaFeatures}>
+            <li>Todo lo de Gratis</li>
+            <li>Botón de WhatsApp</li>
+            <li>Modalidades de atención</li>
+          </ul>
+        </div>
       </div>
     </div>
   );
