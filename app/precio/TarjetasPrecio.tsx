@@ -25,6 +25,11 @@ export default function TarjetasPrecio() {
         <div className={styles.tarjetaEncabezado}>
           <p className={styles.tarjetaNombre}>Gratis</p>
           <p className={styles.tarjetaDescripcion}>Aparecés en el directorio con tu información básica.</p>
+
+          <div className={styles.toggleEstatico}>
+            <span className={styles.toggleEstaticoTexto}>Gratis para siempre</span>
+          </div>
+
           <p className={styles.tarjetaPrecio}>₡0</p>
         </div>
         <div className={styles.cajaFeatures}>
