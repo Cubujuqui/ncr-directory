@@ -183,7 +183,7 @@ export default function Unirme() {
     const consentimientoTimestamp = new Date().toISOString();
     const textoConsentimientoPlano = generarTextoConsentimientoPlano(window.location.origin);
 
-    const { data: nuevaSolicitud, error } = await supabase.from('solicitudes').insert({
+    const { error } = await supabase.from('solicitudes').insert({
       carne,
       nombre_preferido: nombrePreferido,
       tier: data.get('tier') as string,
@@ -211,7 +211,7 @@ export default function Unirme() {
       consentimiento_timestamp: consentimientoTimestamp,
       carne_foto_url: rutaFoto,
       foto_url: fotoPerfilUrl,
-    }).select('id').single();
+    });
     if (error) {
       setEstado('error');
       setErrorMsg('Hubo un problema al enviar el formulario. Intentá de nuevo en un momento.');
@@ -219,11 +219,16 @@ export default function Unirme() {
       return;
     }
 
+    // No se puede pedir de vuelta el id de la solicitud recién creada: la
+    // política RLS de `solicitudes` solo permite INSERT (no SELECT) para el
+    // rol público, y Postgres exige el permiso de SELECT para poder devolver
+    // la fila insertada. El vínculo entre ambas tablas queda disponible de
+    // todas formas mediante `carne` + `consentimiento_timestamp`, que son
+    // idénticos en ambos registros.
     const { error: errorConsentimiento } = await supabase.from('registro_consentimientos').insert({
       carne,
       timestamp: consentimientoTimestamp,
       texto_consentimiento: textoConsentimientoPlano,
-      solicitud_id: nuevaSolicitud.id,
     });
     if (errorConsentimiento) {
       console.error('No se pudo guardar el registro legal de consentimiento:', errorConsentimiento);
