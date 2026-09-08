@@ -10,6 +10,38 @@ import styles from './page.module.css';
 // Para reactivar: cambiar a true.
 const MOSTRAR_FOTO_CARNE = false;
 
+type ParteConsentimiento = { texto: string; href?: string; esLinkInterno?: boolean };
+
+// FUENTE ÚNICA del texto de consentimiento. Se usa tanto para el render visual
+// en pantalla como para el registro legal permanente guardado en
+// `registro_consentimientos`. Si se edita este contenido, ambos lugares se
+// actualizan automáticamente — no existe una segunda copia que mantener
+// sincronizada manualmente.
+const CONSENTIMIENTO_PARTES: ParteConsentimiento[] = [
+  { texto: 'Entiendo que: 1) Los datos provistos (WhatsApp, redes sociales, email, foto de perfil) serán utilizados para redirigir clientes potenciales hacia los canales que agregué. 2) El sitio utiliza tecnología para proteger la privacidad de mis datos de acuerdo a la legislación local y mejores prácticas disponibles. 3) Estoy de acuerdo en que los datos provistos se usen según lo descrito en este espacio y en ' },
+  { texto: 'Información Importante', href: '/aviso-legal', esLinkInterno: true },
+  { texto: '. ¿Dudas? ' },
+  { texto: 'Escribir aquí', href: '/go/whatsapp/solicitar', esLinkInterno: false },
+  { texto: '. *' },
+];
+
+function renderConsentimiento() {
+  return CONSENTIMIENTO_PARTES.map((parte, i) => {
+    if (!parte.href) return <span key={i}>{parte.texto}</span>;
+    if (parte.esLinkInterno) {
+      return <Link key={i} href={parte.href} className={styles.enlaceConsentimiento}>{parte.texto}</Link>;
+    }
+    return <a key={i} href={parte.href} className={styles.enlaceConsentimiento}>{parte.texto}</a>;
+  });
+}
+
+function generarTextoConsentimientoPlano(origen: string): string {
+  return CONSENTIMIENTO_PARTES.map((parte) => {
+    if (!parte.href) return parte.texto;
+    return `${parte.texto} (${origen}${parte.href})`;
+  }).join('');
+}
+
 export default function Unirme() {
   const [estado, setEstado] = useState<'idle' | 'enviando' | 'exito' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
@@ -148,7 +180,10 @@ export default function Unirme() {
       fotoPerfilUrl = urlData.publicUrl;
     }
 
-    const { error } = await supabase.from('solicitudes').insert({
+    const consentimientoTimestamp = new Date().toISOString();
+    const textoConsentimientoPlano = generarTextoConsentimientoPlano(window.location.origin);
+
+    const { data: nuevaSolicitud, error } = await supabase.from('solicitudes').insert({
       carne,
       nombre_preferido: nombrePreferido,
       tier: data.get('tier') as string,
@@ -173,15 +208,25 @@ export default function Unirme() {
       referido_por: referidoPor,
       referido_timestamp: referidoPor ? new Date().toISOString() : null,
       consentimiento: true,
-      consentimiento_timestamp: new Date().toISOString(),
+      consentimiento_timestamp: consentimientoTimestamp,
       carne_foto_url: rutaFoto,
       foto_url: fotoPerfilUrl,
-    });
+    }).select('id').single();
     if (error) {
       setEstado('error');
       setErrorMsg('Hubo un problema al enviar el formulario. Intentá de nuevo en un momento.');
       console.error(error);
       return;
+    }
+
+    const { error: errorConsentimiento } = await supabase.from('registro_consentimientos').insert({
+      carne,
+      timestamp: consentimientoTimestamp,
+      texto_consentimiento: textoConsentimientoPlano,
+      solicitud_id: nuevaSolicitud.id,
+    });
+    if (errorConsentimiento) {
+      console.error('No se pudo guardar el registro legal de consentimiento:', errorConsentimiento);
     }
 
     setEstado('exito');
@@ -442,8 +487,7 @@ export default function Unirme() {
           <div className={`${styles.seccion} ${styles.cajaConsentimiento}`}>
             <label className={styles.consentimientoLabel}>
               <input type="checkbox" name="consentimiento" required className={styles.checkboxConsentimiento} />
-              <span>
-                Entiendo que: 1) Los datos provistos (WhatsApp, redes sociales, email, foto de perfil) serán utilizados para redirigir clientes potenciales hacia los canales que agregué. 2) El sitio utiliza tecnología para proteger la privacidad de mis datos de acuerdo a la legislación local y mejores prácticas disponibles. 3) Estoy de acuerdo en que los datos provistos se usen según lo descrito en este espacio y en <Link href="/aviso-legal" className={styles.enlaceConsentimiento}>Información Importante</Link>. ¿Dudas? <a href="/go/whatsapp/solicitar" className={styles.enlaceConsentimiento}>Escribir aquí</a>. *              </span>
+              <span>{renderConsentimiento()}</span>
             </label>
           </div>
 
