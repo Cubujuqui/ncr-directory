@@ -95,6 +95,23 @@
   margin-bottom: 18px;
 }
 
+.toggleEstatico {
+  display: flex;
+  background: #F3F0FF;
+  border-radius: 10px;
+  padding: 3px;
+  margin-bottom: 18px;
+}
+
+.toggleEstaticoTexto {
+  flex: 1;
+  text-align: center;
+  padding: 7px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #10004C;
+}
+
 .toggleOpcion {
   flex: 1;
   text-align: center;
