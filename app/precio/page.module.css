@@ -229,6 +229,7 @@
 .tabla tbody tr {
   display: grid;
   grid-template-columns: 220px repeat(3, 1fr);
+  gap: 20px;
   align-items: center;
 }
 
