@@ -8,7 +8,7 @@
 .contenedor {
   max-width: 900px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 40px 20px 0;
 }
 
 .volver {
@@ -33,15 +33,37 @@
   max-width: 560px;
 }
 
+.seccionPrecios {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 20px 40px;
+}
+
+/*
+  Columna de etiqueta (220px) + 3 columnas de tier iguales. Esta MISMA
+  definición se repite en .grilla (tarjetas) y en cada fila de la tabla
+  comparativa, para que ambas se alineen exactamente sin depender de
+  coincidencias de ancho.
+*/
 .grilla {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 220px repeat(3, 1fr);
   gap: 20px;
 }
+
+.grilla > .tarjeta:nth-child(1) { grid-column: 2; }
+.grilla > .tarjeta:nth-child(2) { grid-column: 3; }
+.grilla > .tarjeta:nth-child(3) { grid-column: 4; }
 
 @media (max-width: 720px) {
   .grilla {
     grid-template-columns: 1fr;
+  }
+
+  .grilla > .tarjeta:nth-child(1),
+  .grilla > .tarjeta:nth-child(2),
+  .grilla > .tarjeta:nth-child(3) {
+    grid-column: 1;
   }
 }
 
@@ -183,7 +205,6 @@
   margin-right: 8px;
 }
 
-
 .tituloTabla {
   font-size: 20px;
   font-weight: 800;
@@ -199,8 +220,16 @@
 
 .tabla {
   width: 100%;
+  min-width: 700px;
   border-collapse: collapse;
   font-size: 13px;
+}
+
+.tabla thead tr,
+.tabla tbody tr {
+  display: grid;
+  grid-template-columns: 220px repeat(3, 1fr);
+  align-items: center;
 }
 
 .tablaEncabezadoCaracteristica {
@@ -219,10 +248,10 @@
   font-weight: 800;
   color: #10004C;
   border-bottom: 1px solid rgba(16,0,76,0.1);
-  white-space: nowrap;
 }
 
 .filaCategoria td {
+  grid-column: 1 / 5;
   background: #F3F0FF;
   padding: 8px 16px;
   font-size: 12px;
@@ -242,7 +271,6 @@
   padding: 12px;
   text-align: center;
   border-bottom: 1px solid rgba(16,0,76,0.06);
-  white-space: nowrap;
 }
 
 .celdaCheck {
