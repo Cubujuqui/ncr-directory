@@ -3,6 +3,7 @@ import Link from 'next/link';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import TarjetasPrecio from './TarjetasPrecio';
+import TablaComparativa from './TablaComparativa';
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
@@ -29,8 +30,12 @@ export default function Precio() {
         </p>
 
         <TarjetasPrecio />
+
+        <h2 className={styles.tituloTabla}>Comparación completa</h2>
+        <TablaComparativa />
       </div>
       <SiteFooter />
     </div>
   );
 }
+
