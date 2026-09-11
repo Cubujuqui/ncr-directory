@@ -28,7 +28,9 @@ export default function Precio() {
         <p className={styles.intro}>
           Elegí el plan que mejor se adapte a vos. Los precios son referenciales mientras terminamos de definir el lanzamiento.
         </p>
+      </div>
 
+      <div className={styles.seccionPrecios}>
         <TarjetasPrecio />
 
         <h2 className={styles.tituloTabla}>Comparación completa</h2>
