@@ -27,7 +27,7 @@ export default async function ReportesPage({
   return (
     <div style={{ minHeight: '100vh', background: '#F3F0FF', fontFamily: "'Mulish', system-ui, sans-serif", color: '#10004C', padding: '40px 20px' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-        <Link href="/admin" style={{ color: '#10004C', textDecoration: 'none', fontWeight: 700, fontSize: '14px' }}>← Solicitudes pendientes</Link>
+        <Link href="/admin" style={{ color: '#10004C', textDecoration: 'none', fontWeight: 700, fontSize: '14px' }}>← Volver al panel</Link>
         <h1 style={{ fontSize: '28px', fontWeight: 800, margin: '16px 0 20px' }}>Reporte de clics</h1>
 
         <div style={{ marginBottom: '20px' }}>
