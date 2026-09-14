@@ -47,6 +47,7 @@ export default async function AdminPage() {
           <Link href="/admin/editar" style={pillStyle}>Editar perfil</Link>
           <Link href="/admin/pagos" style={pillStyle}>Pagos</Link>
           <Link href="/admin/reportes" style={pillStyle}>Reportes</Link>
+          <Link href="/admin/testimonios" style={pillStyle}>Testimonios</Link>
         </div>
       </div>
     </div>
