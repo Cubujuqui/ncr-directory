@@ -15,7 +15,7 @@ export default async function PagosPage() {
   return (
     <div style={{ minHeight: '100vh', background: '#F3F0FF', fontFamily: "'Mulish', system-ui, sans-serif", color: '#10004C', padding: '40px 20px' }}>
       <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-        <Link href="/admin" style={{ color: '#10004C', textDecoration: 'none', fontWeight: 700, fontSize: '14px' }}>← Solicitudes pendientes</Link>
+        <Link href="/admin" style={{ color: '#10004C', textDecoration: 'none', fontWeight: 700, fontSize: '14px' }}>← Volver al panel</Link>
         <h1 style={{ fontSize: '26px', fontWeight: 800, margin: '16px 0 24px' }}>Registro de pagos</h1>
         <RegistrarPago />
       </div>
