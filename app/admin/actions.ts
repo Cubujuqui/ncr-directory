@@ -290,3 +290,62 @@ export async function actualizarFotoPerfil(carne: string, fotoUrl: string) {
   revalidatePath('/directorio');
   revalidatePath('/');
 }
+
+export async function listarTestimonios() {
+  await checkAuth();
+
+  const { data } = await supabaseAdmin
+    .from('testimonios')
+    .select('*')
+    .order('creado_timestamp', { ascending: false });
+
+  return data || [];
+}
+
+export async function crearTestimonio(nombre: string, fotoUrl: string, canal: string, handle: string, texto: string) {
+  await checkAuth();
+
+  const { error } = await supabaseAdmin.from('testimonios').insert({
+    nombre: nombre.trim(),
+    foto_url: fotoUrl || null,
+    canal: canal.trim() || null,
+    handle: handle.trim() || null,
+    texto: texto.trim(),
+  });
+
+  if (error) throw new Error('No se pudo crear el testimonio');
+
+  revalidatePath('/');
+  revalidatePath('/admin/testimonios');
+}
+
+export async function actualizarTestimonio(id: number, nombre: string, fotoUrl: string, canal: string, handle: string, texto: string) {
+  await checkAuth();
+
+  const { error } = await supabaseAdmin
+    .from('testimonios')
+    .update({
+      nombre: nombre.trim(),
+      foto_url: fotoUrl || null,
+      canal: canal.trim() || null,
+      handle: handle.trim() || null,
+      texto: texto.trim(),
+    })
+    .eq('id', id);
+
+  if (error) throw new Error('No se pudo actualizar el testimonio');
+
+  revalidatePath('/');
+  revalidatePath('/admin/testimonios');
+}
+
+export async function eliminarTestimonio(id: number) {
+  await checkAuth();
+
+  const { error } = await supabaseAdmin.from('testimonios').delete().eq('id', id);
+
+  if (error) throw new Error('No se pudo eliminar el testimonio');
+
+  revalidatePath('/');
+  revalidatePath('/admin/testimonios');
+}
