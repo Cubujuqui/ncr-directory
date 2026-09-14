@@ -4,14 +4,17 @@ import SearchBar from '@/components/SearchBar';
 import Spotlight from '@/components/Spotlight';
 import { getPerfilesDestacados } from '@/lib/perfiles';
 import { getEspecialidades } from '@/lib/nutricionistas';
+import { getTestimoniosAleatorios } from '@/lib/testimonios';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import FaqAccordion from '@/components/FaqAccordion';
+import TestimoniosCarousel from '@/components/TestimoniosCarousel';
 import styles from './page.module.css';
 
 export default async function Home() {
   const especialidades = getEspecialidades();
   const perfilesDestacados = await getPerfilesDestacados();
+  const testimonios = await getTestimoniosAleatorios();
 
   return (
     <div className={styles.pagina}>
@@ -24,6 +27,8 @@ export default async function Home() {
       </main>
 
       <Spotlight perfiles={perfilesDestacados} />
+
+      {testimonios.length >= 3 && <TestimoniosCarousel testimonios={testimonios} />}
 
       <FaqAccordion />
 
