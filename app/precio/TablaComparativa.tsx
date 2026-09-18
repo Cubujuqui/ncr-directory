@@ -21,29 +21,30 @@ const CATEGORIAS: Categoria[] = [
     filas: [
       { etiqueta: 'Nombre y carné', gratis: true, contacto: true, premium: true },
       { etiqueta: 'Años de experiencia', gratis: true, contacto: true, premium: true },
-      { etiqueta: 'Especialidad', gratis: 'Solo indica si tiene', contacto: 'Nombre completo', premium: 'Nombre completo' },
+      { etiqueta: 'Especialidad', gratis: 'Solo indica si tiene', contacto: 'Lista las especialidades', premium: 'Lista las especialidades' },
       { etiqueta: 'Acerca de (biografía)', gratis: false, contacto: true, premium: true },
+      { etiqueta: 'Habla inglés', gratis: false, contacto: true, premium: true },
+      { etiqueta: 'Atiende en consultorio', gratis: false, contacto: true, premium: true },
+      { etiqueta: 'Atiende a domicilio', gratis: false, contacto: true, premium: true },
+      { etiqueta: 'Atiende online', gratis: false, contacto: true, premium: true },
     ],
   },
   {
     nombre: 'Visibilidad',
     filas: [
       { etiqueta: 'Perfil clicable (más detalles)', gratis: false, contacto: true, premium: true },
-      { etiqueta: 'Modalidades de atención mostradas', gratis: false, contacto: true, premium: true },
+      { etiqueta: 'Foto de perfil', gratis: false, contacto: false, premium: true },
       { etiqueta: 'Aparece en "Nutricionistas destacados"', gratis: false, contacto: false, premium: true },
+      { etiqueta: 'Aparece primero en los resultados de /directorio', gratis: false, contacto: false, premium: true },
+      { etiqueta: 'Promoción en nuestras redes sociales (Instagram, WhatsApp)', gratis: false, contacto: false, premium: true },
+      { etiqueta: 'Acceso anticipado a nuevas funciones (ej. seguros, geo-ubicación, canal de YouTube)', gratis: false, contacto: false, premium: true },
     ],
   },
   {
     nombre: 'Contacto',
     filas: [
-      { etiqueta: 'Botón de WhatsApp o email', gratis: false, contacto: true, premium: true },
-      { etiqueta: 'Redes sociales (Facebook, Instagram, TikTok, YouTube, LinkedIn)', gratis: false, contacto: false, premium: true },
-    ],
-  },
-  {
-    nombre: 'Foto',
-    filas: [
-      { etiqueta: 'Foto de perfil', gratis: false, contacto: false, premium: true },
+      { etiqueta: 'Botón de WhatsApp o email (canal principal)', gratis: false, contacto: true, premium: true },
+      { etiqueta: '+ Redes sociales (Facebook, Instagram, TikTok, YouTube, LinkedIn)', gratis: false, contacto: false, premium: true },
     ],
   },
 ];
