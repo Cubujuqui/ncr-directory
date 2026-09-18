@@ -54,7 +54,7 @@ export default function QueHaceUnNutricionista() {
 
         <h3 className={styles.h3}>Nutrición deportiva</h3>
         <p className={styles.parrafo}>
-          Un nutricionista deportivo trabaja con atletas y personas activas para optimizar rendimiento, recuperación y composición corporal, ajustando la alimentación según el tipo de entrenamiento y los objetivos deportivos.
+          Un nutricionista deportivo trabaja con atletas y personas activas para optimizar rendimiento, recuperación y composición corporal. El plan considera el tipo y volumen de entrenamiento, el momento de las comidas en relación con el ejercicio, la hidratación durante la actividad física y — cuando aplica — el uso de suplementos, siempre ajustado a los objetivos y el historial de cada persona más que a fórmulas genéricas.
         </p>
 
         <h3 className={styles.h3}>Nutrición clínica</h3>
