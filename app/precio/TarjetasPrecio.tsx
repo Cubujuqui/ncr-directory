@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import styles from './page.module.css';
 
 const PREMIUM_MENSUAL = 5000;
@@ -38,6 +39,9 @@ export default function TarjetasPrecio() {
             <li>Especialidad visible</li>
           </ul>
         </div>
+        <Link href="/unirme" className={styles.botonSeleccionar}>
+          Elegir Gratis
+        </Link>
       </div>
 
       <div className={`${styles.tarjeta} ${styles.tarjetaDestacada}`}>
@@ -77,6 +81,9 @@ export default function TarjetasPrecio() {
             <li>Foto de perfil e Instagram, TikTok, YouTube</li>
           </ul>
         </div>
+        <Link href="/unirme" className={styles.botonSeleccionarDestacado}>
+          Elegir Premium
+        </Link>
       </div>
 
       <div className={styles.tarjeta}>
@@ -115,6 +122,9 @@ export default function TarjetasPrecio() {
             <li>Modalidades de atención</li>
           </ul>
         </div>
+        <Link href="/unirme" className={styles.botonSeleccionar}>
+          Elegir Contacto
+        </Link>
       </div>
     </div>
   );
