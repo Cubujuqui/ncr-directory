@@ -4,7 +4,14 @@ import { useState } from 'react';
 import Link from 'next/link';
 import styles from './FaqAccordion.module.css';
 
-const PREGUNTAS = [
+type PreguntaItem = {
+  pregunta: string;
+  respuesta: string;
+  href: string;
+  etiquetaEnlace?: string;
+};
+
+const PREGUNTAS: PreguntaItem[] = [
   {
     pregunta: '¿Qué hace un nutricionista?',
     respuesta: 'Evalúa tu alimentación, historial de salud y objetivos para diseñar un plan realista — y le da seguimiento en el tiempo.',
@@ -39,6 +46,12 @@ const PREGUNTAS = [
     pregunta: '¿Es nutricionistasencostarica.com un servicio de nutrición?',
     respuesta: 'No. El sitio es un directorio de publicidad gratuito — no presta servicios de nutrición ni emplea nutricionistas. Cada profesional listado actúa de forma independiente.',
     href: '/aviso-legal',
+  },
+  {
+    pregunta: '¿Dónde encuentro un centro de nutrición clínica en Costa Rica?',
+    respuesta: 'No hay un solo centro — es una red de nutricionistas independientes que podés contactar directamente. Filtrá los que atienden en consultorio:',
+    href: '/directorio?consultorio=1',
+    etiquetaEnlace: 'Ver el directorio →',
   },
 ];
 
@@ -77,7 +90,7 @@ export default function FaqAccordion() {
             <div className={`${styles.respuesta} ${estaAbierto ? styles.respuestaAbierta : ''}`}>
               <p className={styles.respuestaTexto}>
                 {item.respuesta}{' '}
-                <Link href={item.href} className={styles.enlace}>Leer más →</Link>
+                <Link href={item.href} className={styles.enlace}>{item.etiquetaEnlace ?? 'Leer más →'}</Link>
               </p>
             </div>
             </div>
