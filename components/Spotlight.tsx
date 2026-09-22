@@ -7,6 +7,7 @@ import TarjetaClicable from './TarjetaClicable';
 import { ICONOS_PERFIL } from './IconosPerfil';
 import PerfilLightbox from './PerfilLightbox';
 import BadgeTier from './BadgeTier';
+import SelectorOrden from './SelectorOrden';
 import styles from './Spotlight.module.css';
 
 const PALETAS = [
@@ -114,6 +115,14 @@ export default function Spotlight({ perfiles }: { perfiles: PerfilCompleto[] }) 
         <p className={styles.subtitulo}>
           Perfiles premium — próximamente más nutricionistas destacados
         </p>
+
+        <SelectorOrden
+          colorEtiqueta="rgba(81,15,0,0.7)"
+          colorTexto="#510F00"
+          colorFondo="rgba(255,255,255,0.55)"
+          colorFondoActivo="#ffffff"
+          colorTextoActivo="#510F00"
+        />
 
         <div className={styles.grilla} style={{ '--num-columnas': perfiles.length } as React.CSSProperties}>
           {perfiles.map((p, i) => (
