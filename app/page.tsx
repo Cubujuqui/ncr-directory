@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic';
 
 import SearchBar from '@/components/SearchBar';
 import Spotlight from '@/components/Spotlight';
-import { getPerfilesDestacados } from '@/lib/perfiles';
+import { getPerfilesDestacados, OrdenDirectorio } from '@/lib/perfiles';
 import { getEspecialidades } from '@/lib/nutricionistas';
 import { getTestimoniosAleatorios } from '@/lib/testimonios';
 import SiteHeader from '@/components/SiteHeader';
@@ -11,9 +11,16 @@ import FaqAccordion from '@/components/FaqAccordion';
 import TestimoniosCarousel from '@/components/TestimoniosCarousel';
 import styles from './page.module.css';
 
-export default async function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ orden?: string }>;
+}) {
+  const { orden } = await searchParams;
+  const ordenValido: OrdenDirectorio | undefined =
+    orden === 'experiencia_desc' || orden === 'experiencia_asc' ? orden : undefined;
   const especialidades = getEspecialidades();
-  const perfilesDestacados = await getPerfilesDestacados();
+  const perfilesDestacados = await getPerfilesDestacados(ordenValido);
   const testimonios = await getTestimoniosAleatorios();
 
   return (
