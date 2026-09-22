@@ -1,6 +1,7 @@
-import { ordenarResultadosDirectorio } from '@/lib/perfiles';
+import { ordenarResultadosDirectorio, OrdenDirectorio } from '@/lib/perfiles';
 import Link from 'next/link';
 import FiltrosDirectorio from '@/components/FiltrosDirectorio';
+import SelectorOrden from '@/components/SelectorOrden';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import DirectorioGrilla from '@/components/DirectorioGrilla';
@@ -10,10 +11,12 @@ import styles from './page.module.css';
 export default async function Directorio({
   searchParams,
 }: {
-  searchParams: Promise<{ especialidad?: string | string[]; online?: string; domicilio?: string; consultorio?: string; premium?: string; grupal?: string; empresas?: string; ingles?: string }>;
+  searchParams: Promise<{ especialidad?: string | string[]; online?: string; domicilio?: string; consultorio?: string; premium?: string; grupal?: string; empresas?: string; ingles?: string; orden?: string }>;
 }) {
-  const { especialidad, online, domicilio, consultorio, premium, grupal, empresas, ingles } = await searchParams;
+  const { especialidad, online, domicilio, consultorio, premium, grupal, empresas, ingles, orden } = await searchParams;
   const especialidadesArr = especialidad ? (Array.isArray(especialidad) ? especialidad : [especialidad]) : [];
+  const ordenValido: OrdenDirectorio | undefined =
+    orden === 'experiencia_desc' || orden === 'experiencia_asc' ? orden : undefined;
   const { resultados, total } = await ordenarResultadosDirectorio(especialidadesArr, 50, {
     online: online === '1',
     domicilio: domicilio === '1',
@@ -22,7 +25,7 @@ export default async function Directorio({
     grupal: grupal === '1',
     serviciosEmpresas: empresas === '1',
     hablaIngles: ingles === '1',
-  });
+  }, ordenValido);
 
   return (
     <div className={styles.pagina}>
@@ -37,6 +40,7 @@ export default async function Directorio({
         </h1>
 
         <FiltrosDirectorio />
+        <SelectorOrden />
 
         <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 16, margin: '4px 0 16px' }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'rgba(16,0,76,0.6)' }}>
