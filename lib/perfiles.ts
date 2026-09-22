@@ -125,15 +125,35 @@ async function getPerfilesElegibles(): Promise<PerfilCompleto[]> {
     .map(mapearPerfil);
 }
 
-  export async function getPerfilesDestacados(): Promise<PerfilCompleto[]> {
+// Orden visible al visitante. 'aleatorio' preserva el shuffle original (exposición
+// pareja entre perfiles del mismo tier); las otras opciones ordenan por años de
+// experiencia. El orden nunca se aplica entre tiers, solo dentro de cada uno.
+export type OrdenDirectorio = 'aleatorio' | 'experiencia_desc' | 'experiencia_asc';
+
+function aplicarOrden(lista: PerfilCompleto[], orden?: OrdenDirectorio): PerfilCompleto[] {
+  if (orden === 'experiencia_desc' || orden === 'experiencia_asc') {
+    const signo = orden === 'experiencia_desc' ? -1 : 1;
+    return [...lista].sort((a, b) => {
+      if (a.aniosExperiencia === null && b.aniosExperiencia === null) return 0;
+      if (a.aniosExperiencia === null) return 1; // sin experiencia calculable va al final
+      if (b.aniosExperiencia === null) return -1;
+      return signo * (a.aniosExperiencia - b.aniosExperiencia);
+    });
+  }
+  return [...lista].sort(() => Math.random() - 0.5);
+}
+
+  export async function getPerfilesDestacados(orden?: OrdenDirectorio): Promise<PerfilCompleto[]> {
   const perfiles = await getPerfilesElegibles();
-  return perfiles.filter((p) => p.tier === 'premium').sort(() => Math.random() - 0.5).slice(0, 3);
+  const premium = perfiles.filter((p) => p.tier === 'premium');
+  return aplicarOrden(premium, orden).slice(0, 3);
 }
 
 export async function ordenarResultadosDirectorio(
   especialidad?: string[],
   maxTotal = 50,
-  filtros?: { online?: boolean; domicilio?: boolean; consultorio?: boolean; premiumSolamente?: boolean; grupal?: boolean; serviciosEmpresas?: boolean; hablaIngles?: boolean }
+  filtros?: { online?: boolean; domicilio?: boolean; consultorio?: boolean; premiumSolamente?: boolean; grupal?: boolean; serviciosEmpresas?: boolean; hablaIngles?: boolean },
+  orden?: OrdenDirectorio
 ): Promise<{ resultados: PerfilCompleto[]; total: number }> {
   let perfiles = await getPerfilesElegibles();
 
@@ -166,16 +186,14 @@ export async function ordenarResultadosDirectorio(
 
     perfiles = perfiles.filter((p) => p.tier === 'premium');
     const total = perfiles.length;
-    const resultados = perfiles.sort(() => Math.random() - 0.5).slice(0, maxTotal);
+    const resultados = aplicarOrden(perfiles, orden).slice(0, maxTotal);
     return { resultados, total };
   }
 
   const total = perfiles.length;
-  const premium = perfiles.filter((p) => p.tier === 'premium').sort(() => Math.random() - 0.5);
-  const contacto = perfiles.filter((p) => p.tier === 'contact').sort(() => Math.random() - 0.5);
-  const gratis = perfiles
-    .filter((p) => p.tier === 'free')
-    .sort(() => Math.random() - 0.5);
+  const premium = aplicarOrden(perfiles.filter((p) => p.tier === 'premium'), orden);
+  const contacto = aplicarOrden(perfiles.filter((p) => p.tier === 'contact'), orden);
+  const gratis = aplicarOrden(perfiles.filter((p) => p.tier === 'free'), orden);
 
   const restantes = Math.max(0, maxTotal - premium.length - contacto.length);
   const resultados = [...premium, ...contacto, ...gratis.slice(0, restantes)];
